@@ -1,12 +1,13 @@
 <?php namespace App\Database\Migrations;
 /**
- * This is a migrator which creates the users table and sets the fields
+ * This is a migrator which creates the comments table and sets the fields
  * name, type, primary key or not and length if applicable.
  * We use the CLI tool phptoolbox migrate:up to create the table, the phptoolbox migrate:down
  * to destroy the table and phptoolbox migrate:refresh to run the down function first, then
  * the up function.
  *
  * PHP version 7
+ *
  *
  * @category   Migrators
  * @package    rewind
@@ -16,6 +17,7 @@
  */
 
 use \MVC\Database\Schema;
+use \MVC\Core\Config;
 
 class UsersMigrations {
 
@@ -27,12 +29,10 @@ class UsersMigrations {
         Schema::create('users', function($table){
             $table->primary('id')->autoIncrement();
             $table->number('usergroup')->default(1);
-            $table->string('email')->length(50);
-            $table->string('name');
+            $table->number('requestedgroup')->default(1);
+            $table->string('email')->length(150);
+            $table->string('name')->length(100);
             $table->string('password');
-            $table->string('language')->default('en');
-            $table->number('suggestedRole')->default(1);
-            $table->string('avatar');
             $table->timestamps();
         });
     }
@@ -40,7 +40,7 @@ class UsersMigrations {
 /**
  * The down function destroys the table
  */
- 
+
     public function down() {
         Schema::destroy('users');
     }

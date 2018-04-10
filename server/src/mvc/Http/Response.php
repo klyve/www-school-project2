@@ -26,7 +26,7 @@ class Response {
  * @return [type]       [description]
  */
     public static function send($data) {
-        if(is_array($data)) {
+        if(is_array($data) || gettype($data) === "object") {
             echo self::json($data);
             return $data;
         }

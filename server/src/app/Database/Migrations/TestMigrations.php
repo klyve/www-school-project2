@@ -1,6 +1,10 @@
 <?php namespace App\Database\Migrations;
 /**
- * This is a test migrator
+ * This is a migrator which creates the comments table and sets the fields
+ * name, type, primary key or not and length if applicable.
+ * We use the CLI tool phptoolbox migrate:up to create the table, the phptoolbox migrate:down
+ * to destroy the table and phptoolbox migrate:refresh to run the down function first, then
+ * the up function.
  *
  * PHP version 7
  *
@@ -21,19 +25,20 @@ class TestMigrations {
  */
 
     public function up() {
-        Schema::create('test2', function($table){
-            $table->primary('id');
-            $table->string('testString');
-            $table->string('hello');
+        Schema::create('test', function($table){
+            $table->primary('id')->autoIncrement();
+            $table->string('name')->length(100);
+            $table->number('age');
+            $table->timestamps();
         });
     }
 
 /**
  * The down function destroys the table
  */
- 
+
     public function down() {
-        Schema::destroy('test2');
+        Schema::destroy('test');
     }
 
 }
