@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="ie=edge" http-equiv="X-UA-Compatible">
+
+  <title>{{'register.register'|localize}}</title>
+  <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
+  <link href="public/css/register.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="container">
+    <div class="loginArea">
+      <div class="titleContainer">
+        <div>
+          <p class="loginTitleText">{{'register.signUp'|localize}}</p>
+        </div>
+      </div>
+
+      {% if userExists %}
+      <div>{{'register.userExists'|localize}}</div>
+      {% endif %}
+
+      <form class="loginForm" method="post">
+        <div class="loginFormFields">
+          <div class="loginField">
+            <div class="loginFieldIcon">
+              <i class="fas fa-envelope"></i>
+            </div>
+
+
+            <div class="loginInputFieldContainer">
+              <input class="loginInputField" name="email" pattern="[a-z0-9]+@stud.ntnu.no" title="<username>@stud.ntnu.no" type="text" placeholder="email" required>
+            </div>
+          </div>
+          <div class="loginField">
+            <div class="loginFieldIcon">
+              <i class="fas fa-user"></i>
+            </div>
+
+
+            <div class="loginInputFieldContainer">
+              <input class="loginInputField" name="username" type="text" placeholder="username" required>
+            </div>
+          </div>
+          <div class="loginField">
+            <div class="loginFieldIcon">
+              <i class="fas fa-lock"></i>
+            </div>
+
+
+            <div class="loginInputFieldContainer">
+              <input class="loginInputField" name="password" type="password" placeholder="password" required>
+            </div>
+          </div>
+
+
+
+
+          <p>{{'register.im'|localize}}</p>
+
+
+          <div style="margin-top: 10px;">
+            <input checked="true" id="student" name="role" type="radio" value="user"> <label for="student">{{'register.student'|localize}}</label>
+          </div>
+
+
+          <div>
+            <input id="lecturer" name="role" type="radio"  value="lecturer"> <label for="lecturer">{{'register.lecturer'|localize}}</label>
+          </div>
+        </div>
+
+
+        <div class="loginButtonContainer">
+          <div>
+            <button class="submitButton" type="submit">
+            <p>{{'register.signUp'|localize}}</p></button>
+          </div>
+        </div>
+      </form>
+
+
+      <div class="signUpLink">
+        <p>{{'register.alreadyAccount'|localize}}<a href="../login/index.html">{{'register.login'|localize}}</a></p>
+      </div>
+    </div>
+
+
+    <div class="mediaArea">
+      <div class="textHolder">
+        <p class="mediaSchoolNameText">{{'login.schoolName'|localize}}</p>
+
+
+        <p class="mediaMainText"><i class="fas fa-angle-double-left"></i>Rewind</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+{% extends "main.html" %}
+{% block content %}
+
+<!-- MENU -->
+    <div class="menu">
+        <a href="{{'admin'|link}}">
+          <div class="menuItem">
+            <div class="{{ ('admin'|isPageRoute) ? 'activeMenuItem' : ''}}">
+              <i class="fas fa-user"></i>
+              <p>{{'admin.main.newUsers'|localize}}</p>
+            </div>
+          </div>
+        </a>
+
+        <a href="{{'admin/videos'|link}}">
+          <div class="menuItem">
+            <div class="{{ ('admin/videos'|isPageRoute) ? 'activeMenuItem' : ''}}">
+              <i class="fas fa-address-card"></i>
+              <p>{{'admin.main.newVid'|localize}}</p>
+            </div>
+          </div>
+        </a>
+
+        <a href="{{'admin/blah'|link}}">
+          <div class="menuItem">
+            <div class="{{ ('admin/blah'|isPageRoute) ? 'activeMenuItem' : ''}}">
+              <i class="fas fa-lock"></i>
+              <p>{{'admin.main.newPw'|localize}}</p>
+            </div>
+          </div>
+        </a>
+
+        <a href="{{'admin/search'|link}}">
+          <div class="menuItem">
+            <div class="{{ ('admin/search'|isPageRoute) ? 'activeMenuItem' : ''}}">
+              <i class="fas fa-search"></i>
+              <p>{{'admin.main.search'|localize}}</p>
+            </div>
+          </div>
+        </a>
+      </div>
+
+    <div class="contentBlock">
+        {% block admincontent %}
+        {% endblock %}
+    </div>
+
+{% endblock %}

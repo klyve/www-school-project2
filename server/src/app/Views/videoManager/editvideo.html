@@ -1,0 +1,131 @@
+{% extends "main.html" %}
+{% block content %}
+
+<link rel="stylesheet" href="public/css/videoManager/main.css">
+<link rel="stylesheet" href="public/css/videoManager/upload.css">
+
+
+  <div class="container">
+
+    <div class="menu">
+      <a href="{{'manageUpload'|link}}">
+        <div class="menuItem">
+          <div class="activeMenuItem">
+            <i class="fas fa-upload"></i>
+            <p> upload </p>
+          </div>
+        </div>
+      </a>
+
+      <a href="{{'managePlaylists'|link}}">
+        <div class="menuItem">
+          <i class="fas fa-indent"></i>
+          <p> playlists </p>
+        </div>
+      </a>
+
+      <a href="{{'manageVideos'|link}}">
+        <div class="menuItem">
+          <i class="fas fa-film"></i>
+          <p> videos </p>
+        </div>
+      </a>
+
+      <a href="{{'manageStats'|link}}">
+        <div class="menuItem">
+          <i class="fas fa-chart-bar"></i>
+          <p> stats </p>
+        </div>
+      </a>
+
+      <a href="{{'manageComments'|link}}">
+        <div class="menuItem">
+          <i class="fas fa-comments"></i>
+          <p> comments </p>
+        </div>
+      </a>
+    </div>
+
+
+    <div class="content">
+
+      
+
+      <div>
+        
+      
+
+
+
+      <div class="inputs">
+        <form method="post" enctype="multipart/form-data">
+            
+            
+            <div class="container-fluid">
+                <div class="row">
+                        <div class="col-8">
+                            <div class="preview">
+                                <video class="prevVid" src="{{video.videoId|mediaVideo}}"></video>
+                            </div>                      
+                        </div>
+                        <div class="col-4">
+                                <img class="avatarPicture" style="max-width: 100%; max-height: 250px;" src="{{video.thumbnail|mediaImage}}"/>
+                                <div class="inputCon">
+                                    <input class="inputfile" type="file" name="thumbnail" id="file" />
+                                    <label for="file">
+                                        <i class="fas fa-upload"></i>
+                                        <span>Chose thumbnail</span>
+                                    </label>
+                                </div>
+                        </div>
+                    
+                    </div>
+            </div>
+            <br /><br /><hr />
+          <div class="container-fluid">
+          <div class="row">       
+              
+              <div class="inputgroup">
+                  <div class="form-group modern required">
+                  <label for="title">Playlist</label>
+                      <select class="form-control" name="playlist">
+                      
+                      <option value="NULL">Select playlist</option>
+                      {% for playlist in playlists %}
+                        {% if playlistid == playlist.id %}
+                            <option value="{{playlist.id}}" selected>{{playlist.name}}</option>
+                        {% else %}
+                            <option value="{{playlist.id}}">{{playlist.name}}</option>
+                        {% endif %}
+                      {% endfor %}
+                    </select>
+                  </div>
+            <br /><br />
+          </div>
+            
+            <div class="inputgroup">
+                <div class="form-group modern required">
+                  <label for="title">Video Title</label>
+                  <input class="form-control" name="name" type="text" id="title" value="{{video.name}}" />
+                </div>
+                <br />
+              <div class="form-group modern required">
+                  <label for="description">Video Description</label>
+                  <div class="col-sm-10">
+                    <textarea class="form-control" id="description" name="description" rows="3">{{video.description}}</textarea>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <br /><br /><hr/>
+          <button type="submit" class="btn btn-primary btn-lg btn-block">Save changes</button>
+
+        </form>
+      </div>
+      </div>
+  </div>
+</div>
+
+<script src="public/js/avatarUpload.js"></script>
+
+{% endblock %}

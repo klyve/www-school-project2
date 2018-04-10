@@ -1,0 +1,107 @@
+button {
+  border: none;
+  outline: none;
+}
+
+main {
+  min-height: calc(100vh - 70px);
+  width: calc(100vw - 270px);
+  display: flex;
+  margin-top: 70px;
+  margin-left: 270px;
+  transition: .5s;
+  background: #fafafa;
+  justify-content: center;
+}
+
+.container {
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  padding: 0px 20px;
+}
+
+.menu {
+  display: inline-block;
+  margin: 20px auto;
+  background-color: white;
+}
+
+.menuItem {
+  display: inline-block;
+  text-align: center;
+  padding: 12px 30px;
+  color: #666;
+  transition: 0.2s ease-in-out;
+}
+.menuItem:hover {
+  color: #47ABDB;
+}
+.menuItem:hover p{
+  color: #47ABDB;
+}
+
+.menuItem i {
+  padding: 5px;
+  font-size: 24px;
+}
+.menuItem p {
+  transition: 0.2s ease-in-out;
+  color: #aaa;
+  padding: 5px;
+  font-size: 12px;
+  user-select: none;
+}
+
+
+
+
+.activeMenuItem, .activeMenuItem p{
+  color: #3997D8;
+}
+
+
+
+
+
+.saveContainer {
+  display: inline-block;
+  padding: 50px 0px 100px 00px;
+}
+.saveContainer i {
+  padding: 8px;
+  font-size: 34px;
+  color: #999;
+  transition: 0.2s ease-in-out;
+}
+.saveContainer h1 {
+  font-size: 18px;
+  color: #999;
+  transition: 0.2s ease-in-out;
+  user-select: none;
+}
+.saveContainer:hover h1, .saveContainer:hover i {
+  color: #47ABDB;
+}
+
+
+
+
+
+
+
+
+
+
+@media (max-width: 918px) {
+  .logo {
+    width: 0px;
+    visibility: hidden;
+  }
+  .searchIconContainer {
+    width: auto;
+  }
+  .searchIconContainer i{
+    padding: 7px;
+  }
+}

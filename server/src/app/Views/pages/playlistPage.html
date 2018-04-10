@@ -1,0 +1,38 @@
+{% extends "main.html" %}
+{% block content %}
+
+<link rel="stylesheet" href="public/css/playlistPage.css">
+<title> {{playlist.name}} </title>
+
+    
+
+    
+
+    <div class="container-fluid">
+        <div class="titleHolder">
+            <h1> {{playlist.name}} </h1>
+          </div>
+      <form method="post">
+          <input type="hidden" value="{{playlist.id}}" name="playlistid" />
+          <button type="submit" class="btn btn-danger btn-lg">Subscribe</button>
+        </form>
+        <br /><br />
+    <div class="card-deck">
+
+        {% for key, video in videoList %}
+        <div class="card" style="max-width: 366px;">
+          <img class="card-img-top" src="public/images/img2.png" alt="Card image cap" style="max-width: 366px; max-height: 200px;">
+          <div class="card-body">
+            <h5 class="card-title">{{video.name}}</h5>
+            <p class="card-text">{{video.description}}</p>
+            <p class="card-text"><small class="text-muted">{{video.created_at}}</small></p>
+            <span style="float:left;">
+              <a href="{{'watch'|link}}&id={{video.id}}" class="btn btn-primary">Watch</a>
+            </span>
+          </div>
+        </div>
+
+        {% endfor %}
+      </div>
+    </div>
+{% endblock %}

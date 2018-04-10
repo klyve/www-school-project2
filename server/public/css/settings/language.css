@@ -1,0 +1,27 @@
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  background: white;
+  text-align: center;
+}
+
+.inputCon {
+  height: 50px;
+  padding: 30px;
+  text-align: center;
+}
+
+.inputCon select {
+  height: 43px;
+  width: 300px;
+  border: none;
+  font-size: 16px;
+  background: #ecf0f1;
+}
+
+.inputCon h1 {
+  padding: 10px;
+  font-weight: 900;
+}

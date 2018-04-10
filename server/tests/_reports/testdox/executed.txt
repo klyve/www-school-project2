@@ -1,0 +1,33 @@
+ConfigTests
+ [x] Init
+ [x] Class trait
+ [x] Get
+ [x] Set key
+ [x] Is key
+ [x] Dump
+
+DependencyInjectionTests
+ [x] Inject function
+ [x] Inject object
+ [x] Inject method
+ [x] Parent injection
+ [x] Inject array
+ [x] Inject throws
+
+LanguageTests
+ [x] Init
+ [x] Get
+ [x] Set key
+ [x] Dump
+
+sqlTests
+ [x] Insert
+ [x] Find
+ [x] Update
+
+MiddlewareTests
+ [x] construct
+
+ResponseTests
+ [x] Send
+

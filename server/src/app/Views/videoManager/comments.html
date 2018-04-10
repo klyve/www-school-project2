@@ -1,0 +1,91 @@
+{% extends "main.html" %}
+{% block content %}
+
+<link rel="stylesheet" href="public/css/videoManager/main.css">
+<link rel="stylesheet" href="public/css/videoManager/comments.css">
+<title>{{'comments.'|localize}}</title>
+
+<div class="container">
+
+  <div class="menu">
+    <a href="{{'manageUpload'|link}}">
+      <div class="menuItem">
+        <i class="fas fa-upload"></i>
+        <p>{{'videos.upload'|localize}}</p>
+      </div>
+    </a>
+
+    <a href="{{'managePlaylists'|link}}">
+      <div class="menuItem">
+        <i class="fas fa-indent"></i>
+        <p>{{'videos.playlists'|localize}}</p>
+      </div>
+    </a>
+
+    <a href="{{'manageVideos'|link}}">
+      <div class="menuItem">
+        <i class="fas fa-film"></i>
+        <p>{{'videos.videos'|localize}}</p>
+      </div>
+    </a>
+
+    <a href="{{'manageStats'|link}}">
+      <div class="menuItem">
+        <i class="fas fa-chart-bar"></i>
+        <p>{{'videos.stats'|localize}}</p>
+      </div>
+    </a>
+
+    <a href="{{'manageComments'|link}}">
+      <div class="menuItem">
+        <div class="activeMenuItem">
+          <i class="fas fa-comments"></i>
+          <p>{{'videos.comments'|localize}}</p>
+        </div>
+      </div>
+    </a>
+  </div>
+
+
+
+
+  <div class="content">
+
+  {% for key, comment in comments %}
+
+  <!--- comment item -->
+  <a href="index.php?page=watch&id={{videos[key].videoId}}#{{comment.commentId}}">
+    <div class="item">
+        <div class="itemBody">
+          <div class="userInformation">
+            <img src="public/images/profile.png">
+            <div class="titleItem">
+              <h2> {{ comment.user.name }} </h2>
+              <div class="comment">
+                <i class="fas fa-comment"></i>
+                <h1> {{ comment.comment }} </h1>
+              </div>
+            </div>
+          </div>
+          <div class="videoInformation">
+              <div class="titleItem">
+              <h2> {{ videos[key].playlistName }} </h2>
+              <h1> {{ videos[key].videoName }} </h1>
+            </div>
+
+            <div class="videoItem">
+              <img src="public/images/img2.png">
+            </div>
+          </div>
+        </div>
+    </div>
+  </a>
+
+    {% endfor %}
+
+  </div>
+
+
+</div>
+
+{% endblock %}

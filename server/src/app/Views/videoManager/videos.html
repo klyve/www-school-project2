@@ -1,0 +1,78 @@
+{% extends "main.html" %}
+{% block content %}
+
+<link rel="stylesheet" href="public/css/videoManager/main.css">
+<link rel="stylesheet" href="public/css/videoManager/videos.css">
+<title>{{'videos.videoManager'|localize}}</title>
+
+<div class="container">
+
+  <div class="menu">
+    <a href="{{'manageUpload'|link}}">
+      <div class="menuItem">
+          <i class="fas fa-upload"></i>
+          <p>{{'videos.upload'|localize}}</p>
+      </div>
+    </a>
+
+    <a href="{{'managePlaylists'|link}}">
+      <div class="menuItem">
+        <i class="fas fa-indent"></i>
+        <p>{{'videos.playlists'|localize}}</p>
+      </div>
+    </a>
+
+    <a href="{{'manageVideos'|link}}">
+      <div class="menuItem">
+        <div class="activeMenuItem">
+          <i class="fas fa-film"></i>
+          <p>{{'videos.videos'|localize}}</p>
+        </div>
+      </div>
+    </a>
+
+    <a href="{{'manageStats'|link}}">
+      <div class="menuItem">
+        <i class="fas fa-chart-bar"></i>
+        <p>{{'videos.stats'|localize}}</p>
+      </div>
+    </a>
+
+    <a href="{{'manageComments'|link}}">
+      <div class="menuItem">
+        <i class="fas fa-comments"></i>
+        <p>{{'videos.comments'|localize}}</p>
+      </div>
+    </a>
+  </div>
+
+
+
+
+  <div class="content">
+
+    {% for item in list %}
+
+    <a href="index.php?page=editvideos&id={{item.video.id}}">
+      <div class="item">
+          <div class="itemBody">
+            <div class="videoItem">
+              <img src="public/images/img2.png">
+            </div>
+
+            <div class="titleItem">
+              <h2> {{ item.playlistName }} </h2>
+              <h1> {{ item.video.name }} </h1>
+            </div>
+          </div>
+      </div>
+    </a>
+
+    {% endfor %}
+
+
+  </div>
+
+</div>
+
+{% endblock %}

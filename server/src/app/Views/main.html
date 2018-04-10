@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="public/css/reset.css">
+  <link rel="stylesheet" href="public/css/nav.css">
+  <link rel="stylesheet" href="public/css/main.css">
+</head>
+<body>
+
+  <!-- Navigation bar -->
+  <nav class="nav">
+    <div class="con">
+      <button class="open" onclick="toggleNav()">
+        <i class="fas fa-bars"></i>
+      </button>
+      <a href="{{'index'|link}}">
+        <button class="logo" type="button">
+          <img src="public/images/logo_black.png" height="40">
+        </button>
+      </a>
+    </div>
+
+        <form method="GET" class="search">
+          <input type="hidden" value="search" name="page" />
+          <input type="text" placeholder="Search..." autofocus name="query" />
+          <div class="searchIconContainer">
+            <i class="fas fa-search"></i>
+          </div>
+        </form>
+
+
+    <button class="profile">
+      <img src="{{user.avatar|mediaImage}}">
+    </button>
+  </nav>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- <a href="javascript:void(0)" class="closebtn" onclick="toggleNav()">&times;</a> -->
+    <div class="list">
+
+      {% if user.usergroup > 2 %}
+        <div class="sideHeader">
+          <i class="fas fa-home"></i>
+          <p>{{'main.adminTools'|localize}}</p>
+        </div>
+        <ul>
+          <li><a href="{{'admin'|link}}">{{'main.admin'|localize}}</a></li>
+          <li><a href="">{{'main.text2'|localize}}</a></li>
+        </ul>
+      {% endif %}
+
+      <div class="sideHeader">
+        <i class="fas fa-home"></i>
+        <p>{{'main.main'|localize}}</p>
+      </div>
+      <ul>
+        <li><a href="{{'index'|link}}">{{'main.home'|localize}}</a></li>
+        {% if user.usergroup > 1 %}
+          <li><a href="{{'manageUpload'|link}}">{{'main.uploadFile'|localize}}</a></li>
+        {% endif %}
+        <li><a href="{{'settings'|link}}">{{'main.settings'|localize}}</a></li>
+        <li><a href="{{'logout'|link}}">{{'main.logOut'|localize}}</a></li>
+
+      </ul>
+
+      <div class="sideHeader">
+        <i class="fas fa-book"></i>
+        <p>Library</p>
+      </div>
+      <ul>
+        <li><a href="{{'history'|link}}">{{'history'|localize}}</a></li>
+        <li><a href="{{'liked'|link}}">{{'liked'|localize}}</a></li>
+      </ul>
+      <div class="sideHeader">
+        <i class="fas fa-book"></i>
+        <p>Subscriptions</p>
+      </div>
+      <ul>
+        {% for sub in subscriptions %}
+        <li><a href="{{('playlist&id='~sub.playlist.id)|link}}">{{sub.playlist.name}}</a></li>
+        {% endfor %}
+      </ul>
+
+      <div class="sideHeader">
+        <i class="fas fa-video"></i>
+        <p>{{'main.myPlaylists'|localize}}</p>
+      </div>
+      <ul>
+        {% for playlist in user.playlists %}
+
+        <li><a href="{{'playlist'|link}}">{{playlist.name}}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+
+
+  <main class="main">
+    {% block content %}
+    {% endblock %}
+  </main>
+
+  <script src="public/js/nav.js"></script>
+
+</body>
+</html>

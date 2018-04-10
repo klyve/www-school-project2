@@ -1,0 +1,110 @@
+.content {
+  height: 100%;
+}
+.items {
+  padding: 0px 10px;
+  display: inline-block;
+  background-color: white;
+}
+
+.videoItem {
+  display: inline-block;
+  padding: 20px 10px;
+  width: 300px;
+  word-break: break-word;
+  white-space: normal;
+  cursor: pointer;
+}
+.videoItem:hover {
+  background-color: #eee;
+}
+
+.addPlaylistContainer {
+  display: inline-block;
+  padding: 50px 0px 50px 00px;
+  cursor: pointer;
+}
+.addPlaylistContainer i {
+  padding: 8px;
+  font-size: 34px;
+  color: #999;
+  transition: 0.2s ease-in-out;
+}
+.addPlaylistContainer h1 {
+  font-size: 18px;
+  color: #999;
+  transition: 0.2s ease-in-out;
+  user-select: none;
+}
+.addPlaylistContainer:hover h1, .addPlaylistContainer:hover i {
+  color: #47ABDB;
+}
+
+
+.videoItem img {
+  width: 100%;
+}
+
+.videoItem h1 {
+  margin: 10px 0px 0px 0px;
+  font-size: 16px;
+  color: #3997D8;
+  padding: 0px 0px;
+}
+
+.contentCreator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  visibility: hidden;
+  height: 0.1px;
+  background-color: white;
+  margin-bottom: 100px;
+}
+
+.createPlaylistForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+}
+
+.inputCon, .inputSubmit {
+  padding: 50px;
+  width: 500px;
+  height: 50px;
+  text-align: center;
+}
+
+.inputSubmit {
+  width: 300px;
+}
+
+.inputCon h1 {
+  padding: 10px;
+  font-weight: 900;
+  font-size: 16px;
+}
+.inputCon input, .inputSubmit input {
+  font-size: 16px;
+  transition: 0.2s ease-in-out;
+}
+.inputSubmit input {
+  border-radius: 50px;
+}
+.inputSubmit input:hover {
+  width: 100%;
+  font-size: 16px;
+  background-color: #47ABDB;
+  color: white;
+}
+
+.nameTitle {
+  background-color: #ecf0f1;
+  padding: 10px 0px;
+  text-align: center;
+  width: 100%;
+}

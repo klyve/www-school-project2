@@ -1,0 +1,109 @@
+
+.header {
+  height: 100px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header h1 {
+  font-size: 30px;
+  color: #555;
+}
+
+.video {
+  display: flex;
+  height: 110px;
+  background: white;
+  margin: 10px 0;
+}
+.video:hover {
+  background: #eee;
+}
+
+.video:active {
+  background: #ddd;
+}
+
+.video img {
+  height: 80px;
+  padding: 0 20px;
+}
+
+.video a {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.left {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.title h1 {
+  font-size: 20px;
+  padding: 8px 0;
+
+}
+
+.title h2 {
+  font-size: 18px;
+  padding-left: 15px;
+}
+
+.date {
+  margin-right: 100px;
+}
+
+.item {
+  margin: 40px;
+  width: calc(100% - 80px);
+}
+
+.item h1 {
+  margin: 20px;
+  color: #888;
+}
+
+.videoList {
+  background-color: white;
+  overflow: auto;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.videoItem {
+  display: inline-block;
+  padding: 10px 20px;
+  width: 300px;
+  word-break: break-word;
+  white-space: normal;
+}
+
+.videoItem img {
+  width: 100%;
+}
+
+.videoItem h1 {
+  margin: 10px 0px 0px 0px;
+  font-size: 16px;
+  color: #3997D8;
+  padding: 5px 0px;
+}
+
+.videoItem h2 {
+  font-size: 14px;
+  color: #666;
+  padding: 5px 0px;
+}
+
+.playTitle {
+  font-size: 24px;
+  margin: 30px 5px;
+  color: #888;
+}

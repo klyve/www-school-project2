@@ -1,0 +1,63 @@
+{% extends "main.html" %}
+{% block content %}
+
+  <link rel="stylesheet" href="public/css/settings/main.css">
+  <link rel="stylesheet" href="public/css/settings/name.css">
+
+  <div class="container">
+
+  <!-- MENU -->
+    <div class="menu">
+      <a href="{{['admin/edituser&userid=',selected.id]|join|link}}">
+        <div class="menuItem">
+          <i class="fas fa-camera"></i>
+          <p>{{'admin.user.name.avatar'|localize}}</p>
+        </div>
+      </a>
+
+      <a href="{{['admin/edituserinfo&userid=',selected.id]|join|link}}">
+        <div class="menuItem">
+          <div class="activeMenuItem">
+            <i class="fas fa-address-card"></i>
+            <p>{{'admin.user.name.name'|localize}}</p>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <form method="post">
+      <div class="content">
+        <div>
+          <div class="inputCon">
+            <h1>{{'admin.user.name.displayName'|localize}}</h1>
+            <input class="nameTitle" name="name" type="text" value="{{selected.name}}">
+            <h1>{{'admin.users.accesGroup'|localize}}</h1>
+            <select name="group" class="selectGroup">
+              {% for group in groups %}
+                  {% if group.value == selected.usergroup %}
+                      <option value="{{group.value}}" selected="true">{{group.key}}</option>
+                  {% else %}
+                      <option value="{{group.value}}">{{group.key}}</option>
+                  {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="saveContainer">
+        <button type="submit">
+          <div>
+            <i class="fas fa-save"></i>
+          </div>
+          <div>
+            <h1>{{'admin.user.name.save'|localize}}</h1>
+          </div>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <script src="public/js/nav.js"></script>
+
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "admin/adminmain.html" %}
+{% block admincontent %}
+
+<h1>{{'admin.search.search'|localize}}</h1>
+
+<div class="search">
+    <form method="GET">
+        <input type="hidden" value="admin/search" name="page" />
+        <input type="text" placeholder="Search..." autofocus name="query" />
+        <div class="searchIconContainer">
+        <i class="fas fa-search"></i>
+        </div>
+    </form>
+</div>
+
+{% if searchData %}
+<div class="limiter">
+    <div class="container-table100">
+        <div class="wrap-table100">
+            <div class="table100">
+                <table>
+                    <thead>
+                        <tr class="table100-head">
+                            <th class="column1">{{'admin.search.name'|localize}}</th>
+                            <th class="column1">{{'admin.search.email'|localize}}</th>
+                            <th class="column2">{{'admin.search.role'|localize}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+
+                            <tr>
+
+                                <td class="column1">
+                                    <a href="{{('admin/edituser&userid=' ~ user.id) |link}}">
+                                        {{user.name}}
+                                    </a>
+                                </td>
+                                <td class="column1">
+                                    <a href="{{('admin/edituser&userid=' ~ user.id) |link}}">
+                                        {{user.email}}
+                                    </a>
+                                </td>
+                                <td class="column2">
+                                    <a href="{{('admin/edituser&userid=' ~ user.id) |link}}">
+                                        {{user.usergroup|userRole}}
+                                    </a>
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>Dashboard for /Users/bjarte/NTNU/www/oblig1/src/mvc/Core</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../../.css/bootstrap.min.css" rel="stylesheet">
+  <link href="../../.css/nv.d3.min.css" rel="stylesheet">
+  <link href="../../.css/style.css" rel="stylesheet">
+  <!--[if lt IE 9]>
+  <script src="../../.js/html5shiv.min.js"></script>
+  <script src="../../.js/respond.min.js"></script>
+  <![endif]-->
+ </head>
+ <body>
+  <header>
+   <div class="container">
+    <div class="row">
+     <div class="col-md-12">
+      <ol class="breadcrumb">
+        <li><a href="../../index.html">/Users/bjarte/NTNU/www/oblig1/src</a></li>
+        <li><a href="../index.html">mvc</a></li>
+        <li><a href="index.html">Core</a></li>
+        <li class="active">(Dashboard)</li>
+
+      </ol>
+     </div>
+    </div>
+   </div>
+  </header>
+  <div class="container">
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Classes</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="classCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="classComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Cli.php.html#3">Cli</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Database.php.html#3">Database</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Model.php.html#5">Model</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Route.php.html#5">Route</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="View.php.html#3">View</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Session.php.html#12">Session</a></td><td class="text-right">41%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Model.php.html#5">Model</a></td><td class="text-right">1332</td></tr>
+       <tr><td><a href="Route.php.html#5">Route</a></td><td class="text-right">600</td></tr>
+       <tr><td><a href="Session.php.html#12">Session</a></td><td class="text-right">247</td></tr>
+       <tr><td><a href="Cli.php.html#3">Cli</a></td><td class="text-right">90</td></tr>
+       <tr><td><a href="View.php.html#3">View</a></td><td class="text-right">42</td></tr>
+       <tr><td><a href="Database.php.html#3">Database</a></td><td class="text-right">6</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Methods</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="methodCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="methodComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Cli.php.html#15"><abbr title="Cli::init">init</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Route.php.html#112"><abbr title="Route::buildClassQuery">buildClassQuery</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Route.php.html#45"><abbr title="Route::onInternal">onInternal</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Route.php.html#49"><abbr title="Route::init">init</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Route.php.html#68"><abbr title="Route::isRoute">isRoute</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Route.php.html#71"><abbr title="Route::getRoute">getRoute</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Route.php.html#75"><abbr title="Route::match">match</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Route.php.html#96"><abbr title="Route::anonymousFunction:96#725">anonymousFunction:96#725</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Route.php.html#126"><abbr title="Route::callMiddlewares">callMiddlewares</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Route.php.html#34"><abbr title="Route::put">put</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Session.php.html#48"><abbr title="Session::delete">delete</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Session.php.html#56"><abbr title="Session::dump">dump</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Session.php.html#61"><abbr title="Session::start">start</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Session.php.html#75"><abbr title="Session::destroy">destroy</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="View.php.html#6"><abbr title="View::renderDefault">renderDefault</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="View.php.html#15"><abbr title="View::renderTwig">renderTwig</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Cli.php.html#22"><abbr title="Cli::parseCommands">parseCommands</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Route.php.html#41"><abbr title="Route::notFound">notFound</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Route.php.html#28"><abbr title="Route::delete">delete</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Model.php.html#65"><abbr title="Model::find">find</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Database.php.html#5"><abbr title="Database::instance">instance</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Model.php.html#14"><abbr title="Model::findObjects">findObjects</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Model.php.html#32"><abbr title="Model::findClasses">findClasses</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Model.php.html#52"><abbr title="Model::getSingleDependencies">getSingleDependencies</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Model.php.html#58"><abbr title="Model::getManyDependencies">getManyDependencies</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Route.php.html#22"><abbr title="Route::post">post</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="View.php.html#26"><abbr title="View::render">render</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Model.php.html#83"><abbr title="Model::search">search</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Model.php.html#99"><abbr title="Model::all">all</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Model.php.html#116"><abbr title="Model::save">save</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Model.php.html#124"><abbr title="Model::update">update</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Model.php.html#135"><abbr title="Model::create">create</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Model.php.html#146"><abbr title="Model::saveUnique">saveUnique</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Route.php.html#16"><abbr title="Route::get">get</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Session.php.html#84"><abbr title="Session::_init">_init</abbr></a></td><td class="text-right">33%</td></tr>
+       <tr><td><a href="Session.php.html#65"><abbr title="Session::_age">_age</abbr></a></td><td class="text-right">66%</td></tr>
+       <tr><td><a href="Config.php.html#38"><abbr title="Config::is">is</abbr></a></td><td class="text-right">66%</td></tr>
+       <tr><td><a href="Session.php.html#42"><abbr title="Session::getSessionId">getSessionId</abbr></a></td><td class="text-right">66%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Model.php.html#32"><abbr title="Model::findClasses">findClasses</abbr></a></td><td class="text-right">90</td></tr>
+       <tr><td><a href="Cli.php.html#22"><abbr title="Cli::parseCommands">parseCommands</abbr></a></td><td class="text-right">72</td></tr>
+       <tr><td><a href="Route.php.html#75"><abbr title="Route::match">match</abbr></a></td><td class="text-right">56</td></tr>
+       <tr><td><a href="Model.php.html#14"><abbr title="Model::findObjects">findObjects</abbr></a></td><td class="text-right">42</td></tr>
+       <tr><td><a href="Session.php.html#84"><abbr title="Session::_init">_init</abbr></a></td><td class="text-right">39</td></tr>
+       <tr><td><a href="Route.php.html#49"><abbr title="Route::init">init</abbr></a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="Session.php.html#75"><abbr title="Session::destroy">destroy</abbr></a></td><td class="text-right">20</td></tr>
+       <tr><td><a href="Model.php.html#65"><abbr title="Model::find">find</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Model.php.html#83"><abbr title="Model::search">search</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Model.php.html#99"><abbr title="Model::all">all</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="View.php.html#15"><abbr title="View::renderTwig">renderTwig</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="View.php.html#6"><abbr title="View::renderDefault">renderDefault</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Session.php.html#48"><abbr title="Session::delete">delete</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Route.php.html#112"><abbr title="Route::buildClassQuery">buildClassQuery</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Model.php.html#146"><abbr title="Model::saveUnique">saveUnique</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Model.php.html#124"><abbr title="Model::update">update</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Model.php.html#116"><abbr title="Model::save">save</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Model.php.html#58"><abbr title="Model::getManyDependencies">getManyDependencies</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Model.php.html#52"><abbr title="Model::getSingleDependencies">getSingleDependencies</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Database.php.html#5"><abbr title="Database::instance">instance</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="View.php.html#26"><abbr title="View::render">render</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Session.php.html#42"><abbr title="Session::getSessionId">getSessionId</abbr></a></td><td class="text-right">4</td></tr>
+       <tr><td><a href="Session.php.html#65"><abbr title="Session::_age">_age</abbr></a></td><td class="text-right">4</td></tr>
+       <tr><td><a href="Config.php.html#38"><abbr title="Config::is">is</abbr></a></td><td class="text-right">2</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <footer>
+    <hr/>
+    <p>
+     <small>Generated by <a href="https://github.com/sebastianbergmann/php-code-coverage" target="_top">php-code-coverage 5.2.2</a> using <a href="https://secure.php.net/" target="_top">PHP 7.1.14</a> with <a href="https://xdebug.org/">Xdebug 2.6.0</a> and <a href="https://phpunit.de/">PHPUnit 6.3.0</a> at Fri Mar 2 1:26:16 UTC 2018.</small>
+    </p>
+   </footer>
+  </div>
+  <script src="../../.js/jquery.min.js" type="text/javascript"></script>
+  <script src="../../.js/bootstrap.min.js" type="text/javascript"></script>
+  <script src="../../.js/holder.min.js" type="text/javascript"></script>
+  <script src="../../.js/d3.min.js" type="text/javascript"></script>
+  <script src="../../.js/nv.d3.min.js" type="text/javascript"></script>
+  <script type="text/javascript">
+$(document).ready(function() {
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#classCoverageDistribution svg')
+      .datum(getCoverageDistributionData([5,0,0,0,0,1,0,0,0,1,2,14], "Class Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#methodCoverageDistribution svg')
+      .datum(getCoverageDistributionData([34,0,0,0,1,0,0,3,1,4,0,14], "Method Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getCoverageDistributionData(data, label) {
+    var labels = [
+      '0%',
+      '0-10%',
+      '10-20%',
+      '20-30%',
+      '30-40%',
+      '40-50%',
+      '50-60%',
+      '60-70%',
+      '70-80%',
+      '80-90%',
+      '90-100%',
+      '100%'
+    ];
+    var values = [];
+    $.each(labels, function(key) {
+      values.push({x: labels[key], y: data[key]});
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Cyclomatic Complexity');
+
+    d3.select('#classComplexity svg')
+      .datum(getComplexityData([[0,9,"<a href=\"Cli.php.html#3\">Cli<\/a>"],[89.47368421052632,11,"<a href=\"Config.php.html#4\">Config<\/a>"],[100,0,"<a href=\"Controller.php.html#3\">Controller<\/a>"],[0,2,"<a href=\"Database.php.html#3\">Database<\/a>"],[100,0,"<a href=\"DependencyInjection.php.html#3\">DiException<\/a>"],[100,0,"<a href=\"DependencyInjection.php.html#4\">DiInvalidTypeException<\/a>"],[100,0,"<a href=\"DependencyInjection.php.html#5\">DiNotFoundException<\/a>"],[100,0,"<a href=\"DependencyInjection.php.html#6\">DiFunctionNotFoundException<\/a>"],[100,0,"<a href=\"DependencyInjection.php.html#7\">DiMethodNotFoundException<\/a>"],[100,0,"<a href=\"DependencyInjection.php.html#8\">DiClassNotFoundException<\/a>"],[98.07692307692307,22,"<a href=\"DependencyInjection.php.html#10\">DependencyInjection<\/a>"],[96.15384615384616,12,"<a href=\"Language.php.html#3\">Language<\/a>"],[0,36,"<a href=\"Model.php.html#5\">Model<\/a>"],[0,24,"<a href=\"Route.php.html#5\">Route<\/a>"],[100,0,"<a href=\"Session.php.html#3\">SessionHandlerException<\/a>"],[100,0,"<a href=\"Session.php.html#4\">SessionDisabledException<\/a>"],[100,0,"<a href=\"Session.php.html#5\">InvalidArgumentTypeException<\/a>"],[100,0,"<a href=\"Session.php.html#6\">ExpiredSessionException<\/a>"],[100,0,"<a href=\"Session.php.html#7\">SessionUseOnlyCookiesException<\/a>"],[100,0,"<a href=\"Session.php.html#8\">SessionHttpOnlyCookieException<\/a>"],[100,0,"<a href=\"Session.php.html#9\">SessionCookieSecureException<\/a>"],[41.81818181818181,33,"<a href=\"Session.php.html#12\">Session<\/a>"],[0,6,"<a href=\"View.php.html#3\">View<\/a>"]], 'Class Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Method Complexity');
+
+    d3.select('#methodComplexity svg')
+      .datum(getComplexityData([[0,1,"<a href=\"Cli.php.html#15\">Cli::init<\/a>"],[0,8,"<a href=\"Cli.php.html#22\">Cli::parseCommands<\/a>"],[100,1,"<a href=\"Config.php.html#7\">Config::init<\/a>"],[83.33333333333334,3,"<a href=\"Config.php.html#12\">Config::get<\/a>"],[100,3,"<a href=\"Config.php.html#23\">Config::findNested<\/a>"],[100,1,"<a href=\"Config.php.html#34\">Config::set<\/a>"],[66.66666666666666,2,"<a href=\"Config.php.html#38\">Config::is<\/a>"],[100,1,"<a href=\"Config.php.html#44\">Config::dump<\/a>"],[0,2,"<a href=\"Database.php.html#5\">Database::instance<\/a>"],[100,6,"<a href=\"DependencyInjection.php.html#12\">DependencyInjection::inject<\/a>"],[85.71428571428571,4,"<a href=\"DependencyInjection.php.html#29\">DependencyInjection::injectArray<\/a>"],[100,3,"<a href=\"DependencyInjection.php.html#41\">DependencyInjection::parseParams<\/a>"],[100,8,"<a href=\"DependencyInjection.php.html#52\">DependencyInjection::injectClass<\/a>"],[100,1,"<a href=\"DependencyInjection.php.html#99\">DependencyInjection::injectFunction<\/a>"],[100,2,"<a href=\"Language.php.html#8\">Language::init<\/a>"],[100,2,"<a href=\"Language.php.html#19\">Language::loadFile<\/a>"],[83.33333333333334,3,"<a href=\"Language.php.html#33\">Language::get<\/a>"],[100,1,"<a href=\"Language.php.html#43\">Language::set<\/a>"],[100,3,"<a href=\"Language.php.html#48\">Language::findNested<\/a>"],[100,1,"<a href=\"Language.php.html#60\">Language::dump<\/a>"],[100,1,"<a href=\"Model.php.html#11\">Model::__construct<\/a>"],[0,6,"<a href=\"Model.php.html#14\">Model::findObjects<\/a>"],[0,9,"<a href=\"Model.php.html#32\">Model::findClasses<\/a>"],[0,2,"<a href=\"Model.php.html#52\">Model::getSingleDependencies<\/a>"],[0,2,"<a href=\"Model.php.html#58\">Model::getManyDependencies<\/a>"],[0,3,"<a href=\"Model.php.html#65\">Model::find<\/a>"],[0,3,"<a href=\"Model.php.html#83\">Model::search<\/a>"],[0,3,"<a href=\"Model.php.html#99\">Model::all<\/a>"],[0,2,"<a href=\"Model.php.html#116\">Model::save<\/a>"],[0,2,"<a href=\"Model.php.html#124\">Model::update<\/a>"],[0,1,"<a href=\"Model.php.html#135\">Model::create<\/a>"],[0,2,"<a href=\"Model.php.html#146\">Model::saveUnique<\/a>"],[0,1,"<a href=\"Route.php.html#16\">Route::get<\/a>"],[0,1,"<a href=\"Route.php.html#22\">Route::post<\/a>"],[0,1,"<a href=\"Route.php.html#28\">Route::delete<\/a>"],[0,1,"<a href=\"Route.php.html#34\">Route::put<\/a>"],[0,1,"<a href=\"Route.php.html#41\">Route::notFound<\/a>"],[0,1,"<a href=\"Route.php.html#45\">Route::onInternal<\/a>"],[0,5,"<a href=\"Route.php.html#49\">Route::init<\/a>"],[0,1,"<a href=\"Route.php.html#68\">Route::isRoute<\/a>"],[0,1,"<a href=\"Route.php.html#71\">Route::getRoute<\/a>"],[0,7,"<a href=\"Route.php.html#75\">Route::match<\/a>"],[0,1,"<a href=\"Route.php.html#96\">Route::anonymousFunction:96#725<\/a>"],[0,2,"<a href=\"Route.php.html#112\">Route::buildClassQuery<\/a>"],[0,1,"<a href=\"Route.php.html#126\">Route::callMiddlewares<\/a>"],[83.33333333333334,2,"<a href=\"Session.php.html#15\">Session::write<\/a>"],[70,5,"<a href=\"Session.php.html#24\">Session::get<\/a>"],[66.66666666666666,4,"<a href=\"Session.php.html#42\">Session::getSessionId<\/a>"],[0,2,"<a href=\"Session.php.html#48\">Session::delete<\/a>"],[0,1,"<a href=\"Session.php.html#56\">Session::dump<\/a>"],[0,1,"<a href=\"Session.php.html#61\">Session::start<\/a>"],[66.66666666666666,4,"<a href=\"Session.php.html#65\">Session::_age<\/a>"],[0,4,"<a href=\"Session.php.html#75\">Session::destroy<\/a>"],[33.33333333333333,10,"<a href=\"Session.php.html#84\">Session::_init<\/a>"],[0,2,"<a href=\"View.php.html#6\">View::renderDefault<\/a>"],[0,2,"<a href=\"View.php.html#15\">View::renderTwig<\/a>"],[0,2,"<a href=\"View.php.html#26\">View::render<\/a>"]], 'Method Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getComplexityData(data, label) {
+    var values = [];
+    $.each(data, function(key) {
+      var value = Math.round(data[key][0]*100) / 100;
+      values.push({
+        x: value,
+        y: data[key][1],
+        class: data[key][2],
+        size: 0.05,
+        shape: 'diamond'
+      });
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+});
+  </script>
+ </body>
+</html>

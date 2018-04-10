@@ -1,0 +1,157 @@
+button, select {
+  outline: none;
+  background: none;
+}
+
+textarea {
+  border: 1px solid #ddd;
+  outline: none;
+  resize: none;
+  font-size: 16px;
+  min-width: 100%;
+  margin: 0 auto;
+}
+
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.inputfile + label {
+  border-radius: 30px;
+  padding: 0px 20px;
+  color: white;
+  font-size: 18px;
+  background: #3997D8;
+  display: inline-block;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.inputfile:hover + label {
+  padding: 0px 30px;
+  background: #47ABDB;
+}
+
+.inputfile + label i,
+.inputfile + label span {
+  padding: 10px 5px;
+}
+
+
+
+select {
+  padding: 10px;
+}
+
+
+
+
+.content {
+  background: white;
+  padding: 10px 0px;
+  text-align: center;
+}
+
+.prevVid{
+  height: auto;
+  max-width: calc(100% - 20px);
+  max-height: 500px;
+  align-self: center;
+  transition: 0.8s ease-in-out;
+}
+
+
+
+
+.inputs {
+  height: auto;
+}
+
+.inputCon {
+  
+  padding: 30px;
+  text-align: center;
+}
+
+.videoTitle {
+  background-color: #ecf0f1;
+  text-align: center;
+  width: 20vw;
+  height: 20px;
+  margin: 0 auto;
+  padding: 12px;
+  font-size: 20px;
+}
+
+.inputCon select {
+  height: 25px;
+  width: 100px;
+  border: none;
+  font-size: 16px;
+  background: #ecf0f1;
+}
+
+.inputCon h1 {
+  padding: 5px;
+  font-weight: 900;
+}
+
+.desc {
+  display: flex;
+  padding: 20px;
+  flex-direction: column;
+  height: 200px;
+  width: 40vw;
+  margin: 10px auto;
+}
+
+.desc p {
+  align-self: flex-start;
+  padding: 20px 0;
+}
+
+.upload {
+  margin: 30px;
+  border: 1px solid #3997D8;
+  color: #47ABDB;
+}
+
+.upload:active {
+  background: #ddd;
+  border-color: #ddd;
+
+}
+
+
+
+.uploadVideoContainer {
+  display: inline-block;
+  visibility: hidden;
+  padding: 50px 0px 100px 00px;
+}
+.uploadVideoContainer i {
+  padding: 8px;
+  font-size: 34px;
+  color: #999;
+  transition: 0.2s ease-in-out;
+}
+.uploadVideoContainer h1 {
+  font-size: 18px;
+  color: #999;
+  transition: 0.2s ease-in-out;
+  user-select: none;
+}
+.uploadVideoContainer:hover h1, .uploadVideoContainer:hover i {
+  color: #47ABDB;
+}
+
+
+input {
+  width: 100%;
+  height: 50px;
+}

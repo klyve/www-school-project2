@@ -1,0 +1,49 @@
+.content {
+  min-height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  text-align: center;
+}
+
+
+.avatarPicture {
+  object-fit: cover;
+  height: 300px;
+  width: 300px;
+  border-radius: 50%;
+  margin: 20px;
+}
+
+
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.inputfile + label {
+  border-radius: 30px;
+  padding: 0px 20px;
+  margin: 20px;
+  color: white;
+  font-size: 18px;
+  background: #3997D8;
+  display: inline-block;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.inputfile:hover + label {
+  padding: 0px 30px;
+  background: #47ABDB;
+}
+
+.inputfile + label i,
+.inputfile + label span {
+  padding: 10px 5px;
+}

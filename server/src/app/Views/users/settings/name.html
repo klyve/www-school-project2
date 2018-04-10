@@ -1,0 +1,68 @@
+{% extends "main.html" %}
+{% block content %}
+
+  <link rel="stylesheet" href="public/css/settings/main.css">
+  <link rel="stylesheet" href="public/css/settings/name.css">
+
+  <div class="container">
+
+  <!-- MENU -->
+    <div class="menu">
+      <a href="{{'settings'|link}}">
+        <div class="menuItem">
+          <i class="fas fa-camera"></i>
+          <p>{{'password.avatar'|localize}}</p>
+        </div>
+      </a>
+
+      <a href="{{'settings/name'|link}}">
+        <div class="menuItem">
+          <div class="activeMenuItem">
+            <i class="fas fa-address-card"></i>
+            <p>{{'password.name'|localize}}</p>
+          </div>
+        </div>
+      </a>
+
+      <a href="{{'settings/password'|link}}">
+        <div class="menuItem">
+          <i class="fas fa-lock"></i>
+          <p>{{'password.password'|localize}}</p>
+        </div>
+      </a>
+
+      <a href="{{'settings/language'|link}}">
+        <div class="menuItem">
+          <i class="fas fa-language"></i>
+          <p>{{'password.language'|localize}}</p>
+        </div>
+      </a>
+    </div>
+
+    <form method="post">
+      <div class="content">
+        <div>
+          <div class="form-group modern required">
+            <h1>{{'name.displayName'|localize}}</h1>
+            <input type="text" class="form-control" name="name" value="{{user.name}}" />
+          </div>
+
+        </div>
+      </div>
+
+      <div class="saveContainer">
+        <button type="submit">
+          <div>
+            <i class="fas fa-save"></i>
+          </div>
+          <div>
+            <h1>{{'password.save'|localize}}</h1>
+          </div>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <script src="public/js/nav.js"></script>
+
+{% endblock %}

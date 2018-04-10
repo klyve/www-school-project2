@@ -1,0 +1,115 @@
+{% extends "main.html" %}
+{% block content %}
+
+<link rel="stylesheet" href="public/css/videoManager/main.css">
+<link rel="stylesheet" href="public/css/videoManager/upload.css">
+
+
+  <div class="container">
+
+    <div class="menu">
+      <a href="{{'manageUpload'|link}}">
+        <div class="menuItem">
+          <div class="activeMenuItem">
+            <i class="fas fa-upload"></i>
+            <p>{{'upload.upload'|localize}}</p>
+          </div>
+        </div>
+      </a>
+
+      <a href="{{'managePlaylists'|link}}">
+        <div class="menuItem">
+          <i class="fas fa-indent"></i>
+          <p>{{'upload.playlists'|localize}}</p>
+        </div>
+      </a>
+
+      <a href="{{'manageVideos'|link}}">
+        <div class="menuItem">
+          <i class="fas fa-film"></i>
+          <p>{{'upload.videos'|localize}}</p>
+        </div>
+      </a>
+
+      <a href="{{'manageStats'|link}}">
+        <div class="menuItem">
+          <i class="fas fa-chart-bar"></i>
+          <p>{{'upload.stats'|localize}}</p>
+        </div>
+      </a>
+
+      <a href="{{'manageComments'|link}}">
+        <div class="menuItem">
+          <i class="fas fa-comments"></i>
+          <p>{{'upload.comments'|localize}}</p>
+        </div>
+      </a>
+    </div>
+
+
+    <div class="content">
+
+      <div class="preview">
+        <video class="prevVid" src=""></video>
+      </div>
+
+
+
+      <div class="inputs">
+        <form method="post" enctype="multipart/form-data">
+
+          <div class="inputCon">
+            <input class="inputfile" type="file" name="video" id="file" />
+            <label for="file">
+              <i class="fas fa-upload"></i>
+              <span>{{'upload.choosevid'|localize}}</span>
+            </label>
+          </div>
+
+          <div class="container-fluid">
+          <div class="row">       
+              
+              <div class="inputgroup">
+                  <div class="form-group modern required">
+                  <label for="title">Playlist</label>
+                      <select class="form-control" name="playlist">
+                      
+                      <option value="NULL">Select playlist</option>
+                      {% for playlist in playlists %}
+                        <option value="{{playlist.id}}">{{playlist.name}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+            <br /><br />
+          </div>
+            
+            <div class="inputgroup">
+                <div class="form-group modern required">
+                  <label for="title">{{'upload.title'|localize}}</label>
+                  <input class="form-control" name="name" type="text" id="title" />
+                </div>
+                <br />
+              <div class="form-group modern required">
+                  <label for="description">Video Description</label>
+                  <div class="col-sm-10">
+                    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                  </div>
+                </div>
+            </div>
+          </div>
+
+          <div class="uploadVideoContainer">
+            <button type="submit">
+              <i class="fas fa-upload"></i>
+              <h1>{{'upload.uploadVid'|localize}}</h1>
+            </button>
+          </div>
+        </form>
+      </div>
+      </div>
+  </div>
+</div>
+
+<script src="public/js/upload.js"></script>
+
+{% endblock %}

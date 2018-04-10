@@ -1,0 +1,63 @@
+{% extends "main.html" %}
+{% block content %}
+
+    <link rel="stylesheet" href="public/css/videoView.css">
+
+    <title>{{'videoView.video'|localize}}</title>
+    <div>{{videoId}}</div>
+    <div class="container">
+
+     <div class="video">
+       <video src="http://forelesning.gjovik.ntnu.no/publish/1519228861-467fc95fa241/screen.mp4" controls />
+     </div>
+
+     <form method="post" class="buttons">
+       <p style="padding-right: 10px;">{{rating}}</p>
+       {% if vote != true %}
+       <button type="submit" name="votedown" value="votedown"><i class="fas fa-thumbs-down"></i></button>
+       <button type="submit" name="voteup" value="voteup"><i class="fas fa-thumbs-up"></i></button>
+       {% else %}
+       <button disabled><i class="fas fa-thumbs-down"></i></button>
+       <button disabled><i class="fas fa-thumbs-up"></i></button>
+       {% endif %}
+     </form>
+
+     <div class="titles">
+       <a href="{{'playlist'|link}}&id={{playlistId}}"><h2>{{playlist}}</h2><a/>
+       <h1>{{vid.name}}</h1>
+       <div class="description">
+         <pre class="desc">{{vid.description}}</pre>
+         <button class="descBtn">{{'videoView.showMore'|localize}}</button>
+       </div>
+     </div>
+
+
+
+     <div class="comments">
+       <h1>{{'videoView.comments'|localize}}</h1>
+
+       <form class="writeComment" method="post">
+         <input type="text" name="comment" style="border-bottom: 2px solid black;">
+         <button type="submit">{{'videoView.submit'|localize}}</button>
+       </form>
+        {% for comment in comments %}
+       <div class="comment" id="{{comment.commentId}}">
+          <div class="author">
+            <h2>{{comment.user.name}}</h2>
+            <p>{{comment.created_at}}</p>
+          </div>
+          <p>{{comment.comment}}</p>
+       </div>
+       {%endfor%}
+
+     <div class="save">
+       <button class="saveNotes" type="button">{{'videoView.saveNotes'|localize}}</button>
+     </div>
+     <div class="notes">
+       <textarea placeholder="Write notes here..."></textarea>
+     </div>
+   </div>
+
+  <script src="public/js/downloadNotes.js"></script>
+
+{% endblock %}

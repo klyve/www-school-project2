@@ -1,0 +1,82 @@
+{% extends "main.html" %}
+{% block content %}
+
+<link rel="stylesheet" href="public/css/settings/main.css">
+<link rel="stylesheet" href="public/css/settings/avatar.css">
+
+<div class="container">
+
+
+<!-- MENU -->
+  <div class="menu">
+    <a href="{{'settings'|link}}">
+      <div class="menuItem">
+        <div class="activeMenuItem">
+          <i class="fas fa-camera"></i>
+          <p>{{'password.avatar'|localize}}</p>
+        </div>
+      </div>
+    </a>
+
+    <a href="{{'settings/name'|link}}">
+      <div class="menuItem">
+        <i class="fas fa-address-card"></i>
+        <p>{{'password.name'|localize}}</p>
+      </div>
+    </a>
+
+    <a href="{{'settings/password'|link}}">
+      <div class="menuItem">
+        <i class="fas fa-lock"></i>
+        <p>{{'password.password'|localize}}</p>
+      </div>
+    </a>
+
+    <a href="{{'settings/language'|link}}">
+      <div class="menuItem">
+        <i class="fas fa-language"></i>
+        <p>{{'password.language'|localize}}</p>
+      </div>
+    </a>
+  </div>
+
+
+
+
+  <div class="content">
+
+    <form method="POST" enctype="multipart/form-data">
+    <div>
+      <img class="avatarPicture" src="{{user.avatar|mediaImage}}"/>
+
+      <div class="inputCon">
+        <input class="inputfile" type="file" name="avatar" id="file" />
+        <label for="file">
+          <i class="fas fa-upload"></i>
+          <span>{{'avatar.choose'|localize}}</span>
+        </label>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="saveContainer">
+    <button type="submit">
+      <div>
+        <i class="fas fa-save"></i>
+      </div>
+      <div>
+        <h1>{{'password.save'|localize}}</h1>
+      </div>
+    </button>
+    </div>
+
+  </form>
+
+</div>
+
+
+<script src="public/js/nav.js"></script>
+<script src="public/js/avatarUpload.js"></script>
+
+{% endblock %}

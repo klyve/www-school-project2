@@ -1,0 +1,149 @@
+{
+    "login": {
+        "title": "Log in",
+        "button": "Sign in",
+        "forgotpassword": "forgot password?",
+        "signup": "Sign up",
+        "signuptext": "Want to get inside?",
+        "schoolName": "NTNU"
+    },
+    "register": {
+      "register" : "Register",
+      "signUp" : "Sign Up",
+      "im" : "I am a",
+      "student" : "Student",
+      "lecturer" : "Lecturer",
+      "login" : "Log in",
+      "alreadyAccount" : "Already have an account? ",
+      "userExists" : "User alredy exists"
+    },
+    "main" : {
+      "adminTools" : "Admin tools",
+      "admin" : "Admin",
+      "text2" : "Text2",
+      "main" : "Main",
+      "home" : "Home",
+      "uploadFile" : "Upload File",
+      "settings" : "Settings",
+      "logOut" : "Log out",
+      "myPlaylists" : "My playlists"
+    },
+    "landingpage" : {
+      "logIn" : "LOG IN",
+      "signUp" : "SIGN UP",
+      "lorem" : "NOW COMES SOME LOREM IPSUM",
+      "remember" : "Ah, I remember now...",
+      "logIn" : "Log In"
+    },
+    "forgotPassword" : {
+      "resetPw" : "RESET PASSWORD",
+      "reset" : "RESET"
+    },
+    "videos" : {
+      "videoManager" : "Video Manager",
+      "upload" : "upload",
+      "playlists" : "playlists",
+      "videos" : "videos",
+      "stats" : "stats",
+      "comments" : "comments"
+    },
+    "upload" : {
+      "upload" : "upload",
+      "playlists" : "playlists",
+      "videos" : "videos",
+      "stats" : "stats",
+      "comments" : "comments",
+      "choosevid" : "Choose a video...",
+      "playlist" : "Playlist",
+      "none" : "None",
+      "title" : "Title",
+      "description" : "Description",
+      "uploadVid" : "upload video"
+    },
+    "playlists" : {
+      "playlistManager" : "Playlist Manager",
+      "upload" : "upload",
+      "playlists" : "Playlists",
+      "addPlaylist+" : "add playlist +",
+      "addPlaylist" : "add playlist"
+    },
+    "comments" : {
+      "commentManager" : "Comment Manager"
+    },
+    "password" : {
+      "avatar" : "avatar",
+      "name" : "name",
+      "password" : "password",
+      "language" : "language",
+      "newPw" : "new password",
+      "currentPw" : "current password",
+      "save" : "save settings"
+    },
+    "name" : {
+      "displayName" : "Display Name"
+    },
+    "avatar" : {
+      "choose" : "Choose a picture..."
+    },
+    "videoView" : {
+      "video" : "video",
+      "showMore" : "Show more",
+      "comments" : "Comments",
+      "submit" : "Submit",
+      "saveNotes" : "Save Notes"
+    },
+    "search" : {
+      "search" : "Search results"
+    },
+    "pagesIndex" : {
+      "dashBoard" : "Dashboard",
+      "new" : "NEW TODAY"
+    },
+    "admin": {
+      "users" : {
+        "name" : "Name",
+        "role" : "Current Role",
+        "sugRole" : "Suggested Role",
+        "group" : "Group",
+        "accesGroup": "Access Group",
+        "promote" : "Promote"
+      },
+      "search" : {
+        "search" : "Search",
+        "name" : "Name",
+        "email" : "Email",
+        "role" : "Current Role"
+      },
+      "main" : {
+        "newUsers" : "New Users",
+        "newVid" : "new videos",
+        "password" : "password",
+        "search" : "Search"
+      },
+      "user" : {
+        "password" : {
+          "avatar" : "avatar",
+          "name" : "name",
+          "password" : "password",
+          "language" : "language",
+          "newPw" : "new password",
+          "currentPw" : "current password",
+          "save" : "save settings"
+        },
+        "name" : {
+          "avatar" : "avatar",
+          "name" : "name",
+          "password" : "password",
+          "language" : "language",
+          "displayName" : "Display Name",
+          "save" : "save settings"
+        },
+        "avatar" : {
+          "choosePic" : "Choose a picture..."
+        }
+      }
+    },
+    "watchlater": "Watch later",
+    "history": "History",
+    "liked": "Liked"
+}

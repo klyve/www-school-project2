@@ -1,0 +1,48 @@
+{% extends "admin/adminmain.html" %}
+{% block admincontent %}
+<div class="limiter">
+		<div class="container-table100">
+			<div class="wrap-table100">
+				<div class="table100">
+					<table>
+						<thead>
+							<tr class="table100-head">
+								<th class="column1">{{'admin.users.name'|localize}}</th>
+								<th class="column2">{{'admin.users.role'|localize}}</th>
+                                <th class="column3">{{'admin.users.sugRole'|localize}}</th>
+                                <th class="column4">{{'admin.users.group'|localize}}</th>
+                                <th class="column5">{{'admin.users.promote'|localize}}</th>
+							</tr>
+						</thead>
+						<tbody>
+                            {% for user in users %}
+                                <tr>
+                                    <form method="POST">
+                                        <input type="hidden" value="{{user.id}}" name="userid" />
+                                        <td class="column1">{{user.name}}</td>
+                                        <td class="column2">{{user.usergroup|userRole}}</td>
+                                        <td class="column3">{{user.suggestedRole|userRole}}</td>
+                                        <td class="column4">
+                                            <select name="nextGroup">
+                                                {% for group in groups %}
+                                                    {% if group.value == user.usergroup %}
+                                                        <option value="{{group.value}}" selected="true">{{group.key}}</option>
+                                                    {% else %}
+                                                        <option value="{{group.value}}">{{group.key}}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </td>
+                                        <td class="column5"><button class="tablePromote" type="submit">{{'admin.users.promote'|localize}}</button></td>
+                                    </form>
+                                </tr>
+                            {% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+{% endblock %}

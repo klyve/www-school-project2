@@ -1,0 +1,59 @@
+{% extends "main.html" %}
+{% block content %}
+
+<link rel="stylesheet" href="public/css/search.css">
+
+<div class="header">
+  <h1>{{'search.search'|localize}}</h1>
+
+</div>
+
+<div class="container-fluid">
+  {% for playlist in playlists %}
+    {% if playlist.videos|length != 0 %}
+      <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <h3 class="card-title">{{playlist.name}}</h3>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Videos: {{ playlist.videos|length }}</li>
+            <li class="list-group-item">By: {{ (playlist.videos|first).user.name }}</li>
+          </ul>
+          <div class="card-body">
+            <span style="float:left;">
+              <a href="{{['playlist&id=', playlist.id]|join|link}}" class="btn btn-primary">Go to</a>
+            </span>
+          </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+
+</div>
+
+<div class="videos">
+  {% for video in videos %}
+
+  <div class="video">
+    <a href="{{['watch&id=', video.id]|join|link}}">
+      <div class="left">
+        {% if video.thumbnail %}
+          <img src="{{video.thumbnail|mediaImage}}" alt="">
+        {% else %}
+          <img src="public/images/thumbnail.png" alt="">
+        {% endif %}
+        <div class="title">
+          <h1>{{video.name}}</h1>
+          <h2>{{video.user.name}}</h2>
+        </div>
+      </div>
+
+      <h1 class="date">{{video.created_at}}</h1>
+    </a>
+  </div>
+
+  {% endfor %}
+
+</div>
+
+
+{% endblock %}
