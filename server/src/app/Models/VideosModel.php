@@ -1,4 +1,4 @@
-<?php
+<?php namespace App\Models;
 
 
 class VideosModel extends \MVC\Core\Model {
@@ -20,24 +20,19 @@ class VideosModel extends \MVC\Core\Model {
   // integer: 0 - MAXINT
   public $viewCount;   
 
-  // @TODO: Discuss which format the subtitles should be stored as.
-  //        Should it be in a separate table to more easily retrieve 
-  //        a subtitle without the need for parsing a subtitle format 
-  //        during run-time? Does html natively parse .srt so we don't
-  //         have to think about it? Should be store the subtitle in a 
-  //        file instead, just like with videos and thumbnails ? 
-  //                                    - JSolsvik 11.04.2018
+  // example: media/thumbnails/catvideo.png
+  //          media/thumbnails/<hash($id . $userid . $name)>.png
+  public $filethumbnail;
 
-  // Maybe .srt formatted subtitle. 
-  public $subtitle; 
+  // example: media/videos/catvideo.mp4
+  //          media/videos/<hash($id . $userid . $name)>.mp4
+  public $filevideo;
+
+  // example: media/subtitles/catvideo.srt
+  //          media/subtitles/<hash($id . $userid . $name)>.srt
+  public $filesubtitle;
+
 
   public $exclude = ['id'];
 
-    // @NOTE: Each entry in this table implicitly points to two files
-    //          (possibly subtitle file also?). 
-    //        One video file and a thumbnail file. The filenames are 
-    //        based on hash of the metadata in an entry.
-    //        Example: videos/<hash($id . $userid . $name)>.mp4
-    //                 thumbnails/<hash($id . $userid . $name)>.png
-    //                 subtitles/<hash($id . $userid . $name)>.srt
 }
