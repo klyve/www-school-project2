@@ -15,7 +15,7 @@
     "autoload": {
         "psr-4": {
             "MVC\\": "src/mvc",
-            "App\\": "src/app"
+            "App\\": "src/App"
         }
     }
 }

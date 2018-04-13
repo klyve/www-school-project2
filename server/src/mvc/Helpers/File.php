@@ -27,6 +27,8 @@ class File {
         $namespaceRelativePath = str_replace('\\', DIRECTORY_SEPARATOR, $namespace);
         $includePathStr = get_include_path();
         $includePathArr = explode(PATH_SEPARATOR, $includePathStr);
+        if(!in_array("", $includePathArr)) 
+            $includePathArr[] = "";
 
         $classArr = [];
         foreach ($includePathArr as $includePath) {
