@@ -27,15 +27,33 @@ class Route {
     static $staticRoutes = [];
     static $_route = '/';
 
+    static $_requestParams = [];
+    
+
+    public static function regexReplace($string) {
+        $matches = [];
+        $pattern = '/\{(\w+)\}/';
+        $string = trim($string, '/');
+        preg_match_all($pattern, $string, $matches);
+        if(count($matches) > 0) {
+            foreach($matches[0] as $key => $value) {
+                $string = preg_replace('/'.$value.'/', '(?<'.$matches[1][$key].'>.+)', $string);
+            }
+            $string = preg_replace('/\//', '\/', $string);
+        }
+        $string = '/(?<uri>^'.$string.'$)/';
+        return $string;
+    }
 /**
  * @param $name @TODO describe this parameter
  * @param $callback @TODO describe this parameter
  * @param $middleware @TODO describe this parameter
  */
     public static function get($name, $callback, $middleware = false) {
-        self::$httpMethods["GET"][$name] = [
+        self::$httpMethods["GET"][] = [
             "fn" => $callback,
             "middleware" => $middleware,
+            "uri" =>self::regexReplace($name),
         ];
     }
 
@@ -129,14 +147,28 @@ class Route {
     }
 
 
+    protected static function regexMatch($routes, $route) {
+        foreach($routes as $key => $value) {
+            if(preg_match($value["uri"], trim($route, '/'), $matches)) {
+                foreach ($matches as $k => $v) {
+                    if (!is_int($k)) {
+                        self::$_requestParams[$k] = $v;
+                    }
+                }
+                return $value;
+            }
+        }
+        return false;
+    }
+
 /**
  * @param $routes @TODO describe this parameter
  */
     protected static function match($routes) {
         $route = self::$_route;
 
-        if(isset($routes[$route])) {
-            $match = $routes[$route];
+        $match = self::regexMatch($routes, $route);
+        if($match) {
             $fn = null;
             if(is_string($match["fn"])) {
                 $fn = self::buildClassQuery($match["fn"]);
