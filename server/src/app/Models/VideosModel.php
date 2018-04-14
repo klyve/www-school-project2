@@ -12,7 +12,7 @@ class VideosModel extends \MVC\Core\Model {
   public $userid;      
 
   // text, max 128 chars, '10 biggest rollercoasters in the world'
-  public $name;        
+  public $title;        
 
   // text, max 2048 chars, 'My trip around the world took me....'
   public $description; 

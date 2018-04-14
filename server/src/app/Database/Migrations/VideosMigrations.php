@@ -29,9 +29,9 @@ class VideosMigrations {
     public function up() {
         Schema::create('videos', function($table) {
             $table->primary('id')->autoIncrement();
-            $table->string('userid')->length(64);
+            $table->number('userid')->default(1);
 
-            $table->string('name')->length(128);
+            $table->string('title')->length(128);
             $table->string('description')->length(2048);
             $table->number('viewCount')->default(0);
 

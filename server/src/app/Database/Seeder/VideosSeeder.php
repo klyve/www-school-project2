@@ -27,7 +27,7 @@ class VideosSeeder {
         Schema::insert(function(Models\VideosModel $model) {
           for($i = 0; $i < 6; $i++) {
             $model->userid = 1;    // foreign key
-            $model->name = "name" . $i;
+            $model->title = "title" . $i;
             $model->description = "description bla bla".$i;
             $model->viewCount = $i * 1000;
             $model->filethumbnail = "example.png";
