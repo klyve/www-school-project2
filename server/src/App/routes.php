@@ -1,6 +1,6 @@
 <?php
 use MVC\Core\Route;
-
+use MVC\Http\Request;
 
 Route::get('/', 'SimpleJSONController.hello');
 Route::get('/hello', 'SimpleJSONController.sayHelloJSON');

@@ -15,13 +15,14 @@
  */
 
 use \Rakit\Validation\Validator;
-
+use \MVC\Core\Route;
 
 class Request {
 
     protected $method;
     protected $_input = [];
     protected $_files = [];
+    protected $_params = [];
     /**
      * [__construct description]
      */
@@ -33,6 +34,8 @@ class Request {
         foreach($_FILES as $key => $value) {
             $this->_files[$key] = $value;
         }
+
+        $this->_params = Route::$_requestParams;
     }
 
 /**
@@ -100,7 +103,19 @@ class Request {
  */
     public function validate($rules, $messages = []) {
         $validator = new Validator;
-        return $validator->validate(array_merge($this->_input, $this->_files), $rules, $messages);
+        return $validator->validate(array_merge($this->_input, $this->_files, $this->_params), $rules, $messages);
+    }
+
+    public function params() {
+        return $this->_params;
+    }
+
+    public function param($name) {
+        if(isset($this->_params[$name])) {
+            return $this->_params[$name];
+        }
+
+        return false;
     }
 
 }
