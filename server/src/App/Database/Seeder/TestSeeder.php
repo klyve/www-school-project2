@@ -17,22 +17,17 @@
 use \MVC\Database\Schema;
 use \App\Models as Models;
 
-class VideosSeeder {
+class TestSeeder {
 
 /**
  * The up function fills the table with dummy data for development
  */
 
     public function up() {
-        Schema::insert(function(Models\VideosModel $model) {
+        Schema::insert(function(Models\TestModel $model) {
           for($i = 0; $i < 6; $i++) {
-            $model->userid = 1;    // foreign key
-            $model->name = "name" . $i;
-            $model->description = "description bla bla".$i;
-            $model->viewCount = $i * 1000;
-            $model->filethumbnail = "example.png";
-            $model->filevideo     = "example.mp4";
-            $model->filesubtitle  = "example.srt";
+            $model->name = "Hello" . $i;
+            $model->age = $i % 2;
             $model->save();
           }
         });
@@ -43,6 +38,6 @@ class VideosSeeder {
  */
 
     public function down() {
-        Schema::truncate('videos');
+        Schema::truncate('test');
     }
 }

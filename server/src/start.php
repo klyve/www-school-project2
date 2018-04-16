@@ -15,7 +15,7 @@
  */
 
 require_once 'mvc/bootstrap.php';
-require_once __DIR__ . '/app/config.php';
+require_once __DIR__ . '/App/config.php';
 
 define('APP_ROOT', __DIR__);
 
@@ -28,6 +28,6 @@ if(php_sapi_name() === 'cli') {
 }else {
     MVC\Core\Language::init();
 
-    require_once 'app/routes.php';
+    require_once 'App/routes.php';
     MVC\Core\Route::init();
 }

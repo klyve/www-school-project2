@@ -52,6 +52,9 @@ class Migrations {
  * @param  [type] $files [description]
  */
     public static function migrateUp($files) {
+        if(count($files) == 0) {
+          echo "No Migration files found for up \n\r";
+        }
         foreach($files as $file) {
             self::runMigration($file, 'up');
         }
@@ -61,6 +64,9 @@ class Migrations {
      * @param  [type] $files [description]
      */
     public static function migrateDown($files) {
+        if(count($files) == 0) {
+          echo "No Migration files found for down \n\r";
+        }
         foreach($files as $file) {
             self::runMigration($file, 'down');
         }

@@ -43,10 +43,6 @@ class Hash {
     $hashedPwd = password_hash($password, PASSWORD_DEFAULT);
 
     return $hashedPwd;
-    // return [
-    //     "salt" => $salt,
-    //     "password" => $hashedPwd
-    //   ];
   }
 /**
  * @TODO: [verify description]

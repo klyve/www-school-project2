@@ -19,7 +19,7 @@ class Cli {
 
     protected static $_commands = [
         'migrate' => \MVC\Database\Migrations::class,
-        'seed' => \MVC\Database\Seeder::class
+        'seed' => \MVC\Database\Seeder::class,
     ];
 
     protected static $_excluded = [
@@ -63,8 +63,13 @@ class Cli {
                     $arguments[] = $argv[$i];
                 }
             }
-
-            self::$_commands[$parts[0]]::runCli($arguments);
+            if(is_array(self::$_commands[$parts[0]])) {
+              foreach(self::$_commands[$parts[0]] as $part) {
+                $part::runCli($arguments);
+              }
+            }else {
+                self::$_commands[$parts[0]]::runCli($arguments);
+            }
         }
 
         return self::parseCommands($argv, $position+1);

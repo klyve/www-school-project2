@@ -19,26 +19,20 @@
 use \MVC\Database\Schema;
 use \MVC\Core\Config;
 
-// @TODO - not supprted. Should it ever be? - JSolsvik 11.04.2018
-// $table->foreign('userid'); 
+class UsersMigrations {
 
-class VideosMigrations {
 /**
  * The up function creates a new table with a set of fields with its properties
  */
+
     public function up() {
-        Schema::create('videos', function($table) {
+        Schema::create('users', function($table){
             $table->primary('id')->autoIncrement();
-            $table->string('userid')->length(64);
-
-            $table->string('name')->length(128);
-            $table->string('description')->length(2048);
-            $table->number('viewCount')->default(0);
-
-            $table->string('filethumbnail')->length(64);
-            $table->string('filevideo')->length(64);
-            $table->string('filesubtitle')->length(64);
-
+            $table->number('usergroup')->default(1);
+            $table->number('requestedgroup')->default(1);
+            $table->string('email')->length(150);
+            $table->string('name')->length(100);
+            $table->string('password');
             $table->timestamps();
         });
     }
@@ -46,7 +40,9 @@ class VideosMigrations {
 /**
  * The down function destroys the table
  */
+
     public function down() {
-        Schema::destroy('videos');
+        Schema::destroy('users');
     }
+
 }
