@@ -28,8 +28,8 @@ class CommentsMigrations {
     public function up() {
         Schema::create('comments', function($table) {
             $table->primary('id')->autoIncrement();
-            $table->number('userid')->default(1);
-            $table->number('videoid')->default(1);
+            $table->number('userid');  // foreign key
+            $table->number('videoid'); // foreign key
             $table->string('content')->length(2048);
             $table->timestamps();
         });

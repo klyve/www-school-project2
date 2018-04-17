@@ -19,15 +19,16 @@
 use \MVC\Database\Schema;
 use \MVC\Core\Config;
 
-class TagMigrations {
+class TagsMigrations {
 
 /**
  * The up function creates a new Tag table with name string as primary key.
  */
 
     public function up() {
-        Schema::create('Tag', function($table){
-            $table->primary('name')->signed()->varchar(255);
+        Schema::create('tags', function($table){
+            $table->primary('id')->autoIncrement();
+            $table->string('text')->varchar(16);
         });
     }
 
@@ -36,7 +37,7 @@ class TagMigrations {
  */
 
     public function down() {
-        Schema::destroy('Tag');
+        Schema::destroy('tags');
     }
 
 }

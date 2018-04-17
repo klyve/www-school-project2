@@ -10,37 +10,35 @@
  *
  *
  * @category   Migrators
- * @package    rewind
- * @version    1.0
- * @link       https://bitbucket.org/klyve/imt2291-project1-spring2018
- * @since      File available since Release 1.0
+ * @package    kruskontroll
+ * @version    2.0
+ * @link       https://bitbucket.org/klyve/imt2291-prosjekt2-v2018/
+ * @since      File available since Release 2.0
  */
 
 use \MVC\Database\Schema;
 use \MVC\Core\Config;
 
-class RatingsMigrations {
+class PlaylistTagsMigrations {
 
 /**
- * The up function creates a new table with a set of fields with its properties
+ * The up function creates a new Tag table with name string as primary key.
  */
 
     public function up() {
-        Schema::create('ratings', function($table) {
+        Schema::create('playlisttags', function($table){
             $table->primary('id')->autoIncrement();
-            $table->number('userid'); // foreign key
-            $table->number('videoid'); // foreign key
-            $table->number('rating')->default(-1);
-            $table->timestamps();
+            $table->number('playlistid'); // foreign key
+            $table->number('tagid');      // foreign key
         });
     }
 
 /**
- * The down function destroys the table
+ * The down function destroys the Tag table.
  */
 
     public function down() {
-        Schema::destroy('ratings');
+        Schema::destroy('playlisttags');
     }
 
 }

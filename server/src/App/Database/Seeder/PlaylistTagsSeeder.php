@@ -17,16 +17,16 @@
 use \MVC\Database\Schema;
 use \App\Models as Models;
 
-class TagSeeder {
+class PlaylistTagsSeeder {
 
 /**
  * The up function fills the Tag table with dummy data for development
  */
-
     public function up() {
-        Schema::insert(function(Models\TagModel $model) {
-          for($i = 0; $i < 6; $i++) {
-            $model->name = "Tag" . $i;
+        Schema::insert(function(Models\PlaylistTagsModel $model) {
+          for($i = 1; $i <= 3; $i++) {
+            $model->playlistid = 1;
+            $model->tagid      = $i;
             $model->save();
           }
         });
@@ -37,6 +37,6 @@ class TagSeeder {
  */
 
     public function down() {
-        Schema::truncate('Tag');
+        Schema::truncate('playlisttags');
     }
 }

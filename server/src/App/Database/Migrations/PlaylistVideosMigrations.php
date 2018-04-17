@@ -28,8 +28,8 @@ class PlaylistVideosMigrations {
     public function up() {
         Schema::create('playlistvideos', function($table){
             $table->primary('id')->autoIncrement();
-            $table->number('playlistid')->default(1);
-            $table->number('videoid')->default(1);
+            $table->number('playlistid'); // foreign key
+            $table->number('videoid');   // foreign key
             $table->number('position')->default(0);
             $table->timestamps();
         });
