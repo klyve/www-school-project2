@@ -17,22 +17,16 @@
 use \MVC\Database\Schema;
 use \App\Models as Models;
 
-class VideosSeeder {
+class SubscriptionsSeeder {
 
 /**
  * The up function fills the table with dummy data for development
  */
-
     public function up() {
-        Schema::insert(function(Models\VideosModel $model) {
-          for($i = 0; $i < 6; $i++) {
-            $model->userid = 1;    // foreign key
-            $model->title = "title" . $i;
-            $model->description = "description bla bla".$i;
-            $model->viewCount = $i * 1000;
-            $model->filethumbnail = "example.png";
-            $model->filevideo     = "example.mp4";
-            $model->filesubtitle  = "example.srt";
+        Schema::insert(function(Models\SubscriptionsModel $model) {
+          for($i = 0; $i < 4; $i++) {
+            $model->userid = 1;    
+            $model->playlistid = $i+1;
             $model->save();
           }
         });
@@ -43,6 +37,6 @@ class VideosSeeder {
  */
 
     public function down() {
-        Schema::truncate('videos');
+        Schema::truncate('subscriptions');
     }
 }
