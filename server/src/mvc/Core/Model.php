@@ -18,9 +18,11 @@ use \MVC\Helpers\SQL;
 
 class Model {
 
-    private $_excludes = ['table', '_excludes', 'exclude', '_dirty', '_findVars'];
+    private $_excludes = ['table', '_excludes', 'exclude', '_dirty', '_findVars', 'protected', '_protected'];
     private $_dirty = false;
     private $_findVars = [];
+
+    public $_protected = ['protected', '_protected', 'table'];
 /**
  * @TODO: [__construct description]
  */
@@ -193,7 +195,9 @@ class Model {
         $dbi = Database::instance();
         $stmt = $dbi->prepare($query);
         $stmt->execute($data);
-
+        foreach($data as $key => $value) {
+            $this->$key = $value;
+        }
         return $dbi->lastInsertId();
     }
 
@@ -209,6 +213,26 @@ class Model {
         if($stmt->rowCount() == 0) {
             $this->save();
         }
+    }
+
+
+    public function exportData() {
+        $objects = get_object_vars($this);
+
+        $protected = array_merge($this->_protected, $this->_excludes);
+        if(isset($this->protected)) {
+            $protected = array_merge($protected, $this->protected);
+        }
+
+        $ret = [];
+        foreach($objects as $key => $value) {
+            if(!in_array($key, $protected) && !is_integer($key)) {
+                $ret[$key] = $value;
+            }
+        }
+        
+
+        return $ret;
     }
 
 }

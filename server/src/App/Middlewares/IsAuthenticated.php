@@ -12,11 +12,12 @@
  * @link       https://bitbucket.org/klyve/imt2291-project1-spring2018
  * @since      File available since Release 1.0
  */
-use \MVC\Core\Session;
-
-use App\Models as Model;
 use \MVC\Http\Response;
-class LoggedIn {
+use \MVC\Http\Error;
+use \MVC\Http\ErrorCode;
+use App\Models\UsersModel;
+
+class IsAuthenticated {
 
   /**
    * @param $request the request
@@ -24,16 +25,26 @@ class LoggedIn {
    * @return redirect @TODO describe whats returned
    */
     public function run($request, $next) {
-        $userId = Session::get('uid');
-        $response = new Response();
-
-        /** checks if we got a uid */
-        if(!$userId) {
-            $response->redirect('login');
-        }else {
-
-            /** continues the request */
-            $next($request);
+        $token = $request->token();
+        $statusCode = new Error(ErrorCode::get('user.authentication_required'));
+        if(!$token) {
+            return Response::send($statusCode);
         }
+
+        $userId = $request->token()->userid;
+        if(!$userId) {
+            return Response::send($statusCode);
+        }
+
+        $user = new UsersModel();
+        $user->find([
+            'id' => $userId
+        ]);
+
+        if(!$user->id) {
+            return Response::send($statusCode);
+        }
+        
+        $next($request);
     }
 }

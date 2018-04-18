@@ -26,14 +26,17 @@ class Response {
  * @return [type]       [description]
  */
     public static function send($data) {
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Headers: Origin');
+        header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE');
+
+        $ret = null;
+        $data = self::unpackData($data);
         if(is_array($data) || gettype($data) === "object") {
-            echo self::json($data);
-            return $data;
+            $data = self::json($data);
         }
-        if(is_string($data)) {
-            echo $data;
-            return $data;
-        }
+        
+        if($data) echo $data;
     }
 /**
  * @TODO: [json description]
@@ -41,12 +44,33 @@ class Response {
  * @return [type]       [description]
  */
     public static function json($data) {
+        header('content-type: application/json; charset=utf-8');
+        
         try {
             $json = json_encode($data);
             return $json;
         } catch(Exception $e) {
           throw new ResponseJSONParseException($e->message);
         }
+    }
+
+
+    public static function unpackData($data = null) {
+        if(is_string($data)) {
+            return $data;
+        }
+        if($data instanceof \MVC\Core\Model) {
+            $data = $data->exportData();
+        }
+        if($data instanceof \MVC\Http\Error) {
+            http_response_code($data->getErrorCode());
+            $data = $data->getData();
+        }
+        if($data instanceof \MVC\Http\ResponseObject) {
+            http_response_code($data->getStatus());
+            $data = self::unpackData($data->getData());
+        }
+        return $data;
     }
 /**
  * @TODO: [redirect description]
@@ -55,5 +79,10 @@ class Response {
  */
     public static function redirect($url) {
         header('location: index.php?page='.$url);
+    }
+
+
+    public static function statusCode($status, $message = null) {
+        return new ResponseObject($status, $message);
     }
 }

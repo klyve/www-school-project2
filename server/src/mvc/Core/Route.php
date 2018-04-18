@@ -129,7 +129,8 @@ class Route {
                 self::match(self::$staticRoutes);
             }
         } catch(\Exception $e) {
-            die("ERROR COULD NOT DO SOMETHING");
+            echo $e->getMessage();
+            die();
         }
     }
 

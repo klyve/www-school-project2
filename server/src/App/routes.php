@@ -5,13 +5,19 @@ use MVC\Http\Request;
 Route::get('/', 'SimpleJSONController.hello');
 Route::get('/hello', 'SimpleJSONController.sayHelloJSON');
 
-Route::post('/login', 'AuthController.postLogin');
-Route::post('/register', 'AuthController.postRegister');
+
+
+Route::post('user/login', 'AuthController.postLogin');
+Route::post('user/register', 'AuthController.postRegister');
 
 Route::get('/test', 'AuthController.getUser');
 
-Route::put('/user/password', 'AuthController.putPassword');
+Route::put('/user/password', 'AuthController.putPassword', ['IsAuthenticated']);
 
+
+Route::get('error', function() {
+    return \MVC\Http\Response::statusCode(201, "hello world");
+});
 
 Route::get('graphql', function() {
     return json_encode([]);

@@ -10,8 +10,10 @@ class UsersModel extends \MVC\Core\Model {
   public $usergroup = 1;
   public $requestedgroup = 1;
   public $password;
+  public $token;
 
-  //public $tests = [TestModel::class];
 
-  public $exclude = ['id', 'usergroup', 'requestedgroup'];
+  public $exclude = ['id', 'usergroup', 'requestedgroup', 'token'];
+
+  public $protected = ['password', 'requestedgroup', 'id', 'created_at', 'deleted_at'];
 }

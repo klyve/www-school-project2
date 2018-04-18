@@ -22,11 +22,16 @@ define('APP_ROOT', __DIR__);
 // Init configs
 MVC\Core\Config::init($config);
 
+
 if(php_sapi_name() === 'cli') {
     echo "PHP CLI TOOL\n\r";
     MVC\Core\Cli::init($argv);
 }else {
+    
     MVC\Core\Language::init();
+    require_once __DIR__ . '/App/http/errors.php';
+
+    MVC\Http\ErrorCode::init($errors);
 
     require_once 'App/routes.php';
     MVC\Core\Route::init();

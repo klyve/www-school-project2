@@ -7,6 +7,11 @@ $config = [
         'username' => 'root',
         'password' => ''
     ],
+    'token' => [
+        'secret' => 'wgh%#Q(%!=!?#%(!i0eohjweopghj=!#%)w2eoghp2q=3gjh9023',
+        'expiration' => date("Y-m-d H:i:s", strtotime('+24 hours', strtotime((new DateTime())->format('Y-m-d H:i:s')))),
+        'issuer' => 'KrusKontroll.com',
+    ],
     'usergroups' => [
       'student' => 1,
       'lecturer' => 2,

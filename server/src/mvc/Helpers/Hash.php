@@ -15,6 +15,11 @@
  */
 
 
+use \ReallySimpleJWT\TokenBuilder;
+use \ReallySimpleJWT\Token;
+use \MVC\Core\Config;
+
+
 class Hash {
 
 
@@ -78,4 +83,33 @@ class Hash {
     return hash('md5', $data);
   }
 
+
+
+  public static function JWT($data) {
+    $secret = Config::get('token.secret');
+    $expiration = Config::get('token.expiration');
+    $issuer = Config::get('token.issuer');
+      $builder = new TokenBuilder();
+
+      $token = $builder->addPayload($data)
+          ->setSecret($secret)
+          ->setExpiration($expiration)
+          ->setIssuer($issuer)
+          ->build();
+        return $token;
+  }
+
+  public static function verifyJWT($token) {
+    $secret = Config::get('token.secret');
+    return Token::validate($token, $secret);
+  }
+
+  public static function getJWT($token) {
+    $data = Token::getPayload($token);
+    if($data) {
+      $data = json_decode($data);
+      return $data;
+    }
+    return false;
+  }
 }

@@ -25,13 +25,18 @@ class ComposerStaticInit36a383d6320bfc94468033143b100f5e
         array (
             'Twig\\Extensions\\' => 16,
             'Twig\\' => 5,
+            'Tests\\' => 6,
         ),
         'S' => 
         array (
             'Symfony\\Polyfill\\Mbstring\\' => 26,
+            'Symfony\\Component\\Translation\\' => 30,
         ),
         'R' => 
         array (
+            'ReallySimpleJWT\\Helper\\' => 23,
+            'ReallySimpleJWT\\Exception\\' => 26,
+            'ReallySimpleJWT\\' => 16,
             'Rakit\\Validation\\' => 17,
         ),
         'M' => 
@@ -46,6 +51,10 @@ class ComposerStaticInit36a383d6320bfc94468033143b100f5e
         array (
             'Doctrine\\Instantiator\\' => 22,
             'DeepCopy\\' => 9,
+        ),
+        'C' => 
+        array (
+            'Carbon\\' => 7,
         ),
         'A' => 
         array (
@@ -72,9 +81,29 @@ class ComposerStaticInit36a383d6320bfc94468033143b100f5e
         array (
             0 => __DIR__ . '/..' . '/twig/twig/src',
         ),
+        'Tests\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/rbdwllr/reallysimplejwt/tests',
+        ),
         'Symfony\\Polyfill\\Mbstring\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
+        ),
+        'Symfony\\Component\\Translation\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/translation',
+        ),
+        'ReallySimpleJWT\\Helper\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/rbdwllr/reallysimplejwt/src/Helper',
+        ),
+        'ReallySimpleJWT\\Exception\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/rbdwllr/reallysimplejwt/src/Exception',
+        ),
+        'ReallySimpleJWT\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/rbdwllr/reallysimplejwt/src',
         ),
         'Rakit\\Validation\\' => 
         array (
@@ -95,6 +124,10 @@ class ComposerStaticInit36a383d6320bfc94468033143b100f5e
         'DeepCopy\\' => 
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
+        ),
+        'Carbon\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
         ),
         'App\\' => 
         array (
