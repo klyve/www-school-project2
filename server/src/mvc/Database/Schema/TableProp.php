@@ -137,6 +137,15 @@ class TableProp {
         $this->isUnsigned = true;
         return $this;
     }
+
+    /**
+     * Sets isUnsigned to false.
+     * @return altered TableProp.
+     */
+    public function signed(){
+        $this->isUnsigned = false;
+        return $this;
+    }
     /**
      * @TODO: [zerofill description]
      * @return [type] [description]
