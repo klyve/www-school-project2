@@ -28,7 +28,7 @@ class PlaylistsMigrations {
     public function up() {
         Schema::create('playlists', function($table){
             $table->primary('id')->autoIncrement();
-            $table->number('userid')->default(1);
+            $table->number('userid');  // foreign keys
             $table->string('title')->length(128);
             $table->string('description')->length(2048);
             $table->timestamps();

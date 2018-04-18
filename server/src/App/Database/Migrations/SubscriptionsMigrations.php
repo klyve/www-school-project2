@@ -28,7 +28,7 @@ class SubscriptionsMigrations {
     public function up() {
         Schema::create('subscriptions', function($table){
             $table->primary('id')->autoIncrement();
-            $table->number('userid')->default(1);
+            $table->number('userid'); // foreign key
             $table->number('playlistid')->default(1);
             $table->timestamps();
         });
