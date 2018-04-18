@@ -2,18 +2,32 @@
 use MVC\Core\Route;
 use MVC\Http\Request;
 
-Route::get('/', 'SimpleJSONController.hello');
+// Route::get('/', 'SimpleJSONController.hello')
+//     ->withMiddlewares(['IsAuthenticated']);
 Route::get('/hello', 'SimpleJSONController.sayHelloJSON');
 
 
+Route::get('/', function() {
+    return ['hey'];
+})
+// ->withMiddlewares(['IsAuthenticated'])
+->withValidators(['UserValidations.login']);
 
-Route::post('user/login', 'AuthController.postLogin');
-Route::post('user/register', 'AuthController.postRegister');
 
-Route::get('/test', 'AuthController.getUser');
+Route::post('user/login', 'AuthController.postLogin')
+    ->withValidators(['UserValidations.login']);
 
-Route::put('/user/password', 'AuthController.putPassword', ['IsAuthenticated']);
+Route::post('user/register', 'AuthController.postRegister')
+    ->withValidators(['UserValidations.register']);
 
+Route::put('/user/password', 'AuthController.putPassword')
+    ->withMiddlewares(['IsAuthenticated'])
+    ->withValidators(['UserValidations.changePassword']);
+
+
+// Route::get('adsfgnjwd', 'gnrgwklgweg')
+//     ->withMiddlewares(['IsAuthenticated'])
+//     ->withValidators(['FileName.function.function.function']);
 
 Route::get('error', function() {
     return \MVC\Http\Response::statusCode(201, "hello world");

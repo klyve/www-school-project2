@@ -22,7 +22,7 @@ $config = [
     'defaults' => [
         'language' => [
             'default' => 'en',
-            'path' => 'app/locales',
+            'path' => 'App/locales',
             'available' => [
                 [
                     'name' => 'English',

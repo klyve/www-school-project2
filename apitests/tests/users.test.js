@@ -10,9 +10,7 @@ const credentials = {
     password: 'hello',
     newpassword: 'hello123',
 };
-
 let userToken = null;
-
 
 
 test.serial('register a user', async (t) => {
@@ -55,7 +53,6 @@ test.serial('Log in a user', async (t) => {
 
 test.serial('Change password of user', async (t) => {
     
-    // console.log(userToken);
     const res = await axios.put(`${API}/user/password`, credentials, axiosBearer(userToken));
     t.is(res.status, 204, `Expected status code 204 got ${res.status}`);
 
