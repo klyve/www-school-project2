@@ -63,9 +63,10 @@ class Route {
  * @param $middleware @TODO describe this parameter
  */
     public static function post($name, $callback, $middleware = false) {
-        self::$httpMethods["POST"][$name] = [
+        self::$httpMethods["POST"][] = [
             "fn" => $callback,
             "middleware" => $middleware,
+            "uri" =>self::regexReplace($name),
         ];
     }
 
@@ -75,9 +76,10 @@ class Route {
  * @param $middleware @TODO describe this parameter
  */
     public static function delete($name, $callback, $middleware = false) {
-        self::$httpMethods["DELETE"][$name] = [
+        self::$httpMethods["DELETE"][] = [
             "fn" => $callback,
             "middleware" => $middleware,
+            "uri" =>self::regexReplace($name),
         ];
     }
 
@@ -87,9 +89,10 @@ class Route {
  * @param $middleware @TODO describe this parameter
  */
     public static function put($name, $callback, $middleware = false) {
-        self::$httpMethods["PUT"][$name] = [
+        self::$httpMethods["PUT"][] = [
             "fn" => $callback,
             "middleware" => $middleware,
+            "uri" =>self::regexReplace($name),
         ];
     }
 

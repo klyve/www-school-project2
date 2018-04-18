@@ -1,0 +1,41 @@
+@charset "UTF-8";
+ 
+// Color palette
+
+$primary-color: #3fe3f3;
+$default-background-color: $primary-color;
+
+// Colors
+$black: #000;
+$white: #fff;
+$red: #e2061c;
+$gray-light: #c9c8c8;
+$gray: #838282;
+$gray-dark: #333333;
+$blue: #253652;
+ 
+// Color schemes
+$color-primary: $blue !default;
+$color-dark: darken($color-primary, 15%) !default;
+$color-second: $red !default;
+$color-second-dark: darken($color-second, 15%) !default;
+
+
+ 
+// Font
+$base-font-size: 1.8 !default;
+$base-font-family: Helvetica, Arial, Sans-Serif !default;
+$base-font-color: $gray-dark !default;
+ 
+// Border
+$base-border-radius: 2px !default;
+$rounded-border-radius: 50% !default;
+$base-border-color: $gray !default;
+
+
+
+
+$sidebar-width: 70px;
+$sidebar-extended: 270px;
+
+$header-height: 70px;

@@ -13,6 +13,15 @@ Route::get('/test', 'AuthController.getUser');
 Route::put('/user/password', 'AuthController.putPassword');
 
 
+Route::get('graphql', function() {
+    return json_encode([]);
+});
+
+Route::post('graphql', function() {
+    return json_encode([]);
+});
+
+
 // Error class
 Route::notFound(function() {
     echo "404 not found";

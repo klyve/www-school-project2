@@ -13,7 +13,8 @@ return array(
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'Rakit\\Validation\\' => array($vendorDir . '/rakit/validation/src'),
     'MVC\\' => array($baseDir . '/src/mvc'),
+    'GraphQL\\' => array($vendorDir . '/webonyx/graphql-php/src'),
     'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator'),
     'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),
-    'App\\' => array($baseDir . '/src/app'),
+    'App\\' => array($baseDir . '/src/App'),
 );

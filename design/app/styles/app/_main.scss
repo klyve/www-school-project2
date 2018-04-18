@@ -1,0 +1,165 @@
+body {
+    height: 100%;
+    min-height: 100vh;
+    width: 100%;
+}
+
+#container {
+
+}
+
+#body-container {
+    background: $default-background-color;
+    min-height: 100vh;
+    min-height: calc(100vh - 58px);
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+
+.sidebar {
+    width: $sidebar-width;
+    min-height: calc(100vh - #{$header-height});
+    background: $white;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    transition: width 0.25s ease, margin 0.25s ease;
+    position: relative;
+    z-index: 15;
+
+    ul {
+        margin: 0;
+        padding: 0;
+        li {
+            a {
+                
+                height: 50px;
+                display: block;
+                text-align: center;
+                color: #b5bbce;
+                font-size: 20px;
+                line-height: 50px;
+                border-bottom: 1px solid #f3f5f7;
+                transition: color 0.25s ease;
+                -webkit-transition: color 0.25s ease;
+                -moz-transition: color 0.25s ease;
+                -ms-transition: color 0.25s ease;
+                i {
+                    display: inline-block;
+                }
+                span {
+                    display: none;
+                    opacity: 0;
+                    font-size: 16px;
+                }
+                &:hover {
+                    color: red;
+                    text-decoration: none;
+                }
+
+                
+            }
+            
+
+            &.heading {
+                display: none;
+                margin-bottom: 10px;
+                h4 {
+                    color: #a9a9a9;
+                    font-size: 18px;
+                    padding: 15px;
+                    padding-left: 20px;
+                }
+            }
+        }
+        
+    }
+}
+
+.content-container {
+    min-height: calc(100vh - #{$header-height});
+    background: #fff;
+    transition: width 0.25s ease, margin 0.25s ease;
+    width: calc(100% - #{$sidebar-width});
+    /*min-height: calc(100vh - 58px);*/
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+}
+header {
+    height: $header-height;
+    background: $white;
+    position: relative;
+    z-index: 10;
+    font-family: "opensans-regular", sans-serif;
+    -webkit-box-shadow: 0 8px 74px -29px rgba(0, 0, 0, 0.35);
+    -moz-box-shadow: 0 8px 74px -29px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 8px 74px -29px rgba(0, 0, 0, 0.35);
+
+    transition: background 0.25s ease;
+    -webkit-transition: background 0.25s ease;
+    -moz-transition: background 0.25s ease;
+    -ms-transition: background 0.25s ease;
+
+    .logo {
+        transition: width 0.25s ease, margin 0.25s ease;
+        width: $sidebar-width;
+        height: $header-height;
+        background: #eb3b5a;
+    }
+}
+
+.sidebar {
+    -webkit-box-shadow: 8px 8px 74px -29px rgba(0,0,0,0.25);
+    -moz-box-shadow: 8px 8px 74px -29px rgba(0,0,0,0.25);
+    box-shadow: 8px 8px 74px -29px rgba(0,0,0,0.25);
+}
+
+
+body {
+    &.expanded-menu {
+        header {
+            .logo {
+                width: $sidebar-extended;
+            }
+        }
+        .sidebar {
+            width: $sidebar-extended;
+
+
+            ul {
+                li {
+                    a {
+                        text-align: left;
+                        border-bottom: none;
+                        padding-left: 20px;
+                        display: flex;
+                        align-items: center;
+                        min-width: $sidebar-extended;
+                        i {
+                        }
+                        span {
+                            display: block;
+                            margin-left: 10px;
+                            opacity: 1;
+                        }
+                    }
+                    &.heading {
+                        display: block;
+                    }
+
+                }
+            }
+        }
+        .content-container {
+            width: calc(100% - #{$sidebar-extended});
+        }
+    }
+}

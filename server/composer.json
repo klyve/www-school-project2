@@ -10,7 +10,8 @@
         "twig/twig": "^2.0",
         "phpunit/phpunit": "^7.0",
         "twig/extensions": "^1.5",
-        "rakit/validation": "^0.14.0"
+        "rakit/validation": "^0.14.0",
+        "webonyx/graphql-php": "^0.11.5"
     },
     "autoload": {
         "psr-4": {
