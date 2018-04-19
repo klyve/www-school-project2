@@ -29,21 +29,20 @@ class VideosModel extends \MVC\Core\Model {
   //
   // Server defined fields
   //
-
   // integer: 0 - MAXINT
-  public $viewCount;   
+  public $viewCount = 0; 
 
   // example: media/thumbnails/catvideo.png
   //          media/thumbnails/<hash($id . $userid . $name)>.png
-  public $filethumbnail;
+  public $filethumbnail = "example.png";
 
   // example: media/videos/catvideo.mp4
   //          media/videos/<hash($id . $userid . $name)>.mp4
-  public $filevideo;
+  public $filevideo = "example.mp4";
 
   // example: media/subtitles/catvideo.srt
   //          media/subtitles/<hash($id . $userid . $name)>.srt
-  public $filesubtitle;
+  public $filesubtitle = "example.srt";
 
 
   public $exclude = ['id'];

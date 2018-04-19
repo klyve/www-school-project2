@@ -3,6 +3,13 @@ const { API } = require('../configs');
 const { testDataIntegrity, axiosBearer } = require('../methods');
 const axios = require('axios');
 
+// HTTP STATUS CODES
+const HTTP_OK            = 200;  // Success and returning content
+const HTTP_CREATED       = 201;  // Successfull creation
+const HTTP_ACCEPTED      = 202;  // Marked for  deletion, not deleted yet
+const HTTP_NOCONTENT     = 204;  // Successfull update
+const HTTP_NOTIMPLMENTED = 501;
+
 
 // @note Insert this user into the database using 'php toolbox seed:up' 'php toolbox seed:refresh'
 const credentials = {
@@ -26,12 +33,6 @@ let videoid    = 1;
 let userToken  = null;
 
 
-const HTTP_OK        = 200;  // Success and returning content
-const HTTP_ACCEPTED  = 202;  // Marked for  deletion, not deleted yet
-const HTTP_CREATED   = 201;  // Successfull creation
-const HTTP_NOCONTENT = 204;  // Successfull update
-const HTTP_NOTIMPLMENTED = 501;
-
 test.before(async (t) => {
     t.plan(10);
 
@@ -43,7 +44,7 @@ test.before(async (t) => {
    
     userToken = res.data.token;
 
-    console.log(userToken);
+    //console.log(userToken);
     t.pass();
 });
 
@@ -53,6 +54,9 @@ test.serial('Post video without files', async t => {
 
     try {
         const res = await axios.post(`${API}/user/${userid}/video`, newVideodata, axiosBearer(userToken))
+        t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`);
+
+        videoid = res.data.videoid;
     } catch(err) {
         t.is(err.response.status, HTTP_NOTIMPLMENTED, `Expected status code ${HTTP_NOTIMPLMENTED} got ${err.response.status}`);
     }
@@ -64,7 +68,19 @@ test.serial('Put video', async t => {
 
     try {
         const res = await axios.put(`${API}/user/${userid}/video/${videoid}`, updateVideodata, axiosBearer(userToken))
+        t.is(res.status, HTTP_NOCONTENT, `Expected status code ${HTTP_NOCONTENT} got ${res.status}`);
+
     } catch(err) {
+        // @TODO understand error occuring sometimes here - JSolsvik 19.04.2018
+        /*
+          Rejected promise returned by test. Reason:
+
+              TypeError {
+                message: 'Cannot read property \'status\' of undefined',
+              }
+
+        */
+        //console.log(err.response)
         t.is(err.response.status, HTTP_NOTIMPLMENTED, `Expected status code ${HTTP_NOTIMPLMENTED} got ${err.response.status}`);
     }
 });
@@ -74,8 +90,11 @@ test.serial('Delete video', async t => {
     t.plan(1);
 
     try {
-        const res = await axios.delete(`${API}/user/${userid}/video/${videoid}`, null, axiosBearer(userToken))
+        const res = await axios.delete(`${API}/user/${userid}/video/${videoid}`, axiosBearer(userToken))
+        t.is(res.status, HTTP_ACCEPTED, `Expected status code ${HTTP_ACCEPTED} got ${res.status}`);
+
     } catch(err) {
+      //  console.log(err.response)
         t.is(err.response.status, HTTP_NOTIMPLMENTED, `Expected status code ${HTTP_NOTIMPLMENTED} got ${err.response.status}`);
     }
 });
