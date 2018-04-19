@@ -1,6 +1,6 @@
 import test from 'ava';
 const { API } = require('../configs');
-const {testDataIntegrity } = require('../methods');
+const { testDataIntegrity, axiosBearer } = require('../methods');
 const axios = require('axios');
 
 
@@ -11,27 +11,71 @@ const credentials = {
     password: 'password1',
 };
 
-const videodata = {
-    userid: 1,
+const newVideodata = {
     title: '10 Javascript Frameworks you HAVE TO LEARN in 2018',
     description: 'Your life will be an absolute missery if you dont learn these super important frameworks!'
 }
 
-let userToken = null;
+const updateVideodata = {
+    title: '10 Javascript Frameworks in 2018',
+    description: 'Your life will be in RUINS if you dont learn these super important frameworks!'
+}
+
+let userid     = 1;
+let videoid    = 1;
+let userToken  = null;
+
+
+const HTTP_OK        = 200;  // Success and returning content
+const HTTP_ACCEPTED  = 202;  // Marked for  deletion, not deleted yet
+const HTTP_CREATED   = 201;  // Successfull creation
+const HTTP_NOCONTENT = 204;  // Successfull update
+const HTTP_NOTIMPLMENTED = 501;
 
 test.before(async (t) => {
     t.plan(10);
+
+    // @TODO Get 'userid' back from this route, and use it in the other tests.
     const res = await axios.post(`${API}/user/login`, credentials)
-    t.is(res.status, 200, `Expected status code 200 got ${res.status}`);
+    t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.status}`);
    
     testDataIntegrity(res, ['email', 'name', 'token', 'usergroup'], t);
    
     userToken = res.data.token;
+
+    console.log(userToken);
     t.pass();
 });
 
 
-test('Post new video without files', async t => {
+test.serial('Post video without files', async t => {
     t.plan(1);
-    t.pass()
+
+    try {
+        const res = await axios.post(`${API}/user/${userid}/video`, newVideodata, axiosBearer(userToken))
+    } catch(err) {
+        t.is(err.response.status, HTTP_NOTIMPLMENTED, `Expected status code ${HTTP_NOTIMPLMENTED} got ${err.response.status}`);
+    }
+});
+
+
+test.serial('Put video', async t => {
+    t.plan(1);
+
+    try {
+        const res = await axios.put(`${API}/user/${userid}/video/${videoid}`, updateVideodata, axiosBearer(userToken))
+    } catch(err) {
+        t.is(err.response.status, HTTP_NOTIMPLMENTED, `Expected status code ${HTTP_NOTIMPLMENTED} got ${err.response.status}`);
+    }
+});
+
+
+test.serial('Delete video', async t => {
+    t.plan(1);
+
+    try {
+        const res = await axios.delete(`${API}/user/${userid}/video/${videoid}`, null, axiosBearer(userToken))
+    } catch(err) {
+        t.is(err.response.status, HTTP_NOTIMPLMENTED, `Expected status code ${HTTP_NOTIMPLMENTED} got ${err.response.status}`);
+    }
 });
