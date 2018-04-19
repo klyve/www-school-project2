@@ -25,6 +25,15 @@ Route::put('/user/password', 'AuthController.putPassword')
     ->withValidators(['UserValidations.changePassword']);
 
 
+Route::post('/user/{userid}/video', 'VideoController.postVideo')
+    ->withMiddlewares(['IsAuthenticated']);
+
+Route::put('/user/{userid}/video/{videoid}', 'VideoController.putVideo')
+    ->withMiddlewares(['IsAuthenticated']);
+
+Route::delete('/user/{userid}/video/{videoid}', 'VideoController.deleteVideo')
+    ->withMiddlewares(['IsAuthenticated']);
+
 // Route::get('adsfgnjwd', 'gnrgwklgweg')
 //     ->withMiddlewares(['IsAuthenticated'])
 //     ->withValidators(['FileName.function.function.function']);
