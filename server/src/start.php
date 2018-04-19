@@ -29,7 +29,7 @@ if(php_sapi_name() === 'cli') {
 }else {
     
     MVC\Core\Language::init();
-    require_once __DIR__ . '/App/http/errors.php';
+    require_once __DIR__ . '/App/Http/errors.php';
 
     MVC\Http\ErrorCode::init($errors);
 

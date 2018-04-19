@@ -30,31 +30,16 @@ class Route {
     static $_requestParams = [];
     
 
-    public static function regexReplace($string) {
-        $matches = [];
-        $pattern = '/\{(\w+)\}/';
-        $string = trim($string, '/');
-        preg_match_all($pattern, $string, $matches);
-        if(count($matches) > 0) {
-            foreach($matches[0] as $key => $value) {
-                $string = preg_replace('/'.$value.'/', '(?<'.$matches[1][$key].'>.+)', $string);
-            }
-            $string = preg_replace('/\//', '\/', $string);
-        }
-        $string = '/(?<uri>^'.$string.'$)/';
-        return $string;
-    }
+    
 /**
  * @param $name @TODO describe this parameter
  * @param $callback @TODO describe this parameter
  * @param $middleware @TODO describe this parameter
  */
     public static function get($name, $callback, $middleware = false) {
-        self::$httpMethods["GET"][] = [
-            "fn" => $callback,
-            "middleware" => $middleware,
-            "uri" =>self::regexReplace($name),
-        ];
+        $obj = new RouteObject($name, $callback);
+        self::$httpMethods["GET"][] = $obj;
+        return $obj;
     }
 
 /**
@@ -63,11 +48,9 @@ class Route {
  * @param $middleware @TODO describe this parameter
  */
     public static function post($name, $callback, $middleware = false) {
-        self::$httpMethods["POST"][] = [
-            "fn" => $callback,
-            "middleware" => $middleware,
-            "uri" =>self::regexReplace($name),
-        ];
+        $obj = new RouteObject($name, $callback);
+        self::$httpMethods["POST"][] = $obj;
+        return $obj;
     }
 
 /**
@@ -76,11 +59,9 @@ class Route {
  * @param $middleware @TODO describe this parameter
  */
     public static function delete($name, $callback, $middleware = false) {
-        self::$httpMethods["DELETE"][] = [
-            "fn" => $callback,
-            "middleware" => $middleware,
-            "uri" =>self::regexReplace($name),
-        ];
+        $obj = new RouteObject($name, $callback);
+        self::$httpMethods["DELETE"][] = $obj;
+        return $obj;
     }
 
 /**
@@ -89,11 +70,9 @@ class Route {
  * @param $middleware @TODO describe this parameter
  */
     public static function put($name, $callback, $middleware = false) {
-        self::$httpMethods["PUT"][] = [
-            "fn" => $callback,
-            "middleware" => $middleware,
-            "uri" =>self::regexReplace($name),
-        ];
+        $obj = new RouteObject($name, $callback);
+        self::$httpMethods["PUT"][] = $obj;
+        return $obj;
     }
 
 /**
@@ -151,20 +130,6 @@ class Route {
     }
 
 
-    protected static function regexMatch($routes, $route) {
-        foreach($routes as $key => $value) {
-            if(preg_match($value["uri"], trim($route, '/'), $matches)) {
-                foreach ($matches as $k => $v) {
-                    if (!is_int($k)) {
-                        self::$_requestParams[$k] = $v;
-                    }
-                }
-                return $value;
-            }
-        }
-        return false;
-    }
-
 /**
  * @param $routes @TODO describe this parameter
  */
@@ -174,27 +139,28 @@ class Route {
         $match = self::regexMatch($routes, $route);
         if($match) {
             $fn = null;
-            if(is_string($match["fn"])) {
-                $fn = self::buildClassQuery($match["fn"]);
-            }else if(is_callable($match["fn"])) {
+            if(is_string($match->getCallback())) {
+                $fn = self::buildClassQuery($match->getCallback());
+            }else if(is_callable($match->getCallback())) {
                 $fn = [
-                    "object" => $match["fn"],
+                    "object" => $match->getCallback(),
                     "method" => false
                 ];
             }
-            $fn["middleware"] = $match["middleware"];
-
             if($fn === null) {
                 die("Internal server Error");
             }
+            
+            $fn["middleware"] = $match->getMiddlewares();
+            $fn["validators"] = $match->getValidators();
 
-            if($match["middleware"]) {
-                self::callMiddlewares($fn, function($fn) {
+            // var_dump($fn);
+            
+            self::callMiddlewares($fn, function($fn) {
+                self::callValidators($fn, function($fn) {
                     Http\Response::send(DependencyInjection::inject($fn));
                 });
-            }else {
-                Http\Response::send(DependencyInjection::inject($fn));
-            }
+            });
 
         }else {
             if(is_callable(self::$staticRoutes['404'])) {
@@ -223,12 +189,30 @@ class Route {
         ];
     }
 
+    protected static function regexMatch($routes, $route) {
+        foreach($routes as $obj) {
+            if(preg_match($obj->getRegex(), trim($route, '/'), $matches)) {
+                foreach ($matches as $k => $v) {
+                    if (!is_int($k)) {
+                        self::$_requestParams[$k] = $v;
+                    }
+                }
+                return $obj;
+            }
+        }
+        return false;
+    }
+
     /**
      * @param $middlewares @TODO describe this parameter
      * @param $callback @TODO describe this parameter
      */
     protected static function callMiddlewares($middlewares, $callback) {
         $middleware = new \MVC\Http\Middleware($middlewares, $callback);
+    }
+
+    protected static function callValidators($validators, $callback) {
+        $middleware = new \MVC\Http\Validation($validators, $callback);
     }
 
 }
