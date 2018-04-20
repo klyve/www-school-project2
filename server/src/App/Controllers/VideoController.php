@@ -90,7 +90,7 @@ class VideoController extends Controller {
     ]);
 
     if(!$updatedVideo->id) {
-        return Response::statusCode(HTTP_NOT_FOUND, []);
+        return Response::statusCode(HTTP_NOT_FOUND);
     }
 
     $updatedVideo->title       = $req->input('title');
@@ -105,7 +105,6 @@ class VideoController extends Controller {
         return Response::statusCode(HTTP_INTERNAL_ERROR, []);
     }
     */
-    
     return Response::statusCode(HTTP_NO_CONTENT, ["Updated video"]);
   }
 
@@ -116,7 +115,7 @@ class VideoController extends Controller {
             'id' => $req->param('videoid')
     ]);
     if(!$deleteVideo->id) {
-        return Response::statusCode(HTTP_NOT_FOUND, []);
+        return Response::statusCode(HTTP_NOT_FOUND);
     }
 
     return Response::statusCode(HTTP_NOT_IMPLMENTED, ["Video deletion not supported yet."]);

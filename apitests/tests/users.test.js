@@ -26,7 +26,7 @@ test.serial('register a user', async (t) => {
 
     try {
         const res2 = await axios.post(`${API}/user/register`, credentials)
-    }catch(err) {
+    } catch(err) {
         if(err.response.status !== 409)
             t.fail(`Expected status code 409 got ${err.response.status}`);
         t.pass();
