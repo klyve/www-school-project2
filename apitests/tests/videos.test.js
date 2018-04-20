@@ -2,6 +2,8 @@ import test from 'ava';
 const { API } = require('../configs');
 const { testDataIntegrity, axiosBearer } = require('../methods');
 const axios = require('axios');
+const fs = require("fs");
+
 
 // HTTP STATUS CODES
 const HTTP_OK            = 200;  // Success and returning content
@@ -39,7 +41,7 @@ test.before(async (t) => {
     // @TODO Get 'userid' back from this route, and use it in the other tests.
     const res = await axios.post(`${API}/user/login`, credentials)
     t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.status}`);
-   
+
     testDataIntegrity(res, ['email', 'name', 'token', 'usergroup'], t);
    
     userToken = res.data.token;
@@ -68,20 +70,22 @@ test.serial('Put video', async t => {
 
     try {
         const res = await axios.put(`${API}/user/${userid}/video/${videoid}`, updateVideodata, axiosBearer(userToken))
-        t.is(res.status, HTTP_NOCONTENT, `Expected status code ${HTTP_NOCONTENT} got ${res.status}`);
+        //t.is(res.status, HTTP_NOCONTENT, `Expected status code ${HTTP_NOCONTENT} got ${res.status}`)
+        console.log(res.data);
+
 
     } catch(err) {
         // @TODO understand error occuring sometimes here - JSolsvik 19.04.2018
         /*
-          Rejected promise returned by test. Reason:
-
+          Rejected promise returned by test. Reasonkey: "value", 
               TypeError {
                 message: 'Cannot read property \'status\' of undefined',
               }
-
         */
-        //console.log(err.response)
-        t.is(err.response.status, HTTP_NOTIMPLMENTED, `Expected status code ${HTTP_NOTIMPLMENTED} got ${err.response.status}`);
+    //    console.log(err)
+        t.fail()
+
+      //  t.is(err, HTTP_NOTIMPLMENTED, `Expected status code ${HTTP_NOTIMPLMENTED} got ${err.response.status}`);
     }
 });
 
@@ -94,7 +98,47 @@ test.serial('Delete video', async t => {
         t.is(res.status, HTTP_ACCEPTED, `Expected status code ${HTTP_ACCEPTED} got ${res.status}`);
 
     } catch(err) {
-      //  console.log(err.response)
+       
         t.is(err.response.status, HTTP_NOTIMPLMENTED, `Expected status code ${HTTP_NOTIMPLMENTED} got ${err.response.status}`);
     }
+});
+
+
+test('Post video with file', async t => {
+
+
+    t.plan(2);
+
+    let error = null;
+    await fs.readFile("files/thumbnail.png", function(err, data) {
+    
+        console.log(data);
+        error = err;
+    });
+    await fs.readFile("files/video.mp4", function(err, data) {
+            
+            console.log(data);
+            error = err;
+    });
+
+
+console.log(error);
+    t.is(error, null, `Error ${error}`);
+
+console.log(error);
+    t.is(error, null, `Error ${error}`);
+
+    
+    /*
+    var formData = new FormData();
+    var imagefile = document.querySelector('#file');
+    formData.append("image", imagefile.files[0]);
+    axios.post('upload_file', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+    })
+    */
+
+
 });

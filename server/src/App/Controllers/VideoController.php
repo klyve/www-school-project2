@@ -12,38 +12,85 @@ use \MVC\Http\ErrorCode;
 const HTTP_OK            = 200;  // Success and returning content
 const HTTP_CREATED       = 201;  // Successfull creation
 const HTTP_ACCEPTED      = 202;  // Marked for  deletion, not deleted yet
-const HTTP_NOCONTENT     = 204;  // Successfull update
-const HTTP_NOTFOUND      = 404; 
-const HTTP_NOTIMPLMENTED = 501;
+const HTTP_NO_CONTENT     = 204;  // Successfull update
+const HTTP_BAD_REQUEST    = 400;
+const HTTP_NOT_FOUND      = 404; 
+const HTTP_NOT_IMPLMENTED = 501;
 const HTTP_INTERNAL_ERROR = 500;
+
+
+// @TODO Put this somewhere it makes sense
+function getFileParameterOrNull($fileParam) {
+  if ( !isset($_FILES[$fileParam]) ) {
+      return null;
+  }   
+  $tmp_filepath = $_FILES[$fileParam]['tmp_name'];
+
+  if (!is_uploaded_file($tmp_filepath)) {
+      return null;
+  }
+
+  return $_FILES[$fileParam];
+}
+
+
+// @TODO Put this somewhere it makes sense
+//  @return null is equal to 500 BAD REQUEST
+function uploadFile($tmpfilePath, 
+                    $userid, 
+                    $videoid, 
+                    $collectionName, 
+                    $extension) {
+
+    $ROOT = $_SERVER['DOCUMENT_ROOT'];
+    if (!file_exists("$ROOT/media")){
+        var_dump($ROOT);
+        return Response::statusCode(HTTP_INTERNAL_ERROR, 
+                                        "Media folder does not exist");
+    }
+
+    $userdir = "$ROOT/media/$collectionName/$userid";
+
+    if (!file_exists($userdir)) {
+        @mkdir($userdir);
+    }
+
+    $didMove = @move_uploaded_file($tmp_filepath, "$userdir/$videoid.$extension");
+    if (!$didMove) {
+        return Response::statusCode(HTTP_INTERNAL_ERROR, 
+                                "Could not move file into $collectionName");
+    }
+
+    return null;
+}
 
 
 class VideoController extends Controller {
   
+  // @route POST /user/{userid}/video
   public function postVideo(Request $req) {
 
+    $userid = $req->param('userid');
+
     $newVideo = new VideosModel();
-    $newVideo->userid = $req->param('userid');
+    $newVideo->userid = $userid;
     $newVideo->title  = $req->input('title');
     $newVideo->description = $req->input('description');
-
-    // @TODO 1. Parse optional file parameters
-    //       2. Store files to disk storage.
-    //       3. Computed hashed filename. - - jSolsvik 19.04.2018
 
     $res = array('videoid' => $newVideo->save($newVideo));
 
     return Response::statusCode(HTTP_CREATED, $res);
   }
 
+  // @route PUT /user/{userid}/video/{videoid}
   public function putVideo(VideosModel $video, Request $req) {
 
     $updatedVideo  = $video->find([
-        'id' => $req->param('videoid'),
+        'id' => $req->param('videoid')
     ]);
 
     if(!$updatedVideo->id) {
-        return Response::statusCode(HTTP_NOTFOUND, []);
+        return Response::statusCode(HTTP_NOT_FOUND, []);
     }
 
     $updatedVideo->title       = $req->input('title');
@@ -59,11 +106,19 @@ class VideoController extends Controller {
     }
     */
     
-    return Response::statusCode(HTTP_NOCONTENT, $updatedVideo);
+    return Response::statusCode(HTTP_NO_CONTENT, ["Updated video"]);
   }
 
+  // @route DELETE /user/{userid}/video/{videoid}
   public function deleteVideo(VideosModel $video, Request $req) {
 
-    return Response::statusCode(HTTP_NOTIMPLMENTED, 0);
+    $deleteVideo = $video->find([
+            'id' => $req->param('videoid')
+    ]);
+    if(!$deleteVideo->id) {
+        return Response::statusCode(HTTP_NOT_FOUND, []);
+    }
+
+    return Response::statusCode(HTTP_NOT_IMPLMENTED, ["Video deletion not supported yet."]);
   }
 }
