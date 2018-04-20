@@ -14,14 +14,15 @@ let userToken = null;
 
 
 test.serial('register a user', async (t) => {
-    t.plan(17);
+    t.plan(19);
     const res = await axios.post(`${API}/user/register`, credentials)
     
     if(res.status !== 200)
         t.fail(`Expected status code 200 got ${res.status}`);
     t.pass();
     
-    testDataIntegrity(res, ['email', 'name', 'token', 'usergroup'], t);
+    console.log(res.data);
+    testDataIntegrity(res, ['id', 'email', 'name', 'token', 'usergroup'], t);
 
 
     try {
@@ -39,11 +40,11 @@ test.serial('register a user', async (t) => {
 
 
 test.serial('Log in a user', async (t) => {
-    t.plan(10);
+    t.plan(12);
     const res = await axios.post(`${API}/user/login`, credentials)
     t.is(res.status, 200, `Expected status code 200 got ${res.status}`);
 
-    testDataIntegrity(res, ['email', 'name', 'token', 'usergroup'], t);
+    testDataIntegrity(res, ['id', 'email', 'name', 'token', 'usergroup'], t);
     
     userToken = res.data.token;
     t.pass();

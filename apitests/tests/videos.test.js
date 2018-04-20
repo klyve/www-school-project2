@@ -37,17 +37,15 @@ let userToken  = null
 
 
 test.before(async (t) => {
-    t.plan(10);
+    t.plan(12);
 
     // @TODO Get 'userid' back from this route, and use it in the other tests.
     const res = await axios.post(`${API}/user/login`, credentials)
-    t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.status}`);
+    t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.statusCode}`);
 
-    testDataIntegrity(res, ['email', 'name', 'token', 'usergroup'], t);
+    testDataIntegrity(res, ['id', 'email', 'name', 'token', 'usergroup'], t);
    
     userToken = res.data.token;
-
-    //console.log(userToken);
     t.pass();
 });
 
@@ -55,61 +53,35 @@ test.before(async (t) => {
 test.serial('Post video without files', async t => {
     t.plan(1);
 
-    try {
-        const res = await axios.post(`${API}/user/${userid}/video`, newVideodata, axiosBearer(userToken))
-        t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`);
+    const res = await axios.post(`${API}/user/${userid}/video`, newVideodata, axiosBearer(userToken))
+    t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.statusCode}`);
 
-        videoid = res.data.videoid;
-    } catch(err) {
-        t.is(err.response.status, HTTP_NOT_IMPLMENTED, `Expected status code ${HTTP_NOT_IMPLMENTED} got ${err.response.status}`);
-    }
-
-
+    videoid = res.data.videoid;
 });
 
 
 test.serial('Put video', async t => {
     t.plan(1);
 
-    try {
-        const res = await axios.put(`${API}/user/${userid}/video/${videoid}`, {
-            userid,
-            videoid,
-            title: updateVideodata.title,
-            description: updateVideodata.description
-        }, axiosBearer(userToken))
+    const res = await axios.put(`${API}/user/${userid}/video/${videoid}`, {
+        userid,
+        videoid,
+        title: updateVideodata.title,
+        description: updateVideodata.description
+    }, axiosBearer(userToken))
 
-        t.is(res.status, HTTP_NO_CONTENT, `Expected status code ${HTTP_NO_CONTENT} got ${res.status}`)
-        console.log(res.data);
-
-
-    } catch(err) {
-        // @TODO understand error occuring sometimes here - JSolsvik 19.04.2018
-        /*
-          Rejected promise returned by test. Reasonkey: "value", 
-              TypeError {
-                message: 'Cannot read property \'status\' of undefined',
-              }
-        */
-        console.log(err)
-        t.is(err, HTTP_NOT_FOUND, `Expected status code ${HTTP_NOT_FOUND} got ${err.response.status}`);
-    }
+    t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.statusCode}`)
 });
 
 
 test.serial('Delete video', async t => {
     t.plan(1);
 
-    try {
-        const res = await axios.delete(`${API}/user/${userid}/video/${videoid}`, axiosBearer(userToken))
-        t.is(res.status, HTTP_ACCEPTED, `Expected status code ${HTTP_ACCEPTED} got ${res.status}`);
-
-    } catch(err) {
-       
-        t.is(err.response.status, HTTP_NOT_IMPLMENTED, `Expected status code ${HTTP_NOT_IMPLMENTED} got ${err.response.status}`);
-    }
+    const res = await axios.delete(`${API}/user/${userid}/video/${videoid}`, axiosBearer(userToken))
+    t.is(res.status, HTTP_ACCEPTED, `Expected status code ${HTTP_ACCEPTED} got ${res.statusCode}`);
 });
 
+/*
 
 test('Post video with file', async t => {
 
@@ -146,7 +118,7 @@ console.log(error);
           'Content-Type': 'multipart/form-data'
         }
     })
-    */
 
 
 });
+*/

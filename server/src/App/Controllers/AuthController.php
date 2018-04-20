@@ -37,7 +37,7 @@ class AuthController extends Controller {
         ];
       }
       $myUser->token = Hash::JWT(["key" => 'userid', 'value' => $myUser->id]);
-    
+      
     return Response::statusCode(200, $myUser);
   }
 
@@ -63,7 +63,7 @@ class AuthController extends Controller {
     
     $token = Hash::JWT(["key" => 'userid', 'value' => $id]);
     $user->token = $token;
-
+    $user->id = $id;
 
     return $user;
   }

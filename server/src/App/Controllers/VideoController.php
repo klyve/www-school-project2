@@ -7,6 +7,7 @@ use \MVC\Http\Error;
 use App\Models\VideosModel;
 use \MVC\Helpers\Hash;
 use \MVC\Http\ErrorCode;
+use \Datetime;
 
 // HTTP STATUS CODES
 const HTTP_OK            = 200;  // Success and returning content
@@ -90,12 +91,13 @@ class VideoController extends Controller {
     ]);
 
     if(!$updatedVideo->id) {
+      var_dump("DID NOT FIND ANYTHING");
         return Response::statusCode(HTTP_NOT_FOUND);
     }
 
     $updatedVideo->title       = $req->input('title');
     $updatedVideo->description = $req->input('description');
-    $videoid = $updatedVideo->save();
+    $updatedVideo->save();
 
     // @TODO - figure out why videoid === NULL even though the updated happend 
     //            successfully.??  - jSolsvik 19.04.2018
@@ -105,7 +107,7 @@ class VideoController extends Controller {
         return Response::statusCode(HTTP_INTERNAL_ERROR, []);
     }
     */
-    return Response::statusCode(HTTP_NO_CONTENT, ["Updated video"]);
+    return Response::statusCode(HTTP_OK, "Updated video successfully");
   }
 
   // @route DELETE /user/{userid}/video/{videoid}
@@ -117,7 +119,11 @@ class VideoController extends Controller {
     if(!$deleteVideo->id) {
         return Response::statusCode(HTTP_NOT_FOUND);
     }
+    
+    $deleteVideo->deleted_at = date ("Y-m-d H:i:s");
+    $deleteVideo->save();
 
-    return Response::statusCode(HTTP_NOT_IMPLMENTED, ["Video deletion not supported yet."]);
+
+    return Response::statusCode(HTTP_ACCEPTED, "Video accepted for deletion");
   }
 }
