@@ -20,6 +20,8 @@ const HTTP_NOT_IMPLMENTED = 501;
 const HTTP_INTERNAL_ERROR = 500;
 
 
+/*
+
 // @TODO Put this somewhere it makes sense
 function getFileParameterOrNull($fileParam) {
   if ( !isset($_FILES[$fileParam]) ) {
@@ -65,12 +67,16 @@ function uploadFile($tmpfilePath,
     return null;
 }
 
+*/
 
-class VideoController extends Controller {
+
+class VideosController extends Controller {
   
   // @route POST /user/{userid}/video
   public function postVideo(Request $req) {
 
+
+    // @assumption userid matches token
     $userid = $req->param('userid');
 
     $newVideo = new VideosModel();
@@ -86,13 +92,19 @@ class VideoController extends Controller {
   // @route PUT /user/{userid}/video/{videoid}
   public function putVideo(VideosModel $video, Request $req) {
 
+
+    // @assumption userid matches token
     $updatedVideo  = $video->find([
         'id' => $req->param('videoid')
     ]);
 
+
     if(!$updatedVideo->id) {
-      var_dump("DID NOT FIND ANYTHING");
         return Response::statusCode(HTTP_NOT_FOUND);
+    }
+
+    if($updatedVideo->userid !== $req->param('userid')) {
+      return Response::statusCode(HTTP_BAD_REQUEST);
     }
 
     $updatedVideo->title       = $req->input('title');

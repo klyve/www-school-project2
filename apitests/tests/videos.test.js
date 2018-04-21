@@ -1,6 +1,6 @@
 import test from 'ava';
 const { API } = require('../configs');
-const { testDataIntegrity, axiosBearer } = require('../methods');
+const { testDataIntegrity, axiosBearer, axiosFile } = require('../methods');
 const axios = require('axios');
 const fs = require("fs");
 
@@ -45,11 +45,12 @@ test.before(async (t) => {
 
     testDataIntegrity(res, ['id', 'email', 'name', 'token', 'usergroup'], t);
    
+    userid = res.data.id;
     userToken = res.data.token;
     t.pass();
 });
 
-
+/*
 test.serial('Post video without files', async t => {
     t.plan(1);
 
@@ -81,44 +82,63 @@ test.serial('Delete video', async t => {
     t.is(res.status, HTTP_ACCEPTED, `Expected status code ${HTTP_ACCEPTED} got ${res.statusCode}`);
 });
 
-/*
+*/
 
-test('Post video with file', async t => {
 
-    t.plan(0)
-    /*
-    t.plan(2);
 
-    let error = null;
-    await fs.readFile("files/thumbnail.png", function(err, data) {
+test('Upload thumbnail file', async t => {
+
+    t.plan(1)
+
+    const filenameThumbnail = "files/thumbnail.png"
+    const mimeThumbnail = "image/png"
+
+    // UPLOAD THUMBNAIL FILE
+    let dataThumbnail = fs.readFileSync(filenameThumbnail);
+    if(dataThumbnail === null) t.fail();
+
+    const fileSizeInBytes = fs.statSync(filenameThumbnail).size;
+
+    try {
+
+    const res = await axios.post(`${API}/file`, dataThumbnail, axiosFile(
+                                                                        userToken, 
+                                                                        fileSizeInBytes,
+                                                                        filenameThumbnail,
+                                                                        mimeThumbnail));
+
+//    console.log(res);
+    t.is(res.statusCode, HTTP_ACCEPTED, `Expected status code ${HTTP_ACCEPTED} got ${res.statusCode}`);    
+
+    } catch(err) {
+        t.fail(`${err.response.status}: ${err.response.data}`);
+    }
+
+});
+
+test('Upload video file', async t => {
+    // UPLOAD VIDEO FILE
+
+    const filenameVideo     = "files/video.mp4"
+    const mimeVideo         = "video/mp4"
     
-        console.log(data);
-        error = err;
-    });
-    await fs.readFile("files/video.mp4", function(err, data) {
-            
-            console.log(data);
-            error = err;
-    });
+    let dataVideo = fs.readFileSync(filenameVideo);
+    if(dataVideo === null) t.fail();
 
+    const fileSizeInBytes = fs.statSync(filenameVideo).size;
+   
+    try {
+        const res = await axios.post(`${API}/file`, dataVideo, axiosFile(
+                                                                userToken, 
+                                                                fileSizeInBytes,
+                                                                filenameVideo,
+                                                                mimeVideo));
+  //      console.log(res);
+        t.is(res.statusCode, HTTP_ACCEPTED, `Expected status code ${HTTP_ACCEPTED} got ${res.statusCode}`);     
 
-console.log(error);
-    t.is(error, null, `Error ${error}`);
-
-console.log(error);
-    t.is(error, null, `Error ${error}`);
-
-    
-    /*
-    var formData = new FormData();
-    var imagefile = document.querySelector('#file');
-    formData.append("image", imagefile.files[0]);
-    axios.post('upload_file', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-    })
+    } catch(err) {
+        t.fail(`${err.response.status}: ${err.response.data}`);
+    }
 
 
 });
-*/

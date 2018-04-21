@@ -21,7 +21,6 @@ test.serial('register a user', async (t) => {
         t.fail(`Expected status code 200 got ${res.status}`);
     t.pass();
     
-    console.log(res.data);
     testDataIntegrity(res, ['id', 'email', 'name', 'token', 'usergroup'], t);
 
 
