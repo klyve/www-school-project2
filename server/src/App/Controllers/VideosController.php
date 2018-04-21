@@ -20,55 +20,34 @@ const HTTP_NOT_IMPLMENTED = 501;
 const HTTP_INTERNAL_ERROR = 500;
 
 
-/*
-
-// @TODO Put this somewhere it makes sense
-function getFileParameterOrNull($fileParam) {
-  if ( !isset($_FILES[$fileParam]) ) {
-      return null;
-  }   
-  $tmp_filepath = $_FILES[$fileParam]['tmp_name'];
-
-  if (!is_uploaded_file($tmp_filepath)) {
-      return null;
-  }
-
-  return $_FILES[$fileParam];
-}
-
 
 // @TODO Put this somewhere it makes sense
 //  @return null is equal to 500 BAD REQUEST
-function uploadFile($tmpfilePath, 
-                    $userid, 
-                    $videoid, 
-                    $collectionName, 
-                    $extension) {
+function makeDirIfNotExist($dir) {
 
-    $ROOT = $_SERVER['DOCUMENT_ROOT'];
-    if (!file_exists("$ROOT/media")){
-        var_dump($ROOT);
-        return Response::statusCode(HTTP_INTERNAL_ERROR, 
-                                        "Media folder does not exist");
-    }
+  if(!file_exists($dir)) {
+      @mkdir($dir);
+  }
+}
 
-    $userdir = "$ROOT/media/$collectionName/$userid";
+function moveFile($src, $dest) {
 
-    if (!file_exists($userdir)) {
-        @mkdir($userdir);
-    }
-
-    $didMove = @move_uploaded_file($tmp_filepath, "$userdir/$videoid.$extension");
+    $didMove = rename($src, $dest);
     if (!$didMove) {
+      var_dump("FAILED TO MOVE FILE", $src, $dest);
         return Response::statusCode(HTTP_INTERNAL_ERROR, 
                                 "Could not move file into $collectionName");
     }
-
     return null;
 }
 
-*/
-
+function newFile($dest) {
+    $output = fopen("$dest", "w");
+    if(!$output) {
+        return Response::statusCode(HTTP_INTERNAL_ERROR, "Could not create file");
+    }  
+    return null;
+}
 
 class VideosController extends Controller {
   
@@ -79,13 +58,47 @@ class VideosController extends Controller {
     // @assumption userid matches token
     $userid = $req->param('userid');
 
-    $newVideo = new VideosModel();
-    $newVideo->userid = $userid;
-    $newVideo->title  = $req->input('title');
+    $newVideo              = new VideosModel();
+    $newVideo->userid      = $userid;
+    $newVideo->title       = $req->input('title');
     $newVideo->description = $req->input('description');
+    $newVideo->filesubtitle  = Hash::md5($userid . $newVideo->title . $newVideo->description . "2o3j4&%(#)") . ".srt";
+    $newVideo->filethumbnail = $req->input('fileThumbnail');
+    $newVideo->filevideo     = $req->input('fileVideo');
+    $videoid = $newVideo->save();
+ 
+    $ROOT         = $_SERVER['DOCUMENT_ROOT'];
 
-    $res = array('videoid' => $newVideo->save($newVideo));
+    $tempdir      = "$ROOT/public/temp/$userid";
+    $destdirSub   = "$ROOT/public/media/subtitles/$userid";
+    $destdirThumb = "$ROOT/public/media/thumbnails/$userid";
+    $destdirVideo = "$ROOT/public/media/videos/$userid";
 
+    makeDirIfNotExist($destdirSub);
+    makeDirIfNotExist($destdirThumb);
+    makeDirIfNotExist($destdirVideo);
+
+    $tempfileThumb = "$tempdir/$newVideo->filethumbnail";
+    $tempfileVideo = "$tempdir/$newVideo->filevideo";
+
+    $err = moveFile($tempfileThumb, "$destdirThumb/$newVideo->filethumbnail");
+    if ($err) {
+        return $err;
+    }
+
+    $err = moveFile($tempfileVideo, "$destdirVideo/$newVideo->filevideo");
+    if ($err) {
+        return $err;
+    }
+
+    $err = newFile("$destdirSub/$newVideo->filesubtitle");
+    if ($err) {
+        return $err;
+    }
+
+    rmdir($tempdir);
+
+    $res = array('videoid' => $videoid);
     return Response::statusCode(HTTP_CREATED, $res);
   }
 

@@ -4,3 +4,13 @@
 
 server/public/temp/*
 !server/public/temp/.gitkeep
+
+
+server/public/media/thumbnails/*
+!server/public/media/thumbnails/.gitkeep
+
+server/public/media/videos/*
+!server/public/media/videos/.gitkeep
+
+server/public/media/subtitles/*
+!server/public/media/subtitles/.gitkeep

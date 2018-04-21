@@ -20,12 +20,14 @@ const credentials = {
     password: 'password1',
 };
 
-const newVideodata = {
+let newVideodata = {
     title: '10 Javascript Frameworks you HAVE TO LEARN in 2018',
-    description: 'Your life will be an absolute missery if you dont learn these super important frameworks!'
+    description: 'Your life will be an absolute missery if you dont learn these super important frameworks!',
+    fileThumbnail: null, // provided by return from tempfile upload
+    fileVideo: null,     // provided by return from tempfile upload
 }
 
-const updateVideodata = {
+let updateVideodata = {
     title: '10 Javascript Frameworks in 2018',
     description: 'Your life will be in RUINS if you dont learn these super important frameworks!'
 }
@@ -34,7 +36,6 @@ const updateVideodata = {
 let userid = 1
 let videoid = null
 let userToken  = null
-
 
 test.before(async (t) => {
     t.plan(12);
@@ -51,7 +52,7 @@ test.before(async (t) => {
 });
 
 
-test.only('Upload thumbnail file', async t => {
+test.serial('Upload thumbnail file', async t => {
 
     t.plan(1)
 
@@ -66,13 +67,15 @@ test.only('Upload thumbnail file', async t => {
 
     try {
 
-    const res = await axios.post(`${API}/user/${userid}/tempfile`, dataThumbnail, axiosFile(
-                                                                        userToken, 
-                                                                        fileSizeInBytes,
-                                                                        filenameThumbnail,
-                                                                        mimeThumbnail));
+        const res = await axios.post(`${API}/user/${userid}/tempfile`, 
+                                 dataThumbnail, 
+                                 axiosFile(userToken, 
+                                           fileSizeInBytes,
+                                           filenameThumbnail,
+                                           mimeThumbnail));
 
- console.log(res);
+        newVideodata.fileThumbnail = res.data.fname;
+
     t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`);    
 
     } catch(err) {
@@ -81,7 +84,7 @@ test.only('Upload thumbnail file', async t => {
 
 });
 
-test('Upload video file', async t => {
+test.serial('Upload video file', async t => {
     // UPLOAD VIDEO FILE
 
     const filenameVideo     = "video.mp4"
@@ -93,27 +96,38 @@ test('Upload video file', async t => {
     const fileSizeInBytes = fs.statSync(`files/${filenameVideo}`).size;
    
     try {
-        const res = await axios.post(`${API}/user/${userid}/tempfile`, dataVideo, axiosFile(
-                                                                userToken, 
-                                                                fileSizeInBytes,
-                                                                filenameVideo,
-                                                                mimeVideo));
+        const res = await axios.post(`${API}/user/${userid}/tempfile`, 
+                                     dataVideo, 
+                                     axiosFile(userToken, 
+                                               fileSizeInBytes,
+                                               filenameVideo,
+                                               mimeVideo));
+
         t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`);     
+
+
+        newVideodata.fileVideo = res.data.fname;
 
     } catch(err) {
         t.fail(`${err.response.status}: ${err.response.data}`);
     }
 });
 
-/*
-test.serial('Post video without files', async t => {
+test.serial('Post video', async t => {
     t.plan(1);
 
-    const res = await axios.post(`${API}/user/${userid}/video`, newVideodata, axiosBearer(userToken))
-    t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.statusCode}`);
+    try {
+        const res = await axios.post(`${API}/user/${userid}/video`, newVideodata, axiosBearer(userToken))
+        t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`);
+    
+        videoid = res.data.videoid;
 
-    videoid = res.data.videoid;
+    } catch (err) {
+        t.fail()
+    }
+
 });
+
 
 
 test.serial('Put video', async t => {
@@ -136,7 +150,3 @@ test.serial('Delete video', async t => {
     const res = await axios.delete(`${API}/user/${userid}/video/${videoid}`, axiosBearer(userToken))
     t.is(res.status, HTTP_ACCEPTED, `Expected status code ${HTTP_ACCEPTED} got ${res.statusCode}`);
 });
-
-*/
-
-
