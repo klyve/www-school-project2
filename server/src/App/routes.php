@@ -35,7 +35,7 @@ Route::delete('/user/{userid}/video/{videoid}', 'VideosController.deleteVideo')
     ->withMiddlewares(['IsAuthenticated']);
 
 
-Route::post('/file', 'FilesController.postFile')
+Route::post('/user/{userid}/tempfile', 'FilesController.postTempfile')
     ->withMiddlewares(['IsAuthenticated']);
 
 // Route::get('adsfgnjwd', 'gnrgwklgweg')

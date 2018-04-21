@@ -50,6 +50,61 @@ test.before(async (t) => {
     t.pass();
 });
 
+
+test.only('Upload thumbnail file', async t => {
+
+    t.plan(1)
+
+    const filenameThumbnail = "thumbnail.png"
+    const mimeThumbnail = "image/png"
+
+    // UPLOAD THUMBNAIL FILE
+    let dataThumbnail = fs.readFileSync(`files/${filenameThumbnail}`);
+    if(dataThumbnail === null) t.fail();
+
+    const fileSizeInBytes = fs.statSync(`files/${filenameThumbnail}`).size;
+
+    try {
+
+    const res = await axios.post(`${API}/user/${userid}/tempfile`, dataThumbnail, axiosFile(
+                                                                        userToken, 
+                                                                        fileSizeInBytes,
+                                                                        filenameThumbnail,
+                                                                        mimeThumbnail));
+
+ console.log(res);
+    t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`);    
+
+    } catch(err) {
+        t.fail(`${err.response.status}: ${err.response.data}`);
+    }
+
+});
+
+test('Upload video file', async t => {
+    // UPLOAD VIDEO FILE
+
+    const filenameVideo     = "video.mp4"
+    const mimeVideo         = "video/mp4"
+    
+    let dataVideo = fs.readFileSync(`files/${filenameVideo}`);
+    if(dataVideo === null) t.fail();
+
+    const fileSizeInBytes = fs.statSync(`files/${filenameVideo}`).size;
+   
+    try {
+        const res = await axios.post(`${API}/user/${userid}/tempfile`, dataVideo, axiosFile(
+                                                                userToken, 
+                                                                fileSizeInBytes,
+                                                                filenameVideo,
+                                                                mimeVideo));
+        t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`);     
+
+    } catch(err) {
+        t.fail(`${err.response.status}: ${err.response.data}`);
+    }
+});
+
 /*
 test.serial('Post video without files', async t => {
     t.plan(1);
@@ -85,58 +140,3 @@ test.serial('Delete video', async t => {
 */
 
 
-test('Upload thumbnail file', async t => {
-
-    t.plan(1)
-
-    const filenameThumbnail = "thumbnail.png"
-    const mimeThumbnail = "image/png"
-
-    // UPLOAD THUMBNAIL FILE
-    let dataThumbnail = fs.readFileSync(`files/${filenameThumbnail}`);
-    if(dataThumbnail === null) t.fail();
-
-    const fileSizeInBytes = fs.statSync(`files/${filenameThumbnail}`).size;
-
-    try {
-
-    const res = await axios.post(`${API}/file`, dataThumbnail, axiosFile(
-                                                                        userToken, 
-                                                                        fileSizeInBytes,
-                                                                        filenameThumbnail,
-                                                                        mimeThumbnail));
-
-//    console.log(res);
-    t.is(res.statusCode, HTTP_ACCEPTED, `Expected status code ${HTTP_ACCEPTED} got ${res.statusCode}`);    
-
-    } catch(err) {
-        t.fail(`${err.response.status}: ${err.response.data}`);
-    }
-
-});
-
-test('Upload video file', async t => {
-    // UPLOAD VIDEO FILE
-
-    const filenameVideo     = "video.mp4"
-    const mimeVideo         = "video/mp4"
-    
-    let dataVideo = fs.readFileSync(`files/${filenameVideo}`);
-    if(dataVideo === null) t.fail();
-
-    const fileSizeInBytes = fs.statSync(`files/${filenameVideo}`).size;
-   
-    try {
-        const res = await axios.post(`${API}/file`, dataVideo, axiosFile(
-                                                                userToken, 
-                                                                fileSizeInBytes,
-                                                                filenameVideo,
-                                                                mimeVideo));
-        t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`);     
-
-    } catch(err) {
-        t.fail(`${err.response.status}: ${err.response.data}`);
-    }
-
-
-});

@@ -21,18 +21,28 @@ const HTTP_INTERNAL_ERROR = 500;
 
 class FilesController extends Controller {
   
-  // @route POST /file
-  public function postFile(Request $req) {
+  // @route POST /user/{userid}/tempfile
+  public function postTempfile(Request $req) {
 
     // @ref copy from okolloen javascript_forelesning 1
-    $ROOT = $_SERVER['DOCUMENT_ROOT'];
-    $fname = $_SERVER['HTTP_X_ORIGINALFILENAME'];       // Get extra parameters
-    $fsize = $_SERVER['HTTP_X_ORIGINALFILESIZE'];
+    $fname    = $_SERVER['HTTP_X_ORIGINALFILENAME'];      
+    $fsize    = $_SERVER['HTTP_X_ORIGINALFILESIZE'];
     $mimetype = $_SERVER['HTTP_X_ORIGINALMIMETYPE'];
 
-    $handle = fopen("php://input", 'r');                // Read the file from stdin
+    // Read the file from stdin
+    $handle = fopen("php://input", 'r');      
+    $userid = $req->param('userid');   
 
-    $output = fopen("$ROOT/public/temp/$fname", "w");
+    $ROOT    = $_SERVER['DOCUMENT_ROOT'];
+    $tempfilename = Hash::md5($userid . $name . $fsize . $mimetype);        // rlkngj..
+    $extension = substr($mimetype, strpos($mimetype, '/')+1); // e.g. mp4
+    $tempdir = "$ROOT/public/temp/$userid";
+
+    if (!file_exists($tempdir)) {
+        @mkdir($tempdir);
+    }
+
+    $output = fopen("$tempdir/$tempfilename.$extension", "w");
     if(!$output) {
         return Response::statusCode(HTTP_INTERNAL_ERROR, "Could not open file");
     }
@@ -46,7 +56,7 @@ class FilesController extends Controller {
     fclose($handle);
     fclose($output);
 
-    $res = ['fname'=>$fname, 'size'=>$fsize, 'mime'=>$mimetype];
+    $res = ['fname'=> "$tempfilename.$extension", 'size'=>$fsize, 'mime'=>$mimetype];
 
     return Response::statusCode(HTTP_CREATED, $res);
   }
