@@ -85,19 +85,18 @@ test.serial('Delete video', async t => {
 */
 
 
-
 test('Upload thumbnail file', async t => {
 
     t.plan(1)
 
-    const filenameThumbnail = "files/thumbnail.png"
+    const filenameThumbnail = "thumbnail.png"
     const mimeThumbnail = "image/png"
 
     // UPLOAD THUMBNAIL FILE
-    let dataThumbnail = fs.readFileSync(filenameThumbnail);
+    let dataThumbnail = fs.readFileSync(`files/${filenameThumbnail}`);
     if(dataThumbnail === null) t.fail();
 
-    const fileSizeInBytes = fs.statSync(filenameThumbnail).size;
+    const fileSizeInBytes = fs.statSync(`files/${filenameThumbnail}`).size;
 
     try {
 
@@ -119,13 +118,13 @@ test('Upload thumbnail file', async t => {
 test('Upload video file', async t => {
     // UPLOAD VIDEO FILE
 
-    const filenameVideo     = "files/video.mp4"
+    const filenameVideo     = "video.mp4"
     const mimeVideo         = "video/mp4"
     
-    let dataVideo = fs.readFileSync(filenameVideo);
+    let dataVideo = fs.readFileSync(`files/${filenameVideo}`);
     if(dataVideo === null) t.fail();
 
-    const fileSizeInBytes = fs.statSync(filenameVideo).size;
+    const fileSizeInBytes = fs.statSync(`files/${filenameVideo}`).size;
    
     try {
         const res = await axios.post(`${API}/file`, dataVideo, axiosFile(
@@ -133,8 +132,7 @@ test('Upload video file', async t => {
                                                                 fileSizeInBytes,
                                                                 filenameVideo,
                                                                 mimeVideo));
-  //      console.log(res);
-        t.is(res.statusCode, HTTP_ACCEPTED, `Expected status code ${HTTP_ACCEPTED} got ${res.statusCode}`);     
+        t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`);     
 
     } catch(err) {
         t.fail(`${err.response.status}: ${err.response.data}`);

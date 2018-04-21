@@ -31,11 +31,11 @@ class FilesController extends Controller {
     $mimetype = $_SERVER['HTTP_X_ORIGINALMIMETYPE'];
 
     $handle = fopen("php://input", 'r');                // Read the file from stdin
-    var_dump($ROOT);
-    $output = fopen("$ROOT/server/public/temp/hasdhd", "w");
-    if(!$output)
-        var_dump("ASDFSDFDFDSFSFDS");
+
+    $output = fopen("$ROOT/public/temp/$fname", "w");
+    if(!$output) {
         return Response::statusCode(HTTP_INTERNAL_ERROR, "Could not open file");
+    }
 
     $contents = '';
 
