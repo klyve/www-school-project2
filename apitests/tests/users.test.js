@@ -7,7 +7,7 @@ const crypto = require('crypto');
 const credentials = {
     email: guid()+'@stud.ntnu.no',
     name: 'bjarte',
-    password: 'hello',
+    password: 'somepassword',
     newpassword: 'hello123',
 };
 

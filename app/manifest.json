@@ -1,0 +1,7 @@
+{
+  "name": "kruskontroll",
+  "short_name": "kruskontroll",
+  "description": "watch videos online",
+  "start_url": "/",
+  "display": "standalone"
+}
