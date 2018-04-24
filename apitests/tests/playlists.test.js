@@ -1,17 +1,18 @@
 import test from 'ava';
 const { API } = require('../configs');
-const { testDataIntegrity, axiosBearer } = require('../methods');
+const { testDataIntegrity, axiosBearer, isEqualsShallow } = require('../methods');
 const axios = require('axios');
 const fs = require("fs");
 
 
 // HTTP STATUS CODES
-const HTTP_OK            = 200;  // Success and returning content
-const HTTP_CREATED       = 201;  // Successfull creation
-const HTTP_ACCEPTED      = 202;  // Marked for  deletion, not deleted yet
+const HTTP_OK             = 200;  // Success and returning content
+const HTTP_CREATED        = 201;  // Successfull creation
+const HTTP_ACCEPTED       = 202;  // Marked for  deletion, not deleted yet
 const HTTP_NO_CONTENT     = 204;  // Successfull update
 const HTTP_NOT_IMPLMENTED = 501;
-const HTTP_NOT_FOUND     = 404;
+const HTTP_BAD_REQUEST    = 400;
+const HTTP_NOT_FOUND      = 404;
 
 // @note Insert this user into the database using 'php toolbox seed:up' 'php toolbox seed:refresh'
 const credentials = {
@@ -21,11 +22,13 @@ const credentials = {
 };
 
 let playlistdata = {
+    id: null,
     title: 'PLAYLIST 10 Javascript Frameworks',
     description: 'A playlist about javascript frameworks ',
 }
 
 let updatedPlaylistdata = {
+    id: null,
     title: 'PLAYLIST 10 Javascript Frameworks NEW 2018 UPDATE',
     description: 'A playlist about javascript frameworks NEW 2018 UPDATED',
 }
@@ -41,7 +44,7 @@ test.before(async (t) => {
     const res = await axios.post(`${API}/user/login`, credentials)
     t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.statusCode}`);
 
-    testDataIntegrity(res, ['email', 'name', 'token', 'usergroup'], t);
+    testDataIntegrity(res.data, ['email', 'name', 'token', 'usergroup'], t);
    
     userToken = res.data.token;
     t.pass();
@@ -50,32 +53,38 @@ test.before(async (t) => {
 
 test.serial('Create playlist', async (t) => {
 
-    t.plan(5)
+    t.plan(6)
     try {
+
         const res = await axios.post(`${API}/playlist`, playlistdata, axiosBearer(userToken))
         t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`)
 
-        testDataIntegrity(res, ['playlistid', 'msg'], t);
+        testDataIntegrity(res.data, ['id', 'msg'], t);
+        playlistdata.id = res.data.id
+
+        t.truthy(playlistdata.id)
 
     } catch(err) {
         t.log(err)
+        t.is(err.response.status, HTTP_BAD_REQUEST, `Expected status code ${HTTP_BAD_REQUEST} got ${err.response.status}`)
+    }
+});
+
+test.serial('Check if playlist was created', async (t) => {
+   
+    t.plan(2)
+    try {
+        const res = await axios.post(`${API}/graphql?query={ playlist(id: ${playlistdata.id}) {  id, title, description }}`, axiosBearer(userToken))
+
+        t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.status}`)
+        t.true( isEqualsShallow(res.data.data.playlist, playlistdata), "Shallow equal unsuccessful")
+
+    } catch(err) {
         t.is(err.response.status, HTTP_NOT_FOUND, `Expected status code ${HTTP_NOT_FOUND} got ${err.response.status}`)
     }
 });
 
 /*
-test.serial('Check if playlist was created', async (t) => {
-   
-    t.plan(1)
-    try {
-        const res = await axios.post(`${API}/graphql`, {"query": }, axiosBearer(userToken))
-        console.log(res.data)
-
-    } catch(err) {
-        t.is(err.response.status, HTTP_NOT_FOUND, `Expected status code ${HTTP_NOT_FOUND} got ${err.response.status}`)
-    }
-});
-
 
 test.serial('Update playlist', async (t) => {
     t.fail("Not implemented!")

@@ -38,7 +38,7 @@ class PlaylistsController extends Controller {
         }
 
 
-        $res = ['playlistid' => $lastinsertid, 'msg' => 'Created playlist'];
+        $res = ['id' => $lastinsertid, 'msg' => 'Created playlist'];
         return Response::statusCode(HTTP_CREATED, $res);
     }
 

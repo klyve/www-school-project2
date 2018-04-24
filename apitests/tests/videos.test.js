@@ -42,7 +42,7 @@ test.before(async (t) => {
     const res = await axios.post(`${API}/user/login`, credentials)
     t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.statusCode}`);
 
-    testDataIntegrity(res, ['email', 'name', 'token', 'usergroup'], t);
+    testDataIntegrity(res.data, ['email', 'name', 'token', 'usergroup'], t);
    
     userToken = res.data.token;
     t.pass();
