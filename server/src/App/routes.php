@@ -50,6 +50,18 @@ Route::post('/tempfile', 'FilesController.postTempfile')
 
 
 
+// PlaylistsController
+
+Route::post('playlist', 'PlaylistsController.postPlaylist')
+    ->withMiddlewares(['IsAuthenticated']);
+
+Route::put('playlist', 'PlaylistsController.updatePlaylist')
+    ->withMiddlewares(['IsAuthenticated']);
+
+Route::delete('playlist', 'PlaylistsController.deletePlaylist')
+    ->withMiddlewares(['IsAuthenticated']);
+
+
 // UsersController
 Route::get('/user', "UsersController.getUser");
 

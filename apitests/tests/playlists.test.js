@@ -25,7 +25,7 @@ let playlistdata = {
     description: 'A playlist about javascript frameworks ',
 }
 
-let newPlaylistdata = {
+let updatedPlaylistdata = {
     title: 'PLAYLIST 10 Javascript Frameworks NEW 2018 UPDATE',
     description: 'A playlist about javascript frameworks NEW 2018 UPDATED',
 }
@@ -50,12 +50,30 @@ test.before(async (t) => {
 
 test.serial('Create playlist', async (t) => {
 
-    t.fail("Not implemented!")
+    t.plan(5)
+    try {
+        const res = await axios.post(`${API}/playlist`, playlistdata, axiosBearer(userToken))
+        t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`)
+
+        testDataIntegrity(res, ['playlistid', 'msg'], t);
+
+    } catch(err) {
+        t.log(err)
+        t.is(err.response.status, HTTP_NOT_FOUND, `Expected status code ${HTTP_NOT_FOUND} got ${err.response.status}`)
+    }
 });
 
-
+/*
 test.serial('Check if playlist was created', async (t) => {
-    t.fail("Not implemented!")
+   
+    t.plan(1)
+    try {
+        const res = await axios.post(`${API}/graphql`, {"query": }, axiosBearer(userToken))
+        console.log(res.data)
+
+    } catch(err) {
+        t.is(err.response.status, HTTP_NOT_FOUND, `Expected status code ${HTTP_NOT_FOUND} got ${err.response.status}`)
+    }
 });
 
 
@@ -117,4 +135,4 @@ test.serial('Delete playlist', async (t) => {
 test.serial('Check if playlist was deleted', async (t) => {
     t.fail("Not implemented!")
 
-});
+});*/
