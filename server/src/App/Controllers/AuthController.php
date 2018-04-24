@@ -10,60 +10,69 @@ use \MVC\Http\ErrorCode;
 
 class AuthController extends Controller {
 
-  public function putPassword(UsersModel $user, Request $req) {
-    $token = $req->token();
-    $myUser = $user->find([
-      'id' => $token->userid,
-    ]);
+    public function putPassword(UsersModel $user, Request $req) {
+        $token = $req->token();
+        $myUser = $user->find([
+            'id' => $token->userid,
+        ]);
 
-    if(!Hash::verify($req->input('password'), $myUser->password)) {
-      return new Error(ErrorCode::get('user.invalid_password'));
+        if(!Hash::verify($req->input('password'), $myUser->password)) {
+            return new Error(ErrorCode::get('user.invalid_password'));
+        }
+        $myUser->password = Hash::password($req->input('newpassword'));
+        $myUser->save();
+        return Response::statusCode(204);
     }
-    $myUser->password = Hash::password($req->input('newpassword'));
-    $myUser->save();
-    return Response::statusCode(204);
-  }
 
-  public function postLogin(UsersModel $user, Request $req, Response $res) {
-      $myUser = $user->find([
-        'email' => $req->input('email'),
-      ]);
+    public function postLogin(UsersModel $user, Request $req, Response $res) {
+        $myUser = $user->find([
+            'email' => $req->input('email'),
+        ]);
 
-      if(!$myUser->id || !Hash::verify($req->input('password'), $myUser->password)) {
-        return [
-          "error" => "Username or password is invalid",
-        ];
-      }
-      $myUser->token = Hash::JWT(["key" => 'userid', 'value' => $myUser->id]);
+        if(!$myUser->id || !Hash::verify($req->input('password'), $myUser->password)) {
+            return [
+                "error" => "Username or password is invalid",
+            ];
+        }
+        $myUser->token = Hash::JWT(["key" => 'userid', 'value' => $myUser->id]);
       
-    return Response::statusCode(200, $myUser);
-  }
-
-  public function getUser(UsersModel $user, Request $req) {
-      return $user->find([
-        'id' => $req->input('id'),
-      ]);
-      return Response::statusCode(200, $myUser);
-  }
-
-  public function postRegister(UsersModel $user, Request $req) {
-    $user->find([
-      'email' => $req->input('email')
-    ]);
-
-    if($user->id) {
-      return new Error(ErrorCode::get('user.email_exists'));
+        return Response::statusCode(200, $myUser);
     }
 
-    $id = $user->create(array_merge($req->only([
-      'name', 'email',
-    ]), ['password' => Hash::password($req->input('password'))]));
-    
-    $token = Hash::JWT(["key" => 'userid', 'value' => $id]);
-    $user->token = $token;
+    public function getUser(UsersModel $user, Request $req) {
+        $myuser = $user->find([
+            'id' => $req->input('id'),
+        ]);
+        return Response::statusCode(200, $myUser);
+    }
 
+    public function postRegister(UsersModel $user, Request $req) {
+        $user->find([
+            'email' => $req->input('email')
+        ]);
 
-    return Response::statusCode(200, $user);
-  }
+        if($user->id) {
+            return new Error(ErrorCode::get('user.email_exists'));
+        }
+
+        $id = $user->create(array_merge($req->only([
+            'name', 'email',
+        ]), ['password' => Hash::password($req->input('password'))]));
+      
+        $token = Hash::JWT(["key" => 'userid', 'value' => $id]);
+        $user->token = $token;
+
+        return Response::statusCode(200, $user);
+    }
+
+    public function refreshToken(UsersModel $user, Request $req) {
+        $myUser = $user->find([
+            'id' => $req->token()->userid
+        ]);
+
+        // @TODO invalidate existing token
+        $myUser->token = Hash::JWT(["key" => 'userid', 'value' => $req->token()->userid]);
+        return Response::statusCode(200, $myUser); 
+    }
 
 }

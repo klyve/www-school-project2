@@ -57,6 +57,33 @@ test.serial('Log in a user', async (t) => {
 });
 
 
+test.serial('Refresh token', async(t) => {
+    t.plan(10);
+    const res = await axios.post(`${API}/user/refresh`, {}, axiosBearer(userToken))
+    t.is(res.status, 200, `Expected status code 200 got ${res.status}`);
+
+    testDataIntegrity(res, ['email', 'name', 'token', 'usergroup'], t);
+    
+    userToken = res.data.token
+    t.pass();
+
+});
+
+
+test.serial('Log out', async(t) => {
+    t.fail()
+});
+
+
+test.serial('Check if logged out', async(t) => {
+    t.fail()
+});
+
+
+test.serial('Log in again', async(t) => {
+    t.fail()
+});
+
 
 test.serial('Change password of user', async (t) => {
     
@@ -97,6 +124,7 @@ test.serial('Update user email and name', async (t) => {
     }
 });
 
+
 test.serial('Delete User', async (t) => {
     
     t.plan(1)
@@ -106,3 +134,5 @@ test.serial('Delete User', async (t) => {
     t.is(res.status, HTTP_ACCEPTED, `Expected status code ${HTTP_ACCEPTED} got ${res.status}`);
 
 });
+
+

@@ -24,10 +24,12 @@ Route::post('user/login', 'AuthController.postLogin')
 Route::post('user/register', 'AuthController.postRegister')
     ->withValidators(['UserValidations.register']);
 
-
 Route::put('user/password', 'AuthController.putPassword')
     ->withMiddlewares(['IsAuthenticated'])
     ->withValidators(['UserValidations.changePassword']);
+
+Route::post('user/refresh', 'AuthController.refreshToken')
+    ->withMiddlewares(['IsAuthenticated']);
 
 
 
