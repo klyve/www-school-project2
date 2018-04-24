@@ -33,20 +33,17 @@ let updateVideodata = {
 }
 
 
-let userid = 1
 let videoid = null
 let userToken  = null
 
 test.before(async (t) => {
-    t.plan(12);
+    t.plan(10);
 
-    // @TODO Get 'userid' back from this route, and use it in the other tests.
     const res = await axios.post(`${API}/user/login`, credentials)
     t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.statusCode}`);
 
-    testDataIntegrity(res, ['id', 'email', 'name', 'token', 'usergroup'], t);
+    testDataIntegrity(res, ['email', 'name', 'token', 'usergroup'], t);
    
-    userid = res.data.id;
     userToken = res.data.token;
     t.pass();
 });
@@ -67,7 +64,7 @@ test.serial('Upload thumbnail file', async t => {
 
     try {
 
-        const res = await axios.post(`${API}/user/${userid}/tempfile`, 
+        const res = await axios.post(`${API}/tempfile`, 
                                  dataThumbnail, 
                                  axiosFile(userToken, 
                                            fileSizeInBytes,
@@ -96,15 +93,14 @@ test.serial('Upload video file', async t => {
     const fileSizeInBytes = fs.statSync(`files/${filenameVideo}`).size;
    
     try {
-        const res = await axios.post(`${API}/user/${userid}/tempfile`, 
+        const res = await axios.post(`${API}/tempfile`, 
                                      dataVideo, 
                                      axiosFile(userToken, 
                                                fileSizeInBytes,
                                                filenameVideo,
                                                mimeVideo));
 
-        t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`);     
-
+        t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`)
 
         newVideodata.fileVideo = res.data.fname;
 
@@ -117,8 +113,8 @@ test.serial('Post video', async t => {
     t.plan(1);
 
     try {
-        const res = await axios.post(`${API}/user/${userid}/video`, newVideodata, axiosBearer(userToken))
-        t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`);
+        const res = await axios.post(`${API}/video`, newVideodata, axiosBearer(userToken))
+        t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`)
     
         videoid = res.data.videoid;
 
@@ -133,12 +129,12 @@ test.serial('Post video', async t => {
 test.serial('Put video', async t => {
     t.plan(1);
 
-    const res = await axios.put(`${API}/user/${userid}/video/${videoid}`, {
-        userid,
+    const res = await axios.put(`${API}/video/${videoid}`, {
         videoid,
         title: updateVideodata.title,
         description: updateVideodata.description
     }, axiosBearer(userToken))
+
 
     t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.statusCode}`)
 });
@@ -147,6 +143,6 @@ test.serial('Put video', async t => {
 test.serial('Delete video', async t => {
     t.plan(1);
 
-    const res = await axios.delete(`${API}/user/${userid}/video/${videoid}`, axiosBearer(userToken))
-    t.is(res.status, HTTP_ACCEPTED, `Expected status code ${HTTP_ACCEPTED} got ${res.statusCode}`);
+    const res = await axios.delete(`${API}/video/${videoid}`, axiosBearer(userToken))
+    t.is(res.status, HTTP_ACCEPTED, `Expected status code ${HTTP_ACCEPTED} got ${res.statusCode}`)
 });

@@ -63,7 +63,7 @@ class AuthController extends Controller {
     
     $token = Hash::JWT(["key" => 'userid', 'value' => $id]);
     $user->token = $token;
-    $user->id = $id;
+
 
     return $user;
   }

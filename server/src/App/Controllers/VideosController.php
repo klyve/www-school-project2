@@ -7,6 +7,7 @@ use \MVC\Http\Error;
 use App\Models\VideosModel;
 use \MVC\Helpers\Hash;
 use \MVC\Http\ErrorCode;
+use \MVC\Helpers\File;
 use \Datetime;
 
 // HTTP STATUS CODES
@@ -20,35 +21,6 @@ const HTTP_NOT_IMPLMENTED = 501;
 const HTTP_INTERNAL_ERROR = 500;
 
 
-
-// @TODO Put this somewhere it makes sense
-//  @return null is equal to 500 BAD REQUEST
-function makeDirIfNotExist($dir) {
-
-  if(!file_exists($dir)) {
-      @mkdir($dir);
-  }
-}
-
-function moveFile($src, $dest) {
-
-    $didMove = rename($src, $dest);
-    if (!$didMove) {
-      var_dump("FAILED TO MOVE FILE", $src, $dest);
-        return Response::statusCode(HTTP_INTERNAL_ERROR, 
-                                "Could not move file into $collectionName");
-    }
-    return null;
-}
-
-function newFile($dest) {
-    $output = fopen("$dest", "w");
-    if(!$output) {
-        return Response::statusCode(HTTP_INTERNAL_ERROR, "Could not create file");
-    }  
-    return null;
-}
-
 class VideosController extends Controller {
   
   // @route POST /user/{userid}/video
@@ -56,49 +28,49 @@ class VideosController extends Controller {
 
 
     // @assumption userid matches token
-    $userid = $req->param('userid');
+    $token = $req->token();
+    $userid = $token->userid;
 
     $newVideo              = new VideosModel();
     $newVideo->userid      = $userid;
     $newVideo->title       = $req->input('title');
     $newVideo->description = $req->input('description');
-    $newVideo->filesubtitle  = Hash::md5($userid . $newVideo->title . $newVideo->description . "2o3j4&%(#)") . ".srt";
+    $newVideo->filesubtitle  = Hash::md5($userid . $newVideo->title  . microtime() ) . ".srt";
     $newVideo->filethumbnail = $req->input('fileThumbnail');
     $newVideo->filevideo     = $req->input('fileVideo');
     $videoid = $newVideo->save();
  
-    $ROOT         = $_SERVER['DOCUMENT_ROOT'];
 
-    $tempdir      = "$ROOT/public/temp/$userid";
-    $destdirSub   = "$ROOT/public/media/subtitles/$userid";
-    $destdirThumb = "$ROOT/public/media/thumbnails/$userid";
-    $destdirVideo = "$ROOT/public/media/videos/$userid";
+    $tempdir      = WWW_ROOT."/public/temp/$userid";
+    $destdirSub   = WWW_ROOT."/public/media/subtitles/$userid";
+    $destdirThumb = WWW_ROOT."/public/media/thumbnails/$userid";
+    $destdirVideo = WWW_ROOT."/public/media/videos/$userid";
 
-    makeDirIfNotExist($destdirSub);
-    makeDirIfNotExist($destdirThumb);
-    makeDirIfNotExist($destdirVideo);
+    File::makeDirIfNotExist($destdirSub);
+    File::makeDirIfNotExist($destdirThumb);
+    File::makeDirIfNotExist($destdirVideo);
 
     $tempfileThumb = "$tempdir/$newVideo->filethumbnail";
     $tempfileVideo = "$tempdir/$newVideo->filevideo";
 
-    $err = moveFile($tempfileThumb, "$destdirThumb/$newVideo->filethumbnail");
+    $err = File::moveFile($tempfileThumb, "$destdirThumb/$newVideo->filethumbnail");
     if ($err) {
-        return $err;
+        return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to move file");
     }
 
-    $err = moveFile($tempfileVideo, "$destdirVideo/$newVideo->filevideo");
+    $err = File::moveFile($tempfileVideo, "$destdirVideo/$newVideo->filevideo");
     if ($err) {
-        return $err;
+        return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to move file");
     }
 
-    $err = newFile("$destdirSub/$newVideo->filesubtitle");
+    $err = File::newFile("$destdirSub/$newVideo->filesubtitle");
     if ($err) {
-        return $err;
+        return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to new file");
     }
 
     rmdir($tempdir);
 
-    $res = array('videoid' => $videoid);
+    $res = array('videoid' => $videoid, 'message' => "Created a new video");
     return Response::statusCode(HTTP_CREATED, $res);
   }
 
@@ -108,16 +80,12 @@ class VideosController extends Controller {
 
     // @assumption userid matches token
     $updatedVideo  = $video->find([
-        'id' => $req->param('videoid')
+        'id' => $req->param('videoid'), 
+        'userid' => $req->token()->userid
     ]);
 
-
     if(!$updatedVideo->id) {
-        return Response::statusCode(HTTP_NOT_FOUND);
-    }
-
-    if($updatedVideo->userid !== $req->param('userid')) {
-      return Response::statusCode(HTTP_BAD_REQUEST);
+        return Response::statusCode(HTTP_NOT_FOUND, "Could not find video on userid");
     }
 
     $updatedVideo->title       = $req->input('title');

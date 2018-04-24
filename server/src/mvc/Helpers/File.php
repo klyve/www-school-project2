@@ -49,4 +49,35 @@ class File {
         return $classArr;
     }
 
+    function openToWrite($dest) {
+        return fopen($dest, "w");
+    }
+    
+    function makeDirIfNotExist($dir) {
+
+      if(!file_exists($dir)) {
+          @mkdir($dir);
+      }
+    }
+
+    // @return 1 if ERROR
+    function moveFile($src, $dest) {
+
+        $didMove = rename($src, $dest);
+        if (!$didMove) {
+            return 1;
+        }
+        return 0;
+    }
+
+    // @return 1 if ERROR
+    function newFile($dest) {
+        $output = fopen("$dest", "w");
+        if(!$output) {
+            return 1;
+        }  
+        return 0;
+    }
+
+
 }

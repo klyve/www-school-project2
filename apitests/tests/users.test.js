@@ -10,18 +10,25 @@ const credentials = {
     password: 'hello',
     newpassword: 'hello123',
 };
-let userToken = null;
+
+let userToken = null
+
+
+const HTTP_NOT_IMPLMENTED = 501;
+const HTTP_ACCEPTED       = 202;  // Marked for  deletion, not deleted yet
+const HTTP_OK             = 200;  // Marked for  deletion, not deleted yet
 
 
 test.serial('register a user', async (t) => {
-    t.plan(19);
+    t.plan(17);
     const res = await axios.post(`${API}/user/register`, credentials)
     
     if(res.status !== 200)
         t.fail(`Expected status code 200 got ${res.status}`);
     t.pass();
     
-    testDataIntegrity(res, ['id', 'email', 'name', 'token', 'usergroup'], t);
+
+    testDataIntegrity(res, ['email', 'name', 'token', 'usergroup'], t);
 
 
     try {
@@ -39,13 +46,13 @@ test.serial('register a user', async (t) => {
 
 
 test.serial('Log in a user', async (t) => {
-    t.plan(12);
+    t.plan(10);
     const res = await axios.post(`${API}/user/login`, credentials)
     t.is(res.status, 200, `Expected status code 200 got ${res.status}`);
 
-    testDataIntegrity(res, ['id', 'email', 'name', 'token', 'usergroup'], t);
+    testDataIntegrity(res, ['email', 'name', 'token', 'usergroup'], t);
     
-    userToken = res.data.token;
+    userToken = res.data.token
     t.pass();
 });
 
@@ -69,4 +76,33 @@ test.serial('Change password of user', async (t) => {
     }
 
     t.pass();
+});
+
+
+test.serial('Update user email and name', async (t) => {
+    const updatedCredentials = {
+        email: guid()+'updated@stud.ntnu.no',
+        name: 'Bjarte The Enhanced',
+    };
+
+    try {
+        const res = await axios.put(`${API}/user`, updatedCredentials, axiosBearer(userToken))
+
+        //console.log(res)
+        t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.status}`);
+
+    } catch(err) {
+  //      console.log(err)
+        t.is(err.response.status, HTTP_NOT_IMPLMENTED, `Expected status code ${HTTP_NOT_IMPLMENTED} got ${err.response.status}`);
+    }
+});
+
+test.serial('Delete User', async (t) => {
+    
+    t.plan(1)
+    //console.log(userToken)
+
+    const res = await axios.delete(`${API}/user`, axiosBearer(userToken))
+    t.is(res.status, HTTP_ACCEPTED, `Expected status code ${HTTP_ACCEPTED} got ${res.status}`);
+
 });

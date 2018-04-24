@@ -25,18 +25,35 @@ Route::put('/user/password', 'AuthController.putPassword')
     ->withValidators(['UserValidations.changePassword']);
 
 
-Route::post('/user/{userid}/video', 'VideosController.postVideo')
+
+// VideosController
+Route::post('/video', 'VideosController.postVideo')
     ->withMiddlewares(['IsAuthenticated']);
 
-Route::put('/user/{userid}/video/{videoid}', 'VideosController.putVideo')
+Route::put('video/{videoid}', 'VideosController.putVideo')
     ->withMiddlewares(['IsAuthenticated']);
 
-Route::delete('/user/{userid}/video/{videoid}', 'VideosController.deleteVideo')
+Route::delete('video/{videoid}', 'VideosController.deleteVideo')
     ->withMiddlewares(['IsAuthenticated']);
 
 
-Route::post('/user/{userid}/tempfile', 'FilesController.postTempfile')
+// FilesController
+Route::post('/tempfile', 'FilesController.postTempfile')
     ->withMiddlewares(['IsAuthenticated']);
+
+
+
+// UsersController
+Route::get('/user', "UsersController.getUser");
+
+Route::put('/user', 'UsersController.putUser')
+    ->withMiddlewares(['IsAuthenticated']);
+
+Route::delete('/user', 'UsersController.deleteUser')
+    ->withMiddlewares(['IsAuthenticated']);
+
+
+
 
 // Route::get('adsfgnjwd', 'gnrgwklgweg')
 //     ->withMiddlewares(['IsAuthenticated'])

@@ -5,6 +5,7 @@ use \MVC\Http\Request;
 use \MVC\Http\Response;
 use \MVC\Http\Error;
 use \MVC\Helpers\Hash;
+use \MVC\Helpers\File;
 use \MVC\Http\ErrorCode;
 use \Datetime;
 
@@ -31,18 +32,16 @@ class FilesController extends Controller {
 
     // Read the file from stdin
     $handle = fopen("php://input", 'r');      
-    $userid = $req->param('userid');   
+    $userid = $req->token()->userid;
 
-    $ROOT    = $_SERVER['DOCUMENT_ROOT'];
-    $tempfilename = Hash::md5($userid . $name . $fsize . $mimetype);        // rlkngj..
+    
+    $tempfilename = Hash::md5($userid . $name . $fsize . $mimetype . microtime() );        // rlkngj..
     $extension = substr($mimetype, strpos($mimetype, '/')+1); // e.g. mp4
-    $tempdir = "$ROOT/public/temp/$userid";
+    $tempdir = WWW_ROOT."/public/temp/$userid";
 
-    if (!file_exists($tempdir)) {
-        @mkdir($tempdir);
-    }
+    File::makeDirIfNotExist($tempdir);
 
-    $output = fopen("$tempdir/$tempfilename.$extension", "w");
+    $output = File::openToWrite("$tempdir/$tempfilename.$extension");
     if(!$output) {
         return Response::statusCode(HTTP_INTERNAL_ERROR, "Could not open file");
     }
@@ -56,7 +55,7 @@ class FilesController extends Controller {
     fclose($handle);
     fclose($output);
 
-    $res = ['fname'=> "$tempfilename.$extension", 'size'=>$fsize, 'mime'=>$mimetype];
+    $res = ['fname'=> "$tempfilename.$extension", 'size'=>$fsize, 'mime'=>$mimetype, 'message' => 'File uploaded succesfully to temp storage'];
 
     return Response::statusCode(HTTP_CREATED, $res);
   }
