@@ -58,6 +58,7 @@ test.serial('Create playlist', async (t) => {
     const res = await axios.post(`${API}/playlist`, playlistdata, axiosBearer(userToken))
     t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`)
 
+
     testDataIntegrity(res.data, ['id', 'msg'], t)
 
     playlistid = res.data.id
@@ -80,65 +81,53 @@ test.serial('Check if playlist was created', async (t) => {
 
 test.serial('Update(put) playlist', async (t) => {
 
-    t.plan(1)
-
-    const res = await axios.put(`${API}/playlist/${playlistid}`, updatedPlaylistdata, axiosBearer(userToken))
-    t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.status}`)
-    console.log(res)
+    t.plan(3)
+    try {
+        const res = await axios.put(`${API}/playlist/${playlistid}`, updatedPlaylistdata, axiosBearer(userToken))
+        testDataIntegrity(res.data, ['msg'], t)
+        t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.status}`)
+    
+    
+    } catch(err) {
+    }
 });
 
 test.serial('Check if playlist updated correctly', async (t) => {
-    t.fail("Not implemented!")
-
-});
-
-/*
-
-/*
-
-test.serial('Add video to playlist', async (t) => {
-    t.fail("Not implemented!")
-
-});
 
 
-test.serial('Check if video was added to playlist', async (t) => {
-    t.fail("Not implemented!")
+    t.plan(2)
+    const res = await axios.post(`${API}/graphql?query={ playlist(id: ${updatedPlaylistdata.id}) {  id, title, description }}`, axiosBearer(userToken))
+
+
+    t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.status}`)
+    //console.log(res.data.data.playlist, updatedPlaylistdata)
+    t.true( isEqualsShallow(res.data.data.playlist, updatedPlaylistdata), "Shallow equal unsuccessful")
 
 });
 
 
-
-test.serial('Remove video from playlist', async (t) => {
-    t.fail("Not implemented!")
-
-});
-
-
-test.serial('Check if video was removed from playlist', async (t) => {
-    t.fail("Not implemented!")
-
-});
-
-
-test.serial('Change playlist order', async (t) => {
-    t.fail("Not implemented!")
-
-});
-
-
-test.serial('Check if playlist order changed correctly', async (t) => {
-    t.fail("Not implemented!")
-
-});
 
 
 test.serial('Delete playlist', async (t) => {
-    t.fail("Not implemented!")
+    t.plan(3)
+    
+    try {
+        const res = await axios.delete(`${API}/playlist/${playlistid}`, axiosBearer(userToken))
+        testDataIntegrity(res.data, ['msg'], t)
+        t.is(res.status, HTTP_ACCEPTED, `Expected status code ${HTTP_ACCEPTED} got ${res.status}`)   
 
+    } catch(err) {
+
+    }
 });
 
 test.serial('Check if playlist was deleted', async (t) => {
-    t.fail("Not implemented!")
+    t.plan(2)
+    const res = await axios.post(`${API}/graphql?query={ playlist(id: ${updatedPlaylistdata.id}) {  id, title, description }}`, axiosBearer(userToken))
 
-});*/
+    t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.status}`)
+    //console.log(res.data.data.playlist, updatedPlaylistdata)
+    t.falsy( res.data.data.playlist.id, "playlistid should be null, because not found" );
+});
+
+

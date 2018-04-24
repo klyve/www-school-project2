@@ -44,6 +44,7 @@ class PlaylistsController extends Controller {
 
 
     // @assumption playlistdata has already been validated
+    //              playlistid's validated
     public function putPlaylist(PlaylistsModel $playlist, Request $req) {
 
 
@@ -51,9 +52,12 @@ class PlaylistsController extends Controller {
             return Response::statusCode(HTTP_BAD_REQUEST, "Playlistid mismatch");
         }
 
+        $playlistid = $req->param('playlistid');
+        $userid = $req->token()->userid;
+
         $myplaylist = $playlist->find([
-            'userid' => $req->token()->userid,
-            'id' => $req->input('id'),
+            'id' => $playlistid,
+            'userid' => $userid
         ]);
 
         if (!$myplaylist->id) {
@@ -63,11 +67,34 @@ class PlaylistsController extends Controller {
         $myplaylist->title = $req->input('title');
         $myplaylist->description = $req->input('description');
 
+
+        // @ERROR Cannot save the updated playlist
+        $myplaylist->save(); // <--- SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens
+
+
         $res = ['msg' => 'Updated playlist'];
         return Response::statusCode(HTTP_OK, $res);
     }
 
     public function deletePlaylist(PlaylistsModel $playlist, Request $req) {
-        return Response::statusCode(HTTP_ACCEPTED, "Playlist marked for deletion");
+
+        $playlistid = $req->param('playlistid');
+        $userid = $req->token()->userid;
+
+        $myplaylist = $playlist->find([
+            'id' => $playlistid,
+            'userid' => $userid
+        ]);
+
+        if (!$myplaylist->id) {
+            return Response::statusCode(HTTP_NOT_FOUND, "Could not find playlist on userid");
+        }
+
+        // @ERROR Cannot save the updated playlist
+        $myplaylist->deleted_at = date("Y-m-d H:i:s");
+        $myplaylist->save(); // <--- SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens
+
+        $res = ['msg' => "Playlist marked for deletion"];
+        return Response::statusCode(HTTP_ACCEPTED, $res);
     }
 }
