@@ -54,50 +54,47 @@ test.before(async (t) => {
 test.serial('Create playlist', async (t) => {
 
     t.plan(6)
-    try {
 
-        const res = await axios.post(`${API}/playlist`, playlistdata, axiosBearer(userToken))
-        t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`)
+    const res = await axios.post(`${API}/playlist`, playlistdata, axiosBearer(userToken))
+    t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`)
 
-        testDataIntegrity(res.data, ['id', 'msg'], t);
-        playlistdata.id = res.data.id
+    testDataIntegrity(res.data, ['id', 'msg'], t)
 
-        t.truthy(playlistdata.id)
+    playlistid = res.data.id
+    playlistdata.id = res.data.id
+    updatedPlaylistdata.id = res.data.id
+    
+    t.truthy(playlistdata.id)
 
-    } catch(err) {
-        t.log(err)
-        t.is(err.response.status, HTTP_BAD_REQUEST, `Expected status code ${HTTP_BAD_REQUEST} got ${err.response.status}`)
-    }
 });
 
 test.serial('Check if playlist was created', async (t) => {
    
     t.plan(2)
-    try {
-        const res = await axios.post(`${API}/graphql?query={ playlist(id: ${playlistdata.id}) {  id, title, description }}`, axiosBearer(userToken))
+    const res = await axios.post(`${API}/graphql?query={ playlist(id: ${playlistdata.id}) {  id, title, description }}`, axiosBearer(userToken))
 
-        t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.status}`)
-        t.true( isEqualsShallow(res.data.data.playlist, playlistdata), "Shallow equal unsuccessful")
-
-    } catch(err) {
-        t.is(err.response.status, HTTP_NOT_FOUND, `Expected status code ${HTTP_NOT_FOUND} got ${err.response.status}`)
-    }
+    t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.status}`)
+    t.true( isEqualsShallow(res.data.data.playlist, playlistdata), "Shallow equal unsuccessful")
 });
 
-/*
 
-test.serial('Update playlist', async (t) => {
-    t.fail("Not implemented!")
+test.serial('Update(put) playlist', async (t) => {
 
+    t.plan(1)
+
+    const res = await axios.put(`${API}/playlist/${playlistid}`, updatedPlaylistdata, axiosBearer(userToken))
+    t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.status}`)
+    console.log(res)
 });
-
 
 test.serial('Check if playlist updated correctly', async (t) => {
     t.fail("Not implemented!")
 
 });
 
+/*
 
+/*
 
 test.serial('Add video to playlist', async (t) => {
     t.fail("Not implemented!")

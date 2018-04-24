@@ -42,13 +42,32 @@ class PlaylistsController extends Controller {
         return Response::statusCode(HTTP_CREATED, $res);
     }
 
-    public function putPlaylist(VideosModel $video, Request $req) {
 
-        return Response::statusCode(HTTP_OK, "Updated playlist");
+    // @assumption playlistdata has already been validated
+    public function putPlaylist(PlaylistsModel $playlist, Request $req) {
+
+
+        if ( $req->input('id') !==  $req->param('playlistid')) {
+            return Response::statusCode(HTTP_BAD_REQUEST, "Playlistid mismatch");
+        }
+
+        $myplaylist = $playlist->find([
+            'userid' => $req->token()->userid,
+            'id' => $req->input('id'),
+        ]);
+
+        if (!$myplaylist->id) {
+            return Response::statusCode(HTTP_NOT_FOUND, "Could not find playlist on userid");
+        }
+
+        $myplaylist->title = $req->input('title');
+        $myplaylist->description = $req->input('description');
+
+        $res = ['msg' => 'Updated playlist'];
+        return Response::statusCode(HTTP_OK, $res);
     }
 
-    public function deletePlaylist(VideosModel $video, Request $req) {
-
+    public function deletePlaylist(PlaylistsModel $playlist, Request $req) {
         return Response::statusCode(HTTP_ACCEPTED, "Playlist marked for deletion");
     }
 }
