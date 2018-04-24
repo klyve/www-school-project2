@@ -21,7 +21,6 @@ class AuthController extends Controller {
     }
     $myUser->password = Hash::password($req->input('newpassword'));
     $myUser->save();
-
     return Response::statusCode(204);
   }
 

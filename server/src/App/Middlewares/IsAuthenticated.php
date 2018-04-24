@@ -40,7 +40,7 @@ class IsAuthenticated {
         $user->find([
             'id' => $userId
         ]);
-
+        
         if(!$user->id) {
             return Response::send($statusCode);
         }

@@ -1,13 +1,14 @@
 <?php
 use MVC\Core\Route;
 use MVC\Http\Request;
+use App\Models\UsersModel;
 
 // Route::get('/', 'SimpleJSONController.hello')
 //     ->withMiddlewares(['IsAuthenticated']);
 Route::get('/hello', 'SimpleJSONController.sayHelloJSON');
 
-
 Route::get('/', function() {
+    
     return ['hey'];
 });
 
@@ -24,7 +25,7 @@ Route::post('user/register', 'AuthController.postRegister')
     ->withValidators(['UserValidations.register']);
 
 
-Route::put('/user/password', 'AuthController.putPassword')
+Route::put('user/password', 'AuthController.putPassword')
     ->withMiddlewares(['IsAuthenticated'])
     ->withValidators(['UserValidations.changePassword']);
 
@@ -39,106 +40,16 @@ Route::get('error', function() {
 });
 
 
-
-
-
-
-
-
-
-
-
-
-use \GraphQL\GraphQL;
-use \GraphQL\Type\Schema;
-use \GraphQL\Type\Definition\ObjectType;
-use \GraphQL\Type\Definition\Type;
-
-Route::get('graphql', function() {
-
-$queryType = new ObjectType([
-    'name' => 'Query',
-    'fields' => [
-        'echo' => [
-            'type' => Type::string(),
-            'args' => [
-                'message' => Type::nonNull(Type::string()),
-            ],
-            'resolve' => function ($root, $args) {
-                return $root['prefix'] . $args['message'];
-            }
-        ],
-    ],
-]);
-$schema = new Schema([
-    'query' => $queryType
-]);
-
-$rawInput = file_get_contents('php://input');
-$input = json_decode($rawInput, true);
-$query = $input['query'];
-
-$variableValues = isset($input['variables']) ? $input['variables'] : null;
-
-try {
-    $rootValue = ['prefix' => 'You said: '];
-    $result = GraphQL::executeQuery($schema, $query, $rootValue, null, $variableValues);
-    $output = $result->toArray();
-} catch (\Exception $e) {
-    $output = [
-        'errors' => [
-            [
-                'message' => $e->getMessage()
-            ]
-        ]
-    ];
-}
-    return $output;
-
-    // return json_encode([]);
+Route::get('test', functioN() {
+    $users = new UsersModel();
+    $users->search([
+        'name' => 'username'
+    ], 2);
+    var_dump($users);
 });
 
-Route::post('graphql', function() {
-    $queryType = new ObjectType([
-        'name' => 'Query',
-        'fields' => [
-            'echo' => [
-                'type' => Type::string(),
-                'args' => [
-                    'message' => Type::nonNull(Type::string()),
-                ],
-                'resolve' => function ($root, $args) {
-                    return $root['prefix'] . $args['message'];
-                }
-            ],
-        ],
-    ]);
-    $schema = new Schema([
-        'query' => $queryType
-    ]);
-    
-    $rawInput = file_get_contents('php://input');
-    $input = json_decode($rawInput, true);
-    $query = $input['query'];
-    
-    $variableValues = isset($input['variables']) ? $input['variables'] : null;
-    
-    try {
-        $rootValue = ['prefix' => 'You said: '];
-        $result = GraphQL::executeQuery($schema, $query, $rootValue, null, $variableValues);
-        $output = $result->toArray();
-    } catch (\Exception $e) {
-        $output = [
-            'errors' => [
-                [
-                    'message' => $e->getMessage()
-                ]
-            ]
-        ];
-    }
-        return $output;
-    
-});
+Route::get('graphql', 'GraphQLController.query');
+Route::post('graphql', 'GraphQLController.query');
 
 
 // Error class

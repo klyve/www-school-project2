@@ -48,6 +48,12 @@ class SQL {
 
         return $query;
     }
+
+    public static function limitResults($query, $limit) {
+        $limit = (int)$limit;
+        return $query . " LIMIT " . $limit;
+        // return $query;
+    }
 /**
  * @TODO: [find description]
  * @param  [type] $data    [description]
