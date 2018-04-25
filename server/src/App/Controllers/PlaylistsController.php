@@ -47,13 +47,14 @@ class PlaylistsController extends Controller {
     //              playlistid's validated
     public function putPlaylist(PlaylistsModel $playlist, Request $req) {
 
-
         if ( $req->input('id') !==  $req->param('playlistid')) {
             return Response::statusCode(HTTP_BAD_REQUEST, "Playlistid mismatch");
         }
 
-        $playlistid = $req->param('playlistid');
-        $userid = $req->token()->userid;
+        var_dump($req);
+
+        $playlistid = $req->input('id');
+        $userid     = $req->token()->userid;
 
         $myplaylist = $playlist->find([
             'id' => $playlistid,
@@ -64,7 +65,7 @@ class PlaylistsController extends Controller {
             return Response::statusCode(HTTP_NOT_FOUND, "Could not find playlist on userid");
         }
 
-        $myplaylist->title = $req->input('title');
+        $myplaylist->title       = $req->input('title');
         $myplaylist->description = $req->input('description');
 
 

@@ -81,13 +81,15 @@ test.serial('Check if playlist was created', async (t) => {
 
 test.serial('Update(put) playlist', async (t) => {
 
+console.log(updatedPlaylistdata);
     t.plan(3)
     try {
         const res = await axios.put(`${API}/playlist/${playlistid}`, updatedPlaylistdata, axiosBearer(userToken))
         testDataIntegrity(res.data, ['msg'], t)
         t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.status}`)
     
-    
+        console.log(res.data);
+
     } catch(err) {
     }
 });
