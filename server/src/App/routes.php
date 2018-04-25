@@ -24,7 +24,11 @@ Route::put('/user/password', 'AuthController.putPassword')
     ->withMiddlewares(['IsAuthenticated'])
     ->withValidators(['UserValidations.changePassword']);
 
+Route::post('/playlist/{playlistid}/tag', 'PlaylistTagController.postTag')
+    ->withMiddlewares(['IsAuthenticated']);
 
+Route::delete('/playlist/{playlistid}/tag/{tagname}', 'PlaylistTagController.deleteTag')
+    ->withMiddlewares(['IsAuthenticated']);
 // Route::get('adsfgnjwd', 'gnrgwklgweg')
 //     ->withMiddlewares(['IsAuthenticated'])
 //     ->withValidators(['FileName.function.function.function']);
