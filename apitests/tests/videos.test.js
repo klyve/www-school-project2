@@ -79,7 +79,6 @@ test.serial('Upload thumbnail file', async t => {
         t.truthy(newVideodata.fileThumbnail, "File thumbnail has to be defined");
 
     } catch(err) {
-        console.log(err.response.config.adapter)
         t.fail(`${err.response.status}: ${err.response.data}`);
     }
 
@@ -118,19 +117,16 @@ test.serial('Upload video file', async t => {
 test.serial('Post video', async t => {
     t.plan(2);
     
-    console.log(newVideodata);
 
     try {
         const res = await axios.post(`${API}/video`, newVideodata, axiosBearer(userToken))
         t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`)
         
-        console.log(res.data);
         videoid = res.data.videoid;
 
         t.truthy(res.data.videoid);
 
     } catch (err) {
-        console.log(err.response.data)
         t.fail()
     }
 
