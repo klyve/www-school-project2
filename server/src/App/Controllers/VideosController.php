@@ -20,6 +20,7 @@ const HTTP_NOT_FOUND      = 404;
 const HTTP_NOT_IMPLMENTED = 501;
 const HTTP_INTERNAL_ERROR = 500;
 
+const DS = DIRECTORY_SEPARATOR;
 
 class VideosController extends Controller {
   
@@ -38,39 +39,54 @@ class VideosController extends Controller {
     $newVideo->filesubtitle  = Hash::md5($userid . $newVideo->title  . microtime() ) . ".srt";
     $newVideo->filethumbnail = $req->input('fileThumbnail');
     $newVideo->filevideo     = $req->input('fileVideo');
-    $videoid = $newVideo->save();
- 
 
-    $tempdir      = WWW_ROOT."/public/temp/$userid";
-    $destdirSub   = WWW_ROOT."/public/media/subtitles/$userid";
-    $destdirThumb = WWW_ROOT."/public/media/thumbnails/$userid";
-    $destdirVideo = WWW_ROOT."/public/media/videos/$userid";
+    // Setup proper filepaths
+    $tempdir       = WWW_ROOT.DS."public".DS."temp".DS.$userid;
 
-    File::makeDirIfNotExist($destdirSub);
-    File::makeDirIfNotExist($destdirThumb);
-    File::makeDirIfNotExist($destdirVideo);
+    $mediaDir      =  WWW_ROOT.DS."public".DS."media";
+    $subtitlesDir  = $mediaDir.DS."subtitles".DS.$userid;
+    $thumbnailsDir = $mediaDir.DS."thumbnails".DS.$userid;
+    $videosDir     = $mediaDir.DS."videos".DS.$userid;
 
-    $tempfileThumb = "$tempdir/$newVideo->filethumbnail";
-    $tempfileVideo = "$tempdir/$newVideo->filevideo";
+    $thumbTemp = $tempdir.DS.$newVideo->filethumbnail;
+    $videoTemp = $tempdir.DS.$newVideo->filevideo;
 
-    $err = File::moveFile($tempfileThumb, "$destdirThumb/$newVideo->filethumbnail");
+    $thumbDest    = $thumbnailsDir.DS.$newVideo->filethumbnail;
+    $videoDest    = $videosDir.DS.$newVideo->filevideo;
+    $subtitleDest = $subtitlesDir.DS.$newVideo->filesubtitle;
+
+    File::makeDirIfNotExist($subtitlesDir);
+    File::makeDirIfNotExist($thumbnailsDir);
+    File::makeDirIfNotExist($videosDir);
+
+
+    // Do file operations
+    $err = File::moveFile($thumbTemp, $thumbDest);
     if ($err) {
         return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to move file");
     }
 
-    $err = File::moveFile($tempfileVideo, "$destdirVideo/$newVideo->filevideo");
+    $err = File::moveFile($videoTemp, $videoDest);
     if ($err) {
         return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to move file");
     }
 
-    $err = File::newFile("$destdirSub/$newVideo->filesubtitle");
+    $err = File::newFile($subtitleDest);
     if ($err) {
         return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to new file");
     }
 
-    rmdir($tempdir);
+    if (!rmdir($tempdir)) {
+        return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to remove users temp directory");
+    }
+    
+    // Finally save the new video in the database if all fil operations went through.
+    $videoid = $newVideo->save();
+    if(!$videoid) {
+        return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to create new video in database");
+    }
 
-    $res = array('videoid' => $videoid, 'message' => "Created a new video");
+    $res = ['videoid' => $videoid, 'message' => "Created a new video"];
     return Response::statusCode(HTTP_CREATED, $res);
   }
 

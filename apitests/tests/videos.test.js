@@ -37,7 +37,7 @@ let videoid = null
 let userToken  = null
 
 test.before(async (t) => {
-    t.plan(10);
+    t.plan(11);
 
     const res = await axios.post(`${API}/user/login`, credentials)
     t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.statusCode}`);
@@ -45,13 +45,14 @@ test.before(async (t) => {
     testDataIntegrity(res, ['email', 'name', 'token', 'usergroup'], t);
    
     userToken = res.data.token;
+    t.truthy(userToken);
     t.pass();
 });
 
 
 test.serial('Upload thumbnail file', async t => {
 
-    t.plan(1)
+    t.plan(2)
 
     const filenameThumbnail = "thumbnail.png"
     const mimeThumbnail = "image/png"
@@ -71,11 +72,14 @@ test.serial('Upload thumbnail file', async t => {
                                            filenameThumbnail,
                                            mimeThumbnail));
 
-        newVideodata.fileThumbnail = res.data.fname;
 
     t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`);    
 
+        newVideodata.fileThumbnail = res.data.fname;
+        t.truthy(newVideodata.fileThumbnail, "File thumbnail has to be defined");
+
     } catch(err) {
+        console.log(err.response.config.adapter)
         t.fail(`${err.response.status}: ${err.response.data}`);
     }
 
@@ -83,6 +87,7 @@ test.serial('Upload thumbnail file', async t => {
 
 test.serial('Upload video file', async t => {
     // UPLOAD VIDEO FILE
+    t.plan(2)
 
     const filenameVideo     = "video.mp4"
     const mimeVideo         = "video/mp4"
@@ -103,6 +108,7 @@ test.serial('Upload video file', async t => {
         t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`)
 
         newVideodata.fileVideo = res.data.fname;
+        t.truthy(newVideodata.fileVideo, "File video has to be defined");
 
     } catch(err) {
         t.fail(`${err.response.status}: ${err.response.data}`);
@@ -110,15 +116,21 @@ test.serial('Upload video file', async t => {
 });
 
 test.serial('Post video', async t => {
-    t.plan(1);
+    t.plan(2);
+    
+    console.log(newVideodata);
 
     try {
         const res = await axios.post(`${API}/video`, newVideodata, axiosBearer(userToken))
         t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`)
-    
+        
+        console.log(res.data);
         videoid = res.data.videoid;
 
+        t.truthy(res.data.videoid);
+
     } catch (err) {
+        console.log(err.response.data)
         t.fail()
     }
 
