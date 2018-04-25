@@ -122,13 +122,38 @@ class VideosController extends Controller {
   // @route DELETE /user/{userid}/video/{videoid}
   public function deleteVideo(VideosModel $video, Request $req) {
 
+    $userid = $req->token()->userid;
     $deleteVideo = $video->find([
             'id' => $req->param('videoid')
     ]);
+
     if(!$deleteVideo->id) {
         return Response::statusCode(HTTP_NOT_FOUND);
     }
+
+    $mediaDir      =  WWW_ROOT.DS."public".DS."media";
+    $subtitlesDir  = $mediaDir.DS."subtitles".DS.$userid;
+    $thumbnailsDir = $mediaDir.DS."thumbnails".DS.$userid;
+    $videosDir     = $mediaDir.DS."videos".DS.$userid;
+
     
+    $err = File::moveFile($thumbnailsDir.DS.$deleteVideo->filethumbnail, $thumbnailsDir.DS."DELETED-".$deleteVideo->filethumbnail);
+    if ($err) {
+        return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to delete thumbnail file");
+    }
+
+    $err = File::moveFile($videosDir.DS.$deleteVideo->filevideo, $videosDir.DS."DELETED-".$deleteVideo->filevideo);
+    if ($err) {
+        return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to delete video file");
+    }
+
+    $err = File::moveFile($subtitlesDir.DS.$deleteVideo->filesubtitle, $subtitlesDir.DS."DELETED-".$deleteVideo->filesubtitle);
+    if ($err) {
+        return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to delete video file");
+    }
+
+
+
     $deleteVideo->deleted_at = date ("Y-m-d H:i:s");
     $deleteVideo->save();
 

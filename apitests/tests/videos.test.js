@@ -152,5 +152,7 @@ test.serial('Delete video', async t => {
     t.plan(1);
 
     const res = await axios.delete(`${API}/video/${videoid}`, axiosBearer(userToken))
+
+    console.log(res.data);
     t.is(res.status, HTTP_ACCEPTED, `Expected status code ${HTTP_ACCEPTED} got ${res.statusCode}`)
 });
