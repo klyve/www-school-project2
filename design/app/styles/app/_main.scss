@@ -2,16 +2,18 @@ body {
     height: 100%;
     min-height: 100vh;
     width: 100%;
+    background: #fff;
+    font-size: 1rem;
+    font-family: "opensans-regular", sans-serif;
+    font-weight: 400;
 }
 
 #container {
-
+    overflow: hidden;
 }
 
 #body-container {
-    background: $default-background-color;
-    min-height: 100vh;
-    min-height: calc(100vh - 58px);
+    min-height: calc(100vh - #{$header-height});
     display: -webkit-flex;
     display: flex;
     -webkit-flex-direction: row;
@@ -24,14 +26,16 @@ body {
 .sidebar {
     width: $sidebar-width;
     min-height: calc(100vh - #{$header-height});
+    max-height: calc(100vh);
     background: $white;
     display: -webkit-flex;
     display: flex;
     -webkit-flex-direction: column;
     flex-direction: column;
     transition: width 0.25s ease, margin 0.25s ease;
-    position: relative;
     z-index: 15;
+    overflow: hidden;
+    overflow-y: scroll;
 
     ul {
         margin: 0;
@@ -84,24 +88,29 @@ body {
 
 .content-container {
     min-height: calc(100vh - #{$header-height});
-    background: #fff;
+    max-height: calc(100vh - #{$header-height});
     transition: width 0.25s ease, margin 0.25s ease;
-    width: calc(100% - #{$sidebar-width});
+    min-width: calc(100% - #{$sidebar-width});
     /*min-height: calc(100vh - 58px);*/
     display: -webkit-flex;
+    flex-shrink: 0;
     display: flex;
     -webkit-flex-direction: column;
     flex-direction: column;
+    overflow: scroll;
 }
 header {
     height: $header-height;
     background: $white;
-    position: relative;
     z-index: 10;
     font-family: "opensans-regular", sans-serif;
     -webkit-box-shadow: 0 8px 74px -29px rgba(0, 0, 0, 0.35);
     -moz-box-shadow: 0 8px 74px -29px rgba(0, 0, 0, 0.35);
     box-shadow: 0 8px 74px -29px rgba(0, 0, 0, 0.35);
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
 
     transition: background 0.25s ease;
     -webkit-transition: background 0.25s ease;
@@ -113,6 +122,108 @@ header {
         width: $sidebar-width;
         height: $header-height;
         background: #eb3b5a;
+        flex-shrink: 0;
+    }
+
+    .navbar-menu-wrapper {
+        transition: width 0.25s ease;
+        -webkit-transition: width 0.25s ease;
+        -moz-transition: width 0.25s ease;
+        -ms-transition: width 0.25s ease;
+        color: rgba(0, 0, 0, 0.5);
+        padding-left: 15px;
+        padding-right: 15px;
+        width: calc(100vw - #{$sidebar-width});
+        height: $header-height;
+        // background: green;
+        display: flex !important;
+
+        button.toggle-menu {
+            align-self: center !important;
+            padding: 0.25rem 0.75rem;
+            font-size: 1.25rem;
+            line-height: 1;
+            background-color: transparent;
+            border: 1px solid transparent;
+            border-radius: 0.25rem;
+            outline: 0;
+            outline-offset: 0;
+            cursor: pointer;
+        }
+
+        .searchbar {
+            font-size: 0.9375rem;
+            margin-left: 1rem;
+            margin-right: 1rem;
+            align-self: center !important;
+            width: 100%;
+            position: relative;
+
+            input {
+                background: none;
+                height: 40px;
+                border: none;
+                width: 100%;
+                color: #333;
+                outline: 0;
+                outline-offset: 0;
+            }
+            .icon-wrapper {
+                position: absolute;
+                height: 40px;
+                right: 0;
+                z-index: 10;
+                top: 0;
+                line-height: 40px;
+                align-self: center !important;
+            }
+        }
+
+        ul.nav-right {
+            margin-left: auto;
+            flex-direction: row;
+            align-items: center;
+            display: flex;
+            padding-left: 0;
+            margin-bottom: 0;
+            list-style: none;
+
+            li.nav-item {
+                position: relative;
+                span.count {
+                    position: absolute;
+                    left: 50%;
+                    background: #eb3b5a;
+                    width: 19px;
+                    height: 19px;
+                    color: #ffffff;
+                    border: 2px solid #ffffff;
+                    border-radius: 100%;
+                    text-align: center;
+                    font-size: 0.625rem;
+                    font-family: "Montserrat-semibold", sans-serif;
+                    line-height: 1.8;
+                    top: -5px;
+                    right: 0;
+                }
+                a {
+                    color: #333;
+                    font-size: 0.9375rem;
+                    margin-left: 1rem;
+                    margin-right: 1rem;
+                    text-decoration: none;
+                    &.usercard {
+                        height: 30px;
+                        width: 30px;
+                        display: block;
+                        text-align: center;
+                        line-height: 30px;
+                        background: #eb3b5a;
+                        color: #fff;
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -120,6 +231,7 @@ header {
     -webkit-box-shadow: 8px 8px 74px -29px rgba(0,0,0,0.25);
     -moz-box-shadow: 8px 8px 74px -29px rgba(0,0,0,0.25);
     box-shadow: 8px 8px 74px -29px rgba(0,0,0,0.25);
+    flex-shrink: 0;
 }
 
 
@@ -128,6 +240,9 @@ body {
         header {
             .logo {
                 width: $sidebar-extended;
+            }
+            .navbar-menu-wrapper {
+                width: calc(100vw - #{$sidebar-extended});
             }
         }
         .sidebar {
@@ -159,7 +274,27 @@ body {
             }
         }
         .content-container {
-            width: calc(100% - #{$sidebar-extended});
+            min-width: calc(100% - #{$sidebar-extended});
         }
+    }
+}
+
+
+
+
+
+
+@media only screen and (max-width: 680px){
+    .sidebar {
+        width: 0;
+    }
+
+    header .searchbar {
+        input {
+            display: none;
+        }
+    }
+    .content-container {
+        width: 100%;
     }
 }

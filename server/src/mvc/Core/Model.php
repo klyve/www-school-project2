@@ -120,12 +120,18 @@ class Model {
  * @param $selector @TODO describe this parameter
  * @return $ret @TODO describe whats returned
  */
-    public function search($data, $selector = "*") {
+    public function search($data, $limit = 0, $selector = "*") {
         $query = SQL::search($data, $this->table, $selector);
+        if($limit !== 0) {
+            $query = SQL::limitResults($query, $limit);
+        }
+        
         $dbi = Database::instance();
         $stmt = $dbi->prepare($query);
+        
         $stmt->execute($data);
         $ret = [];
+
         if($stmt->rowCount() > 0) {
             $ret = $stmt->fetchAll(\PDO::FETCH_CLASS, get_called_class());
             foreach($ret as $retval) {
