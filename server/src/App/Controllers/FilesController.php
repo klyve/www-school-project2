@@ -19,6 +19,7 @@ const HTTP_NOT_FOUND      = 404;
 const HTTP_NOT_IMPLMENTED = 501;
 const HTTP_INTERNAL_ERROR = 500;
 
+const DS = DIRECTORY_SEPARATOR;
 
 class FilesController extends Controller {
   
@@ -35,13 +36,13 @@ class FilesController extends Controller {
     $userid = $req->token()->userid;
 
     
-    $tempfilename = Hash::md5($userid . $name . $fsize . $mimetype . microtime() );        // rlkngj..
-    $extension = substr($mimetype, strpos($mimetype, '/')+1); // e.g. mp4
-    $tempdir = WWW_ROOT."/public/temp/$userid";
+    $tempfilename = Hash::md5($userid . $fname . $fsize . $mimetype . microtime() );        // rlkngj..
+    $extension = substr($fname, strpos($fname, '.')+1); // e.g. mp4
+    $tempdir =  WWW_ROOT.DS."public".DS."temp".DS. $userid;
 
     File::makeDirIfNotExist($tempdir);
 
-    $output = File::openToWrite("$tempdir/$tempfilename.$extension");
+    $output = File::openToWrite("$tempdir".DS."$tempfilename.$extension");
     if(!$output) {
         return Response::statusCode(HTTP_INTERNAL_ERROR, "Could not open file");
     }
