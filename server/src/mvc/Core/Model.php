@@ -169,6 +169,7 @@ class Model {
  */
     public function save() {
         $compileVars = $this->findObjects();
+
         if($this->_dirty)
             return $this->update($this->_findVars);
 

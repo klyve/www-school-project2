@@ -25,20 +25,24 @@ const DS = DIRECTORY_SEPARATOR;
 class VideosController extends Controller {
   
   // @route POST /user/{userid}/video
-  public function postVideo(Request $req) {
+  public function postVideo(VideosModel $newVideo, Request $req) {
 
 
     // @assumption userid matches token
     $token = $req->token();
     $userid = $token->userid;
 
-    $newVideo              = new VideosModel();
     $newVideo->userid      = $userid;
     $newVideo->title       = $req->input('title');
     $newVideo->description = $req->input('description');
     $newVideo->filesubtitle  = Hash::md5($userid . $newVideo->title  . microtime() ) . ".srt";
     $newVideo->filethumbnail = $req->input('fileThumbnail');
     $newVideo->filevideo     = $req->input('fileVideo');
+
+
+    //
+    // @TODO Move this into a function in  FILE.php
+    //
 
     // Setup proper filepaths
     $tempdir       = WWW_ROOT.DS."public".DS."temp".DS.$userid;
@@ -79,6 +83,11 @@ class VideosController extends Controller {
     if (!rmdir($tempdir)) {
         return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to remove users temp directory");
     }
+    
+    //
+    // @TODO Move THE ABOVE into a function in  FILE.php
+    //
+
     
     // Finally save the new video in the database if all fil operations went through.
     $videoid = $newVideo->save();
@@ -131,6 +140,11 @@ class VideosController extends Controller {
         return Response::statusCode(HTTP_NOT_FOUND);
     }
 
+
+    //
+    // @TODO Move this into a function in  FILE.php
+    //
+
     $mediaDir      =  WWW_ROOT.DS."public".DS."media";
     $subtitlesDir  = $mediaDir.DS."subtitles".DS.$userid;
     $thumbnailsDir = $mediaDir.DS."thumbnails".DS.$userid;
@@ -151,6 +165,10 @@ class VideosController extends Controller {
     if ($err) {
         return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to delete video file");
     }
+
+    //
+    // @TODO Move THE ABOVE into a function in  FILE.php
+    //
 
 
 

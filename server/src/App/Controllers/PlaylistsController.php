@@ -25,9 +25,8 @@ class PlaylistsController extends Controller {
     
     // @assumption user has been athenticated
     // @assumption playlistdata has already been validated
-    public function postPlaylist(Request $req) {
+    public function postPlaylist(PlaylistsModel $newPlaylist, Request $req) {
 
-        $newPlaylist = new PlaylistsModel();
         $newPlaylist->userid = $req->token()->userid;
         $newPlaylist->title  = $req->input('title');
         $newPlaylist->description = $req->input('description');
@@ -51,7 +50,6 @@ class PlaylistsController extends Controller {
             return Response::statusCode(HTTP_BAD_REQUEST, "Playlistid mismatch");
         }
 
-        var_dump($req);
 
         $playlistid = $req->input('id');
         $userid     = $req->token()->userid;
