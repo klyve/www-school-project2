@@ -45,6 +45,10 @@ class IsAuthenticated {
             return Response::send($statusCode);
         }
         
+
+        // @TODO check if token->userid matches /user/{userid}/
+        //  Basically ADD ACCESS CONTROL!
+
         $next($request);
     }
 }

@@ -34,6 +34,17 @@ module.exports.axiosBearer = (token) => ({
     }
 })
 
+module.exports.axiosFile = (token, size, filename, mimetype) => ({
+    headers: { 
+        'Content-Type':   mimetype,
+        'Authorization':  'Bearer ' + token,
+        'X-OriginalFilename': filename,
+        'X-OriginalFilesize': size,
+        'X-OriginalMimetype': mimetype,
+    },
+    onUploadProgress: progressEvent => console.log(progressEvent.loaded)
+});
+
 
 
 module.exports.guid = guid;
