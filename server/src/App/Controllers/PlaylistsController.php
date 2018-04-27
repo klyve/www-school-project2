@@ -54,22 +54,22 @@ class PlaylistsController extends Controller {
         $playlistid = $req->input('id');
         $userid     = $req->token()->userid;
 
-        $myplaylist = $playlist->find([
+        $foundPlaylist = $playlist->find([
             'id' => $playlistid,
             'userid' => $userid
         ]);
 
-        if (!$myplaylist->id) {
+        if (!$foundPlaylist->id) {
             return Response::statusCode(HTTP_NOT_FOUND, "Could not find playlist on userid");
         }
 
-        $myplaylist->title       = $req->input('title');
-        $myplaylist->description = $req->input('description');
-
-
-        // @ERROR Cannot save the updated playlist
-        $myplaylist->save(); // <--- SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens
-
+        $playlistTag->update([
+            'id' => $playlistid,
+            'userid' => $userid
+        ],[ 
+           'title' => $req->input('title'),
+           'description' => $req->input('description')
+        ]);
 
         $res = ['msg' => 'Updated playlist'];
         return Response::statusCode(HTTP_OK, $res);

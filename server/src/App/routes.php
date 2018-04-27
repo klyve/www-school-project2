@@ -72,8 +72,12 @@ Route::delete('/user', 'UsersController.deleteUser')
     ->withMiddlewares(['IsAuthenticated']);
 
 
+// Tags controller
+Route::post('/playlist/{playlistid}/tag', 'PlaylistTagController.postTag')
+    ->withMiddlewares(['IsAuthenticated']);
 
-
+Route::delete('/playlist/{playlistid}/tag/{tagname}', 'PlaylistTagController.deleteTag')
+    ->withMiddlewares(['IsAuthenticated']);
 // Route::get('adsfgnjwd', 'gnrgwklgweg')
 //     ->withMiddlewares(['IsAuthenticated'])
 //     ->withValidators(['FileName.function.function.function']);

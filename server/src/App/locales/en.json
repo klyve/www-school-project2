@@ -2,6 +2,11 @@
     "errors": {
       "user": {
         "email_exists": "Email already exists"
+      },
+      "playlist": {
+      	"not_authorized": "You do not have rights for given playlist",
+        "tag_conflict": "The playlist already contains the tag",
+        "not_found": "Could not find resource"
       }
     }
 }

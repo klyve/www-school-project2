@@ -2,6 +2,11 @@
   "errors": {
     "user": {
       "email_exists": "Epost allerede i bruk"
+    },
+    "playlist": {
+        "not_authorized": "Du mangler rettigheter for denne spillelisten",
+        "tag_conflict": "Spillelisten inneholder allerede taggen",
+        "not_found": "Kunne ikke finne ressurs"
     }
   }
 }
