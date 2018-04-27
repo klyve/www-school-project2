@@ -104,6 +104,7 @@ class SQL {
         foreach($selector as $key => $value) {
             if($where !== "") {
                 $where .= " AND $key=:$key";
+                continue;
             }
             $where .= "$key=:$key";
         }
