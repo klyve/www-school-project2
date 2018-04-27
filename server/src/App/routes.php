@@ -62,6 +62,14 @@ Route::delete('/playlist/{playlistid}', 'PlaylistsController.deletePlaylist')
     ->withMiddlewares(['IsAuthenticated']);
 
 
+// PlaylistVideosController
+Route::post('/playlist/{playlistid}/video', 'PlaylistVideosController.postPlaylistVideo')
+    ->withMiddlewares(['IsAuthenticated']);
+
+Route::delete('/playlist/{playlistid}/video/{id}', 'PlaylistVideosController.deletePlaylistVideo')
+    ->withMiddlewares(['IsAuthenticated']);
+
+
 // UsersController
 Route::get('/user', "UsersController.getUser");
 

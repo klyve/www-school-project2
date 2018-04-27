@@ -7,9 +7,12 @@
       	"not_authorized": "You do not have rights for given playlist",
         "tag_conflict": "The playlist already contains the tag",
         "not_found": "Could not find playlist with given playlistid and userid",
-        "id_mismatch": "Id mismatch. The id in the url and the body does not match.",
         "sql_insert_error": "Server had an error when trying to create playlist"
-      }
+      },
+
+      "sql_insert_error": "Server had an error when trying to create resource in the datbase",
+      "not_found": "Could not find data with given parameters",  
+      "id_mismatch": "Id mismatch. The id in the url and the body does not match."
     },
     "success": {
         "created": "Resource created",

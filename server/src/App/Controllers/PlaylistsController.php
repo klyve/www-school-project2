@@ -15,11 +15,6 @@ use \Datetime;
 const HTTP_OK            = 200;  // Success and returning content
 const HTTP_CREATED       = 201;  // Successfull creation
 const HTTP_ACCEPTED      = 202;  // Marked for  deletion, not deleted yet
-const HTTP_NO_CONTENT     = 204;  // Successfull update
-const HTTP_BAD_REQUEST    = 400;
-const HTTP_NOT_FOUND      = 404; 
-const HTTP_NOT_IMPLMENTED = 501;
-const HTTP_INTERNAL_ERROR = 500;
 
 
 class PlaylistsController extends Controller {
@@ -48,7 +43,7 @@ class PlaylistsController extends Controller {
     public function putPlaylist(PlaylistsModel $playlist, Request $req) {
 
         if ( $req->input('id') !==  $req->param('playlistid')) {
-            return new Error(ErrorCode::get('playlist.id_mismatch'));
+            return new Error(ErrorCode::get('id_mismatch'));
         }
 
         $playlistid = $req->input('id');
@@ -86,10 +81,8 @@ class PlaylistsController extends Controller {
             return new Error(ErrorCode::get('playlist.not_found'));
         }
 
-        // @ERROR Cannot save the updated playlist
         $myplaylist->deleted_at = date("Y-m-d H:i:s");
-        $myplaylist->save(); // <--- SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens
-
+        $myplaylist->save();
         $res = ['message' => Language::get('success.deleted')];
         return Response::statusCode(HTTP_ACCEPTED, $res);
     }
