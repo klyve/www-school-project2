@@ -47,65 +47,96 @@ test.before(async (t) => {
 
 test.serial('Add video to playlist', async (t) => {
 
+    const res = await axios.post(`${API}/playlist/${playlistvideo.playlistid}/video`, playlistvideo, axiosBearer(userToken))
 
-    try {
-        const res = await axios.post(`${API}/playlist/${playlistvideo.playlistid}/video`, playlistvideo, axiosBearer(userToken))
 
-        console.log(res.data)
+    t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.statusCode}`)
 
-        t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.statusCode}`)
-
-        playlistvideo.id = res.data.id
-        t.truthy(playlistvideo.id)
+    playlistvideo.id = res.data.id
+    t.truthy(playlistvideo.id)
     
-    } catch (err) {
-        console.log(err.response.data)
-    }
 })
 
 
 
-/*
 test.serial('Check if video was added to playlist', async (t) => {
-    t.fail("Not implemented!")
+   
+    t.plan(2)
 
+    const query =  `{ playlist(id: ${playlistvideo.playlistid}) {  videos{  id  }   }}`;
+    const res   = await axios.post(`${API}/graphql?query=${query}`, axiosBearer(userToken));
+
+    let filtered = res.data
+                      .data
+                      .playlist
+                      .videos
+                      .filter(obj => obj.id == playlistvideo.videoid)
+
+    t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.status}`)
+    t.true( filtered.length > 0, `No results found 
+                                 playlistid: ${playlistvideo.playlistid}
+                                 videoid:    ${playlistvideo.videoid}`)
 })
 
 
 
 test.serial('Remove video from playlist', async (t) => {
-    t.fail("Not implemented!")
 
+    t.plan(1)
+
+    const query = `${API}/playlist/${playlistvideo.playlistid}/video/${playlistvideo.id}`;
+    try {
+        const res = await axios.delete(query, playlistvideo, axiosBearer(userToken))
+        t.is(res.status, HTTP_ACCEPTED, `Expected status code ${HTTP_ACCEPTED} got ${res.statusCode}`)
+    
+    } catch(err) {
+        t.fail()
+    }
 })
 
+// @TODO have a way to delete entries in link tables. This would be OK as we absolutely dont want to store links
+//        for future references... as they are not data at all - JSolsvik 27.04.2018
+test.skip('Check if video was removed from playlist', async (t) => {
+  /*
+    t.plan(2)
 
-test.serial('Check if video was removed from playlist', async (t) => {
-    t.fail("Not implemented!")
+    const query =  `{ playlist(id: ${playlistvideo.playlistid}) {  videos{  id, deleted_at  }   }}`;
+    const res   = await axios.post(`${API}/graphql?query=${query}`, axiosBearer(userToken));
 
-})
+    console.log(res.data)
 
+    let filtered = res.data
+                      .data
+                      .playlist
+                      .videos
+                      .filter(obj => obj.id == playlistvideo.videoid)
 
-test.serial('Change playlist order', async (t) => {
-    t.fail("Not implemented!")
-
-})
-
-
-test.serial('Check if playlist order changed correctly', async (t) => {
-    t.fail("Not implemented!")
-
-})
-
-test.serial('Change playlist order back', async (t) => {
-    t.fail("Not implemented!")
-
-})
-
-
-test.serial('Check if playlist order changed back again correctly', async (t) => {
-    t.fail("Not implemented!")
-
-})
-
-
+    t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.status}`)
+    console.log(filtered.length)
+    t.true( filtered.length === 0, `Found playlistvideos, should have been deleted 
+                                  playlistid: ${playlistvideo.playlistid}
+                                  videoid:    ${playlistvideo.videoid}`)
 */
+})
+
+
+test.todo('Change playlist order')/*, async (t) => {
+    
+})*/
+
+
+test.todo('Check if playlist order changed correctly') /*async (t) => {
+    
+})*/
+
+test.todo('Change playlist order back')/* async (t) => {
+    
+})*/
+
+
+test.todo('Check if playlist order changed back again correctly') /*async (t) => {
+    
+})*/
+
+
+

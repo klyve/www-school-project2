@@ -10,8 +10,8 @@ use \MVC\Http\ErrorCode;
 use \MVC\Helpers\File;
 use \Datetime;
 
-use App\Models\PlaylistsModel;
 use App\Models\VideosModel;
+use App\Models\PlaylistsModel;
 use App\Models\PlaylistVideosModel;
 
 // HTTP STATUS CODES
@@ -75,18 +75,16 @@ class PlaylistVideosController extends Controller {
                                         PlaylistVideosModel $playlistVideos)
     {
         $userid     = $req->token()->userid;
-        $id         = $req->input('id');
         $playlistid = $req->input('playlistid');
 
         // @TODO - HAndle this logic with middleware
-        if( ($playlistid      != $req->param('playlistid'))  
-        ||  ($id              != $req->param('id'))) {
+        if( ($playlistid != $req->param('playlistid') )) {
             return new Error(ErrorCode::get('id_mismatch'));
         }
 
         // @NOTE - checking if user owns the playlist
         $userplaylist = $playlists->find([
-            'id' => $playlistid,
+            'id'     => $playlistid,
             'userid' => $userid
         ]);
 
@@ -95,9 +93,13 @@ class PlaylistVideosController extends Controller {
         }
 
         $foundPlaylistVideo = $playlistVideos->find([
-            'id'         => $id,
-            'playlistid' => $playlistid,
+            'id'    => $req->input('id')
         ]);
+
+        
+        if(!$foundPlaylistVideo->id) {
+            return new Error(ErrorCode::get('not_found'));
+        }
 
         $foundPlaylistVideo->deleted_at = date("Y-m-d H:i:s");
         $foundPlaylistVideo->save();
@@ -106,4 +108,3 @@ class PlaylistVideosController extends Controller {
         return Response::statusCode(HTTP_ACCEPTED, $res);
     }
 }
-    

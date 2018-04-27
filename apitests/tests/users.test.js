@@ -70,19 +70,19 @@ test.serial('Refresh token', async(t) => {
 });
 
 
-test.serial('Log out', async(t) => {
+test.todo('Log out')/*, async(t) => {
     t.fail("Test not implemeted")
-});
+});*/
 
 
-test.serial('Check if logged out', async(t) => {
+test.todo('Check if logged out')/* async(t) => {
     t.fail("Test not implemeted")
-});
+});*/
 
 
-test.serial('Log in again', async(t) => {
+test.todo('Log in again')/*async(t) => {
     t.fail("Test not implemeted")
-});
+});*/
 
 
 test.serial('Change password of user', async (t) => {
