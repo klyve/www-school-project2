@@ -63,13 +63,11 @@ class PlaylistsController extends Controller {
             return Response::statusCode(HTTP_NOT_FOUND, "Could not find playlist on userid");
         }
 
-        $playlistTag->update([
-            'id' => $playlistid,
-            'userid' => $userid
-        ],[ 
-           'title' => $req->input('title'),
-           'description' => $req->input('description')
-        ]);
+        $foundPlaylist->userid      = $userid;
+        $foundPlaylist->title       = $req->input('title');
+        $foundPlaylist->description = $req->input('description');
+
+        $foundPlaylist->save();
 
         $res = ['msg' => 'Updated playlist'];
         return Response::statusCode(HTTP_OK, $res);

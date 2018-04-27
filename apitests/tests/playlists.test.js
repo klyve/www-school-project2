@@ -74,6 +74,8 @@ test.serial('Check if playlist was created', async (t) => {
     t.plan(2)
     const res = await axios.post(`${API}/graphql?query={ playlist(id: ${playlistdata.id}) {  id, title, description }}`, axiosBearer(userToken))
 
+    console.log(res.data);
+
     t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.status}`)
     t.true( isEqualsShallow(res.data.data.playlist, playlistdata), "Shallow equal unsuccessful")
 });
