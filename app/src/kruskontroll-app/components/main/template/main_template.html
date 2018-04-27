@@ -1,0 +1,48 @@
+<link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../store/store.html">
+
+<dom-module id="main-template">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      :host([active]) {
+          display: block;
+      }
+    </style>
+
+    <h2>Hello [[username]]!</h2>
+
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class MainTemplate extends ReduxStore(Polymer.Element) {
+
+      static get is() { return 'main-template'; }
+
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'kruskontroll-app'
+          },
+          message: {
+            type: String,
+            statePath: 'testReducer.message'
+          },
+          username: {
+            type: String,
+            statePath: 'user.name',
+          },
+        };
+      }
+    }
+    
+    window.customElements.define(MainTemplate.is, MainTemplate);
+  </script>
+</dom-module>

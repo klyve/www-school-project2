@@ -1,4 +1,8 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/brum-global-variable/index.html">
+<link rel="import" href="../store/store.html">
+<link rel="import" href="../actions/user.html">
+<link rel="import" href="./components/main/template/main_template.html">
 
 <dom-module id="kruskontroll-app">
   <template>
@@ -7,7 +11,10 @@
         display: block;
       }
     </style>
-    <h2>Hello [[prop1]]!</h2>
+
+    <h1>Your username is [[username]]!</h1>
+    <main-template></main-template>
+
   </template>
 
   <script>
@@ -15,18 +22,44 @@
      * @customElement
      * @polymer
      */
-    class KruskontrollApp extends Polymer.Element {
+    class KruskontrollApp extends ReduxStore(Polymer.Element) {
       static get is() { return 'kruskontroll-app'; }
+      ready() {
+        super.ready();
+        //console.log("IS READY'");
+        //this.dispatch('')
+
+        window.setTimeout(() => {
+          this.dispatch({
+            type: 'UPDATE_USERNAME',
+            payload: {
+              name: 'Bjarte',
+            },
+          });
+        }, 5000);
+      }
       static get properties() {
         return {
+          active: {
+            type: String,
+            value: "false",
+          },
           prop1: {
             type: String,
             value: 'kruskontroll-app'
+          },
+          username: {
+            type: String,
+            statePath: 'user.name',
+          },
+          message: {
+            type: String,
+            statePath: 'testReducer.message'
           }
         };
       }
     }
-
+    
     window.customElements.define(KruskontrollApp.is, KruskontrollApp);
   </script>
 </dom-module>
