@@ -6,7 +6,15 @@
     "playlist": {
         "not_authorized": "Du mangler rettigheter for denne spillelisten",
         "tag_conflict": "Spillelisten inneholder allerede taggen",
-        "not_found": "Kunne ikke finne ressurs"
+        "not_found": "Kunne ikke finne ressurs",
+        "id_mismatch": "Id mismatch. Iden i URL en din matcher ikke med data du sendte.",
+        "sql_insert_error": "Tjeneren fikk et problem med å legge inn spillelisten i databasen"
+    },    
+
+    "success": {
+        "created": "Data opprettet",
+        "updated": "Data oppdatert",
+        "deleted": "Data klargjort for sletting"
     }
   }
 }

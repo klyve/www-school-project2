@@ -6,7 +6,14 @@
       "playlist": {
       	"not_authorized": "You do not have rights for given playlist",
         "tag_conflict": "The playlist already contains the tag",
-        "not_found": "Could not find resource"
+        "not_found": "Could not find playlist with given playlistid and userid",
+        "id_mismatch": "Id mismatch. The id in the url and the body does not match.",
+        "sql_insert_error": "Server had an error when trying to create playlist"
       }
+    },
+    "success": {
+        "created": "Resource created",
+        "updated": "Resource updated",
+        "deleted": "Resource marked for deletion"
     }
 }

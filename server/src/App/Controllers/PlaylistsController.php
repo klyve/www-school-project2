@@ -1,6 +1,7 @@
 <?php namespace App\Controllers;
 
 use \MVC\Core\Controller;
+use \MVC\Core\Language;
 use \MVC\Http\Request;
 use \MVC\Http\Response;
 use \MVC\Http\Error;
@@ -33,11 +34,11 @@ class PlaylistsController extends Controller {
         $lastinsertid = $newPlaylist->save();
 
         if (!$lastinsertid) {
-            return Response::statusCode(HTTP_INTERNAL_ERROR, "Server could not created your playlist");
+            return new Error(ErrorCode::get('playlist.sql_insert_error'));
         }
 
 
-        $res = ['id' => $lastinsertid, 'msg' => 'Created playlist'];
+        $res = ['id' => $lastinsertid, 'message' => Language::get('success.created')];
         return Response::statusCode(HTTP_CREATED, $res);
     }
 
@@ -47,9 +48,8 @@ class PlaylistsController extends Controller {
     public function putPlaylist(PlaylistsModel $playlist, Request $req) {
 
         if ( $req->input('id') !==  $req->param('playlistid')) {
-            return Response::statusCode(HTTP_BAD_REQUEST, "Playlistid mismatch");
+            return new Error(ErrorCode::get('playlist.id_mismatch'));
         }
-
 
         $playlistid = $req->input('id');
         $userid     = $req->token()->userid;
@@ -60,14 +60,15 @@ class PlaylistsController extends Controller {
         ]);
 
         if (!$foundPlaylist->id) {
-            return Response::statusCode(HTTP_NOT_FOUND, "Could not find playlist on userid");
+            return new Error(ErrorCode::get('playlist.not_found'));
         }
 
         $foundPlaylist->title = $req->input('title');
         $foundPlaylist->description = $req->input('description');
         $foundPlaylist->save();
 
-        $res = ['msg' => 'Updated playlist'];
+
+        $res = ['message' => Language::get('success.updated')];
         return Response::statusCode(HTTP_OK, $res);
     }
 
@@ -82,14 +83,14 @@ class PlaylistsController extends Controller {
         ]);
 
         if (!$myplaylist->id) {
-            return Response::statusCode(HTTP_NOT_FOUND, "Could not find playlist on userid");
+            return new Error(ErrorCode::get('playlist.not_found'));
         }
 
         // @ERROR Cannot save the updated playlist
         $myplaylist->deleted_at = date("Y-m-d H:i:s");
         $myplaylist->save(); // <--- SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens
 
-        $res = ['msg' => "Playlist marked for deletion"];
+        $res = ['message' => Language::get('success.deleted')];
         return Response::statusCode(HTTP_ACCEPTED, $res);
     }
 }

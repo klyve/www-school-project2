@@ -36,6 +36,16 @@ $errors = [
             "error" => 3,
             "message" => Language::get('errors.playlist.not_found'),
             "code" => 404, 
-        ]
+        ],
+        'id_mismatch' => [
+            'error' => 4,
+            'message' => Language::get('errors.playlist.id_mismatch'),
+            'code' => 400
+        ],
+        'sql_insert_error' => [
+            'error' => 8,
+            'message' => Language::get('errors.playlist.sql_insert_error'),
+            'code' => 500
+        ],
     ]
 ];

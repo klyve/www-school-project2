@@ -58,8 +58,9 @@ test.serial('Create playlist', async (t) => {
     const res = await axios.post(`${API}/playlist`, playlistdata, axiosBearer(userToken))
     t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`)
 
+    console.log(res.data)
 
-    testDataIntegrity(res.data, ['id', 'msg'], t)
+    testDataIntegrity(res.data, ['id', 'message'], t)
 
     playlistid = res.data.id
     playlistdata.id = res.data.id
@@ -74,7 +75,6 @@ test.serial('Check if playlist was created', async (t) => {
     t.plan(2)
     const res = await axios.post(`${API}/graphql?query={ playlist(id: ${playlistdata.id}) {  id, title, description }}`, axiosBearer(userToken))
 
-    console.log(res.data);
 
     t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.status}`)
     t.true( isEqualsShallow(res.data.data.playlist, playlistdata), "Shallow equal unsuccessful")
@@ -83,14 +83,12 @@ test.serial('Check if playlist was created', async (t) => {
 
 test.serial('Update playlist', async (t) => {
 
-console.log(updatedPlaylistdata);
     t.plan(3)
     try {
         const res = await axios.put(`${API}/playlist/${playlistid}`, updatedPlaylistdata, axiosBearer(userToken))
-        testDataIntegrity(res.data, ['msg'], t)
+        testDataIntegrity(res.data, ['message'], t)
         t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.status}`)
     
-        console.log(res.data);
 
     } catch(err) {
     }
@@ -116,7 +114,7 @@ test.serial('Delete playlist', async (t) => {
     
     try {
         const res = await axios.delete(`${API}/playlist/${playlistid}`, axiosBearer(userToken))
-        testDataIntegrity(res.data, ['msg'], t)
+        testDataIntegrity(res.data, ['message'], t)
         t.is(res.status, HTTP_ACCEPTED, `Expected status code ${HTTP_ACCEPTED} got ${res.status}`)   
 
     } catch(err) {
@@ -131,7 +129,6 @@ test.serial('Check if playlist was deleted', async (t) => {
     const query = `query={ playlist(id: ${updatedPlaylistdata.id}) {  id, deleted_at }}`
     const res = await axios.post(`${API}/graphql?${query}`, axiosBearer(userToken))
 
-    console.log(res.data);
 
     t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.status}`)
     //console.log(res.data.data.playlist, updatedPlaylistdata)
