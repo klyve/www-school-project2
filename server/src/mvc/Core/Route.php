@@ -98,6 +98,8 @@ class Route {
             $route = '/';
             if(isset($_GET['page']) && $_GET['page'] !== '') {
                 $route = $_GET['page'];
+            }elseif(isset($_SERVER['PATH_INFO'])) {
+                $route = $_SERVER['PATH_INFO'];
             }
             self::$_route = $route;
 

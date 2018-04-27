@@ -23,6 +23,7 @@ class Validation {
     private $request;
     private $match;
 
+    // These are my private parts ;)
     private $parts = [];
 /**
  * @TODO: [__construct description]
@@ -91,8 +92,6 @@ class Validation {
         $parts = explode('.', $validations);
         $validation = $parts[0];
         array_shift($parts);
-        
-
 
         $class = \MVC\Core\DependencyInjection::inject('App\\Http\Validation\\'.$validation);
         $this->count++;

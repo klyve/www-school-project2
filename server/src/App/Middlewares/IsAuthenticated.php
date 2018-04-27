@@ -40,11 +40,15 @@ class IsAuthenticated {
         $user->find([
             'id' => $userId
         ]);
-
+        
         if(!$user->id) {
             return Response::send($statusCode);
         }
         
+
+        // @TODO check if token->userid matches /user/{userid}/
+        //  Basically ADD ACCESS CONTROL!
+
         $next($request);
     }
 }
