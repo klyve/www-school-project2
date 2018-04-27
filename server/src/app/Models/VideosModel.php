@@ -33,6 +33,6 @@ class VideosModel extends \MVC\Core\Model {
   public $filesubtitle;
 
 
-  public $exclude = ['id'];
+  public $exclude = ['id', 'deleted_at'];
 
 }
