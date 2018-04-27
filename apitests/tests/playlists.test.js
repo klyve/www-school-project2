@@ -55,18 +55,23 @@ test.serial('Create playlist', async (t) => {
 
     t.plan(6)
 
-    const res = await axios.post(`${API}/playlist`, playlistdata, axiosBearer(userToken))
-    t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`)
+    try {
+        const res = await axios.post(`${API}/playlist`, playlistdata, axiosBearer(userToken))
+        t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`)
 
-    console.log(res.data)
 
-    testDataIntegrity(res.data, ['id', 'message'], t)
+        testDataIntegrity(res.data, ['id', 'message'], t)
 
-    playlistid = res.data.id
-    playlistdata.id = res.data.id
-    updatedPlaylistdata.id = res.data.id
-    
-    t.truthy(playlistdata.id)
+        playlistid = res.data.id
+        playlistdata.id = res.data.id
+        updatedPlaylistdata.id = res.data.id
+        
+        t.truthy(playlistdata.id)
+
+    } catch(err) {
+        console.log(err.response)
+        t.fail();
+    }
 
 });
 

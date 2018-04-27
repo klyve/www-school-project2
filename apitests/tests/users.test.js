@@ -26,17 +26,21 @@ test.serial('register a user', async (t) => {
     if(res.status !== 200)
         t.fail(`Expected status code 200 got ${res.status}`);
     t.pass();
-    
+
 
     testDataIntegrity(res.data, ['email', 'name', 'token', 'usergroup'], t);
 
 
     try {
         const res2 = await axios.post(`${API}/user/register`, credentials)
+
     } catch(err) {
+        
         if(err.response.status !== 409)
             t.fail(`Expected status code 409 got ${err.response.status}`);
         t.pass();
+
+        console.log(err.response.data)
 
         testDataIntegrity(err.response.data, ['error', 'message', 'code'], t);
         t.pass();

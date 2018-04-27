@@ -1,8 +1,15 @@
 {
     "errors": {
+
+      "sql_insert_error": "Server had an error when trying to create resource in the datbase",
+      "not_found": "Could not find data with given parameters",  
+      "id_mismatch": "Id mismatch. The id in the url and the body does not match.",
+
+
       "user": {
         "email_exists": "Email already exists"
       },
+
       "playlist": {
       	"not_authorized": "You do not have rights for given playlist",
         "tag_conflict": "The playlist already contains the tag",
@@ -10,13 +17,20 @@
         "sql_insert_error": "Server had an error when trying to create playlist"
       },
 
-      "sql_insert_error": "Server had an error when trying to create resource in the datbase",
-      "not_found": "Could not find data with given parameters",  
-      "id_mismatch": "Id mismatch. The id in the url and the body does not match."
+
+      "videos": {
+        "not_authorized": "You do not have rights for given video",
+        "tag_conflict": "The video already contains the tag",
+        "not_found": "Could not find resource"
+      }
+
     },
+
+
     "success": {
         "created": "Resource created",
         "updated": "Resource updated",
-        "deleted": "Resource marked for deletion"
+        "deleted": "Resource marked for deletion",
+        "not_found": "Could not find resource"
     }
 }
