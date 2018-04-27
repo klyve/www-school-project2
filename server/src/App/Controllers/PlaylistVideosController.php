@@ -74,13 +74,11 @@ class PlaylistVideosController extends Controller {
                                         PlaylistsModel $playlists,
                                         PlaylistVideosModel $playlistVideos)
     {
+        
         $userid     = $req->token()->userid;
-        $playlistid = $req->input('playlistid');
+        $playlistid = $req->param('playlistid');
+        $id         = $req->param('id');
 
-        // @TODO - HAndle this logic with middleware
-        if( ($playlistid != $req->param('playlistid') )) {
-            return new Error(ErrorCode::get('id_mismatch'));
-        }
 
         // @NOTE - checking if user owns the playlist
         $userplaylist = $playlists->find([
@@ -93,9 +91,8 @@ class PlaylistVideosController extends Controller {
         }
 
         $foundPlaylistVideo = $playlistVideos->find([
-            'id'    => $req->input('id')
+            'id'    => $id
         ]);
-
         
         if(!$foundPlaylistVideo->id) {
             return new Error(ErrorCode::get('not_found'));

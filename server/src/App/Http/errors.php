@@ -39,12 +39,11 @@ $errors = [
         ],
 
         'sql_insert_error' => [
-            'error' => 8,
+            'error' => 4,
             'message' => Language::get('errors.playlist.sql_insert_error'),
             'code' => 500
         ],
     ],
-
 
 
     'not_found' => [

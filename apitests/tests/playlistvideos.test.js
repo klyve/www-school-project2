@@ -32,7 +32,7 @@ let userToken = null
 
 
 // Log in user
-test.before(async (t) => {
+test.beforeEach(async (t) => {
     t.plan(10)
 
     const res = await axios.post(`${API}/user/login`, credentials)
@@ -50,7 +50,7 @@ test.serial('Add video to playlist', async (t) => {
     const res = await axios.post(`${API}/playlist/${playlistvideo.playlistid}/video`, playlistvideo, axiosBearer(userToken))
 
 
-    t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.statusCode}`)
+    t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`)
 
     playlistvideo.id = res.data.id
     t.truthy(playlistvideo.id)
@@ -64,7 +64,7 @@ test.serial('Check if video was added to playlist', async (t) => {
     t.plan(2)
 
     const query =  `{ playlist(id: ${playlistvideo.playlistid}) {  videos{  id  }   }}`;
-    const res   = await axios.post(`${API}/graphql?query=${query}`, axiosBearer(userToken));
+    const res   = await axios.post(`${API}/graphql?query=${query}`, {}, axiosBearer(userToken));
 
     let filtered = res.data
                       .data
@@ -86,9 +86,9 @@ test.serial('Remove video from playlist', async (t) => {
 
     const query = `${API}/playlist/${playlistvideo.playlistid}/video/${playlistvideo.id}`;
     try {
-        const res = await axios.delete(query, playlistvideo, axiosBearer(userToken))
-        t.is(res.status, HTTP_ACCEPTED, `Expected status code ${HTTP_ACCEPTED} got ${res.statusCode}`)
-    
+        const res = await axios.delete(query, axiosBearer(userToken))
+        t.is(res.status, HTTP_ACCEPTED, `Expected status code ${HTTP_ACCEPTED} got ${res.status}`)
+
     } catch(err) {
         t.fail()
     }

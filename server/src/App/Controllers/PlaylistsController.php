@@ -83,6 +83,7 @@ class PlaylistsController extends Controller {
 
         $myplaylist->deleted_at = date("Y-m-d H:i:s");
         $myplaylist->save();
+        
         $res = ['message' => Language::get('success.deleted')];
         return Response::statusCode(HTTP_ACCEPTED, $res);
     }

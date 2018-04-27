@@ -13,6 +13,12 @@ Route::get('/', function() {
 });
 
 
+Route::delete('/playlist/{playlistid}/video/{id}', 
+                'PlaylistVideosController.deletePlaylistVideo')
+    ->withMiddlewares(['IsAuthenticated']);
+
+
+
 
 // ->withMiddlewares(['IsAuthenticated'])
 //->withValidators(['UserValidations.login']);
@@ -44,6 +50,8 @@ Route::delete('video/{videoid}', 'VideosController.deleteVideo')
     ->withMiddlewares(['IsAuthenticated']);
 
 
+
+
 // FilesController
 Route::post('/tempfile', 'FilesController.postTempfile')
     ->withMiddlewares(['IsAuthenticated']);
@@ -62,15 +70,12 @@ Route::delete('/playlist/{playlistid}', 'PlaylistsController.deletePlaylist')
     ->withMiddlewares(['IsAuthenticated']);
 
 
+
+
+
 // PlaylistVideosController
 Route::post('/playlist/{playlistid}/video', 'PlaylistVideosController.postPlaylistVideo')
     ->withMiddlewares(['IsAuthenticated']);
-
-
-Route::delete('/playlist/{playlistid}/video/{videoid}', 
-                'PlaylistVideosController.deletePlaylistVideo')
-    ->withMiddlewares(['IsAuthenticated']);
-
 
 
 
