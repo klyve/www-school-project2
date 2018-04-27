@@ -184,6 +184,7 @@ class Model {
         if(!$data) {
             $data = $this->findObjects();
         }
+
         $query = SQL::update($data, $selector, $this->table);
         $queryData = array_merge($data, $selector);
 

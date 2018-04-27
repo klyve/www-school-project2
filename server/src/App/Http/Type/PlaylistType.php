@@ -25,6 +25,8 @@ class PlaylistType extends ObjectType {
                     'userid' => Types::id(),
                     'title' => Types::string(),
                     'description' => Types::string(),
+                    'created_at' => Types::string(),
+                    'deleted_at' => Types::string(),
                     'user' => [
                         'type' => Types::user(),
                         'description' => 'User the playlist belongs to',

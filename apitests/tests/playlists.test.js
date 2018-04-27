@@ -81,7 +81,7 @@ test.serial('Check if playlist was created', async (t) => {
 });
 
 
-test.serial('Update(put) playlist', async (t) => {
+test.serial('Update playlist', async (t) => {
 
 console.log(updatedPlaylistdata);
     t.plan(3)
@@ -111,7 +111,6 @@ test.serial('Check if playlist updated correctly', async (t) => {
 
 
 
-
 test.serial('Delete playlist', async (t) => {
     t.plan(3)
     
@@ -127,11 +126,16 @@ test.serial('Delete playlist', async (t) => {
 
 test.serial('Check if playlist was deleted', async (t) => {
     t.plan(2)
-    const res = await axios.post(`${API}/graphql?query={ playlist(id: ${updatedPlaylistdata.id}) {  id, title, description }}`, axiosBearer(userToken))
+
+
+    const query = `query={ playlist(id: ${updatedPlaylistdata.id}) {  id, deleted_at }}`
+    const res = await axios.post(`${API}/graphql?${query}`, axiosBearer(userToken))
+
+    console.log(res.data);
 
     t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.status}`)
     //console.log(res.data.data.playlist, updatedPlaylistdata)
-    t.falsy( res.data.data.playlist.id, "playlistid should be null, because not found" );
+    t.truthy( res.data.data.playlist.deleted_at, "playlist.deleted_at should be null, because not found" );
 });
 
 
