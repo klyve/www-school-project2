@@ -25,10 +25,11 @@ class PlaylistTagController extends Controller {
 	    ]);
 	    $currentList = $playlist->find([
 	    	'id' => $req->param('playlistid'),
+	    	'userid' => $currentUser->id,
 	    ]);
 
 	    // Check if the playlist belongs to the user
-	    if ($currentList->userid != $currentUser->id) {
+	    if (!$currentList->id) {
 	    	return new Error(ErrorCode::get('playlist.not_authorized'));
 	    }
 
@@ -78,10 +79,11 @@ class PlaylistTagController extends Controller {
 	    ]);
 	    $currentList = $playlist->find([
 	    	'id' => $req->param('playlistid'),
+	    	'userid' => $currentUser->id,
 	    ]);
 
 	    // Check if the playlist belongs to the user
-	    if ($currentList->userid != $currentUser->id) {
+	    if (!$currentList->id) {
 	    	return new Error(ErrorCode::get('playlist.not_authorized'));
 	    }
 
@@ -94,7 +96,7 @@ class PlaylistTagController extends Controller {
 	    	'playlistid' =>  $currentList->id,
 	    	'tagid' =>  $existingTag->id
 	    ]);
-	    print_r(hello);
+
 	    // Check if the playlist contains the tag, marks tag as deleted
 	    if($currentPlaylistTag->id != null && $currentPlaylistTag->deleted_at == null){
 	    	
