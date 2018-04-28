@@ -12,21 +12,24 @@ Route::get('/', function() {
     return ['hey'];
 });
 
-
-
 // ->withMiddlewares(['IsAuthenticated'])
 //->withValidators(['UserValidations.login']);
+Route::post('/video/{videoid}/tag', 'VideoTagsController.postTag')
+    ->withMiddlewares(['IsAuthenticated']);
 
+Route::delete('/video/{videoid}/tag/{tagname}', 'VideoTagsController.deleteTag')
+    ->withMiddlewares(['IsAuthenticated']);
 
-Route::post('user/login', 'AuthController.postLogin')
+Route::post('/user/login', 'AuthController.postLogin')
     ->withValidators(['UserValidations.login']);
 
-Route::post('user/register', 'AuthController.postRegister')
+Route::post('/user/register', 'AuthController.postRegister')
     ->withValidators(['UserValidations.register']);
 
-Route::put('user/password', 'AuthController.putPassword')
+Route::put('/user/password', 'AuthController.putPassword')
     ->withMiddlewares(['IsAuthenticated'])
     ->withValidators(['UserValidations.changePassword']);
+
 
 Route::post('user/refresh', 'AuthController.refreshToken')
     ->withMiddlewares(['IsAuthenticated']);
@@ -36,10 +39,11 @@ Route::post('user/refresh', 'AuthController.refreshToken')
 Route::post('/video', 'VideosController.postVideo')
     ->withMiddlewares(['IsAuthenticated']);
 
-Route::put('video/{videoid}', 'VideosController.putVideo')
+Route::put('/video/{videoid}', 'VideosController.putVideo')
     ->withMiddlewares(['IsAuthenticated']);
 
-Route::delete('video/{videoid}', 'VideosController.deleteVideo')
+        
+Route::delete('/video/{videoid}', 'VideosController.deleteVideo')
     ->withMiddlewares(['IsAuthenticated']);
 
 
@@ -58,12 +62,21 @@ Route::delete('/user', 'UsersController.deleteUser')
     ->withMiddlewares(['IsAuthenticated']);
 
 
+
 // PlaylistTagController
 Route::post('/playlist/{playlistid}/tag', 'PlaylistTagController.postTag')
     ->withMiddlewares(['IsAuthenticated']);
 
 Route::delete('/playlist/{playlistid}/tag/{tagname}', 'PlaylistTagController.deleteTag')
     ->withMiddlewares(['IsAuthenticated']);
+
+// VideoTagController
+Route::post('/video/{videoid}/tag', 'VideoTagsController.postTag')
+    ->withMiddlewares(['IsAuthenticated']);
+
+Route::delete('/video/{videoid}/tag/{tagname}', 'VideoTagsController.deleteTag')
+    ->withMiddlewares(['IsAuthenticated']);
+
 // Route::get('adsfgnjwd', 'gnrgwklgweg')
 //     ->withMiddlewares(['IsAuthenticated'])
 //     ->withValidators(['FileName.function.function.function']);

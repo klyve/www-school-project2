@@ -37,5 +37,23 @@ $errors = [
             "message" => Language::get('errors.playlist.not_found'),
             "code" => 404, 
         ]
+    ],
+    
+    'videos' => [
+        'not_authorized' => [
+            "error" => 1,
+            "message" => Language::get('errors.videos.not_authorized'),
+            "code" => 401,
+        ],
+        'tag_conflict' => [
+            "error" => 2,
+            "message" => Language::get('errors.videos.tag_conflict'),
+            "code" => 409, 
+        ],
+        'not_found' => [
+            "error" => 3,
+            "message" => Language::get('errors.videos.not_found'),
+            "code" => 404, 
+        ]
     ]
 ];

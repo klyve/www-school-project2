@@ -30,6 +30,8 @@ class VideoTagsMigrations {
             $table->primary('id')->autoIncrement();
             $table->number('videoid');
             $table->number('tagid');
+
+            $table->timestamps();   
         });
     }
 
