@@ -1,0 +1,20 @@
+<script src="../../bower_components/axios/dist/axios.js"></script>
+<script src="./constants.js"></script>
+<script>
+    
+    const bindParams = () => ({
+        headers: {
+            // 'Authorization': 'Bearer ' + token
+        }
+    });
+
+    const get = () => {
+
+    }
+
+    const graphql = graphqlQuery => {
+        return axios.post(SERVER+'graphql', {query:graphqlQuery}, bindParams());
+    }
+
+
+</script>

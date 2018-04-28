@@ -86,10 +86,10 @@ class Hash {
 
 
   public static function JWT($data) {
-    $secret = Config::get('token.secret');
+    $secret = Config::get('token.secret') . $_SERVER['REMOTE_ADDR'];
     $expiration = Config::get('token.expiration');
     $issuer = Config::get('token.issuer');
-      $builder = new TokenBuilder();
+    $builder = new TokenBuilder();
 
       $token = $builder->addPayload($data)
           ->setSecret($secret)
@@ -100,8 +100,13 @@ class Hash {
   }
 
   public static function verifyJWT($token) {
-    $secret = Config::get('token.secret');
-    return Token::validate($token, $secret);
+    $secret = Config::get('token.secret') . $_SERVER['REMOTE_ADDR'];
+    try {
+      $token = Token::validate($token, $secret);
+      return $token;
+    }catch(\Exception $e) {
+      return false;
+    }
   }
 
   public static function getJWT($token) {

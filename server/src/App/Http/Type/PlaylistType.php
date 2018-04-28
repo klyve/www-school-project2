@@ -33,6 +33,10 @@ class PlaylistType extends ObjectType {
                         'type' => Types::listOf(Types::video()),
                         'description' => 'Videos associated with the playlist',
                     ],
+                    'nodes' => [
+                        'type' => Types::listOf(Types::playlistNode()),
+                        'description' => 'Playlist nodes',
+                    ],
                     'tags' => [
                         'type' => Types::listOf(Types::tags()),
                         'description' => 'Return tags associated with a video',
@@ -72,6 +76,14 @@ class PlaylistType extends ObjectType {
         return $usersModel->find([
             'id' => $playlistModel->userid,
         ]);
+    }
+
+    public function resolveNodes($playlistModel, $args) {
+        $pvideoModel = new PlaylistVideosModel();
+        $videos = $pvideoModel->all([
+            'playlistid' => $playlistModel->id
+        ]);
+        return $videos;
     }
 
     public function resolveTags($playlistModel, $args) {
