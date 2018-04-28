@@ -10,6 +10,7 @@ use \App\Http\Type\CommentType;
 use \App\Http\Type\PlaylistType;
 use \App\Http\Type\SearchType;
 use \App\Http\Type\TagsType;
+use \App\Http\Type\PlaylistNodeType;
 
 /**
  * Class Types
@@ -89,13 +90,13 @@ class Types
         return self::$search ?: (self::$search = new SearchType());
     }
 
-    // /**
-    //  * @return NodeType
-    //  */
-    // public static function node()
-    // {
-    //     return self::$node ?: (self::$node = new NodeType());
-    // }
+    /**
+     * @return NodeType
+     */
+    public static function playlistNode()
+    {
+        return self::$node ?: (self::$node = new PlaylistNodeType());
+    }
 
 
 

@@ -22,6 +22,10 @@ class QueryType extends ObjectType
                         'id' => Types::nonNull(Types::id())
                     ]
                 ],
+                'users' => [
+                    'type' => Types::listOf(Types::user()),
+                    'description' => 'List of all users',
+                ],
                 'video' => [
                     'type' => Types::video(),
                     'description' => 'Return a video by id',
@@ -39,9 +43,12 @@ class QueryType extends ObjectType
                 ],
                 'search' => [
                     'type' => Types::search(),
-                    'description' => 'Return search data',
+                    'description' => 'Return search data, requires value',
                     'args' => [
-                        'value' => Types::nonNull(Types::string()),
+                        'value' => [
+                            'type' => Types::nonNull(Types::string()),
+                            'description' => 'Required field to search',
+                        ],
                         'limit' => Types::int(),
                     ]
                 ],
@@ -55,6 +62,10 @@ class QueryType extends ObjectType
     }
     public function hello() {
         return 'Your graphql-php endpoint is ready! Use GraphiQL to browse API';
+    }
+
+    public function users($rootValue, $args, $req, $info) {
+        return (new UsersModel())->all();
     }
 
     public function search($rootValue, $args, $req, $info) {

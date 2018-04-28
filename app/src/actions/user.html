@@ -1,0 +1,19 @@
+<link rel="import" href="../utilities/http.html">
+<script>
+    // console.log(get);
+    // console.log(ReduxStore(null).getState());
+    graphql(`
+        query {
+            user(id: 1) {
+                name
+            }
+        }
+    `)
+    .then(res => res.data)
+    .then(console.log)
+    .catch(console.log);
+
+    
+    // console.log(axios.post);
+
+</script>
