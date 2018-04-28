@@ -20,6 +20,15 @@ Route::post('/video/{videoid}/tag', 'VideoTagsController.postTag')
 Route::delete('/video/{videoid}/tag/{tagname}', 'VideoTagsController.deleteTag')
     ->withMiddlewares(['IsAuthenticated']);
 
+
+// SubscriptionController
+Route::post('playlist/{playlistid}/subscribe', 'SubscriptionsController.postSubscriptions')
+    ->withMiddlewares(['IsAuthenticated']);
+
+Route::delete('playlist/{playlistid}/subscribe', 'SubscriptionsController.postSubscriptions')
+    ->withMiddlewares(['IsAuthenticated']);
+
+
 Route::post('/user/login', 'AuthController.postLogin')
     ->withValidators(['UserValidations.login']);
 
@@ -45,6 +54,7 @@ Route::put('/video/{videoid}', 'VideosController.putVideo')
         
 Route::delete('/video/{videoid}', 'VideosController.deleteVideo')
     ->withMiddlewares(['IsAuthenticated']);
+
 
 
 // FilesController
@@ -76,6 +86,7 @@ Route::post('/video/{videoid}/tag', 'VideoTagsController.postTag')
 
 Route::delete('/video/{videoid}/tag/{tagname}', 'VideoTagsController.deleteTag')
     ->withMiddlewares(['IsAuthenticated']);
+
 
 // Route::get('adsfgnjwd', 'gnrgwklgweg')
 //     ->withMiddlewares(['IsAuthenticated'])

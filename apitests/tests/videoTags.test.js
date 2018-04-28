@@ -69,7 +69,8 @@ test.serial('Add tag to playlist', async (t) =>{
 		const res3 = await axios.post(	
 			`${API}/video/${urlVars.videoid[0]}/tag`, tag, axiosBearer(userToken2)
 		);
-		t.true(res3.status === 401);	
+		t.true(res3.status === 401);
+
 	}catch(err){					// Expect no new tag to be created nor for the video to get more tags.
 		t.true(err.response.status === 401);		
 	}
