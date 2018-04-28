@@ -22,10 +22,10 @@ Route::delete('/video/{videoid}/tag/{tagname}', 'VideoTagsController.deleteTag')
 
 
 // SubscriptionController
-Route::post('playlist/{playlistid}/subscribe', 'SubscriptionsController.postSubscriptions')
+Route::post('/playlist/{playlistid}/subscribe', 'SubscriptionsController.postSubscriptions')
     ->withMiddlewares(['IsAuthenticated']);
 
-Route::delete('playlist/{playlistid}/subscribe', 'SubscriptionsController.postSubscriptions')
+Route::delete('/playlist/{playlistid}/subscribe', 'SubscriptionsController.deleteSubscriptions')
     ->withMiddlewares(['IsAuthenticated']);
 
 
