@@ -32,7 +32,6 @@ Route::post('user/refresh', 'AuthController.refreshToken')
     ->withMiddlewares(['IsAuthenticated']);
 
 
-
 // VideosController
 Route::post('/video', 'VideosController.postVideo')
     ->withMiddlewares(['IsAuthenticated']);
@@ -49,7 +48,6 @@ Route::post('/tempfile', 'FilesController.postTempfile')
     ->withMiddlewares(['IsAuthenticated']);
 
 
-
 // UsersController
 Route::get('/user', "UsersController.getUser");
 
@@ -60,8 +58,12 @@ Route::delete('/user', 'UsersController.deleteUser')
     ->withMiddlewares(['IsAuthenticated']);
 
 
+// PlaylistTagController
+Route::post('/playlist/{playlistid}/tag', 'PlaylistTagController.postTag')
+    ->withMiddlewares(['IsAuthenticated']);
 
-
+Route::delete('/playlist/{playlistid}/tag/{tagname}', 'PlaylistTagController.deleteTag')
+    ->withMiddlewares(['IsAuthenticated']);
 // Route::get('adsfgnjwd', 'gnrgwklgweg')
 //     ->withMiddlewares(['IsAuthenticated'])
 //     ->withValidators(['FileName.function.function.function']);
