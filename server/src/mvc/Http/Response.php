@@ -26,10 +26,7 @@ class Response {
  * @return [type]       [description]
  */
     public static function send($data) {
-        header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Headers: Origin');
-        header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE');
-
+    
         $ret = null;
         $data = self::unpackData($data);
         if(is_array($data) || gettype($data) === "object") {

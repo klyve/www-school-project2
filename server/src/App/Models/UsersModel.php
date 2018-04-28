@@ -12,7 +12,6 @@ class UsersModel extends \MVC\Core\Model {
   public $password;
   public $token;
 
-
   public $exclude = ['id', 'usergroup', 'requestedgroup', 'token'];
 
   public $protected = ['id', 'password', 'requestedgroup', 'created_at', 'deleted_at'];

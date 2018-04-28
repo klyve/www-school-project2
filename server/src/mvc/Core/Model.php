@@ -105,6 +105,7 @@ class Model {
         $stmt->execute($data);
         if($stmt->rowCount() > 0) {
             $row = $stmt->fetch();
+            
             $this->_findVars = $data;
             $this->_dirty = true;
             foreach($row as $key => $value) {

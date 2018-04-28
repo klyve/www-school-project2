@@ -10,7 +10,7 @@ use \App\Models\VideosModel;
 class UserType extends ObjectType {
     public function __construct() {
         $config = [
-            'name' => 'User',
+            'name' => 'UserType',
             'description' => 'Our users',
             'fields' => function() {
                 return [

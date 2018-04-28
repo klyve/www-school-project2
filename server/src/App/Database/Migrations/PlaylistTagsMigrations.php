@@ -30,6 +30,7 @@ class PlaylistTagsMigrations {
             $table->primary('id')->autoIncrement();
             $table->number('playlistid'); // foreign key
             $table->number('tagid');      // foreign key
+            $table->timestamps();
         });
     }
 
