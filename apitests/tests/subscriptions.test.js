@@ -36,26 +36,21 @@ test.before('Setting up user for all tests', async (t) =>{
 
 
 // @TODO This test will not pass until 'deleted_at' is not returned from Model::find()
-test.skip('Subscribe to playlist', async (t) =>{
+test.serial('Subscribe to playlist', async (t) =>{
 	t.plan(2);
 	const res1 = await axios.post(	// Subscribe to a playlist the user has not subscribed to.
 		`${API}/playlist/${urlVars.playlistid}/subscribe`, null, axiosBearer(userToken)
 	);
 	t.true(res1.status === 201);	// Expect beeing subscribed to playlist.
 
-	try{							// Subscribe to a playlist already subscribed to.
-		const res3 = await axios.post(	
-			`${API}/playlist/${urlVars.playlistid}/subscribe`, null, axiosBearer(userToken)
-		);
-		t.true(res3.status === 409);
-	}catch(err){					// Expect nothing to happen.
-	
-		t.true(err.response.status === 409);		
-	}
+	const res3 = await axios.post(	
+		`${API}/playlist/${urlVars.playlistid}/subscribe`, null, axiosBearer(userToken)
+	);
+	t.true(res3.status === 200);
 });
 
 // @TODO This test will not pass until 'deleted_at' is not returned from Model::find()
-test.skip('Unsubscribe from playlist', async (t) =>{
+test.serial('Unsubscribe from playlist', async (t) => {
 	t.plan(2);
 	const res1 = await axios.delete(	// Unsubscribe to playlist
 		`${API}/playlist/${urlVars.playlistid}/subscribe`, axiosBearer(userToken)

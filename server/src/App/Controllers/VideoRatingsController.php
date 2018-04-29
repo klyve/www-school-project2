@@ -27,17 +27,26 @@ class VideoRatingsController extends Controller {
         $videoid = $req->param('videoid');
         $rating = $req->input('rating');
 
+        $existingVideo = $videos->find([
+            'id' => $videoid 
+        ]);
+
+        if(!$existingVideo->id) {
+            return new Error(ErrorCode::get('not_found'));
+        }
+
+        // Find existing rating if it exists
         $existingRating = $ratings->find([
             'userid' => $userid,
             'videoid' => $videoid
         ]);
 
         // If rating already exist, update rating
-        if($existingRating->id) {
+        if ($existingRating->id) {
             $existingRating->rating = $rating;
             $existingRating->deleted_at = null;
             $existingRating->save();
-            return Response::statusCode(HTTP_OK, "Rating updated");            
+            return Response::statusCode(HTTP_OK, "Rating created");            
         }
 
         $ratings->userid = $userid;

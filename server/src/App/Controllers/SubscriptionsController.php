@@ -16,6 +16,7 @@ class SubscriptionsController extends Controller {
 		UsersModel $user, PlaylistsModel $playlist,
 		SubscriptionsModel $subscriptions, Request $req){
 
+
 		$currentPlaylist = $playlist->find([
 			'id' => $req->param('playlistid'),
 		]);
@@ -23,6 +24,7 @@ class SubscriptionsController extends Controller {
 		if(!$currentPlaylist->id) {	// Could not find playlist
 			return new Error(ErrorCode::get('playlist.not_found'));
 		}
+
 
 		$token = $req->token();
 	    $currentUser = $user->find([
@@ -34,19 +36,26 @@ class SubscriptionsController extends Controller {
 			'playlistid' => $currentPlaylist->id,
 		]);
 
-		if($existingSubscription->id){	// Already subscribed, causing a conflict.
-			return new Error(ErrorCode::get('subscriptions.already_subscribed'));
 
-		}else{						// Not subscribed, subscribing.
-			print_r($existingSubscription);
-			$subscriptions->userid = $currentUser->id;
-			$subscriptions->playlistid = $currentPlaylist->id;
-
-			$subscriptions->save();
-			return response::statusCode(201, "Subscribed to playlist");
+		if ($existingSubscription->id
+		&& !$existingSubscription->deleted_at) {	
+			return response::statusCode(200, "Already Subscribed");
 		}
+			
+		if ($existingSubscription->id
+		&& $existingSubscription->deleted_at) {	
 
-		return response::statusCode(500, "Unexpected execution path");
+			$existingSubscription->deleted_at = null;
+			$existingSubscription->save();
+			return response::statusCode(201, "Resubscribed to playlist");
+		}
+			
+		print_r($existingSubscription);
+		$subscriptions->userid = $currentUser->id;
+		$subscriptions->playlistid = $currentPlaylist->id;
+
+		$subscriptions->save();
+		return response::statusCode(201, "Subscribed to playlist");
 	}
 
 	public function deleteSubscriptions(

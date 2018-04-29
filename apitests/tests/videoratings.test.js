@@ -219,7 +219,7 @@ test.serial('Check if like is Deleted', async (t) => {
                            .ratings
                            .filter(o => o.user.name == credentials.name)
 
-    t.falsy(deletedRating.rating)
+    t.truthy(deletedRating[0].deleted_at)
 })
 
 test.serial('Check if no like is registered by default', async (t) => {
