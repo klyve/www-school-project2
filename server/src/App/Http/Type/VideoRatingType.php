@@ -4,9 +4,8 @@ use \GraphQL\Type\Definition\ObjectType;
 use \GraphQL\Type\Definition\ResolveInfo;
 use \GraphQL\Type\Definition\Type;
 use \App\Http\Types;
-use \App\Models\UsersModel;
-use \App\Models\VideosModel;
 use \App\Models\RatingsModel;
+use \App\Models\UsersModel;
 
 
 class VideoRatingType extends ObjectType {
@@ -20,6 +19,9 @@ class VideoRatingType extends ObjectType {
                     'videoid' => Types::id(),
                     'userid' => Types::id(),
                     'rating' => Types::int(),
+                    'user' => [
+                        'type' => Types::user(),
+                    ],
                 ];
             },
 
@@ -34,5 +36,10 @@ class VideoRatingType extends ObjectType {
             }
         ];
         parent::__construct($config);
+    }
+
+    public function resolveUser($videorating, $args) {
+        $user = new UsersModel();
+        return $user->find(['id' => $videorating->userid]);
     }
 }

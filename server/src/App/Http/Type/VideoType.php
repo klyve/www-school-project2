@@ -95,12 +95,12 @@ class VideoType extends ObjectType
     }
 
     public function resolveRatings($video, $args) {
-        $rataings = new RatingsModel();
+        $ratings = new RatingsModel();
         return $ratings->all(['videoid' => $video->id]);
     }
 
     public function resolveRating($video, $args) {
-        $rataings = new RatingsModel();
+        $ratings = new RatingsModel();
         return $ratings->find(['videoid' => $video->id, 'userid' => $video->userid]);
     }
 
