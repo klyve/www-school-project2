@@ -53,7 +53,7 @@ class RouteObject {
         preg_match_all($pattern, $string, $matches);
         if(count($matches) > 0) {
             foreach($matches[0] as $key => $value) {
-                $string = preg_replace('/'.$value.'/', '(?<'.$matches[1][$key].'>.+)', $string);
+                $string = preg_replace('/'.$value.'/', '(?<'.$matches[1][$key].'>[a-zA-Z0-9]+)', $string);
             }
             $string = preg_replace('/\//', '\/', $string);
         }

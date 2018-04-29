@@ -195,7 +195,6 @@ test.serial('Delete like',  async (t) => {
 
     t.is(res.status, HTTP_ACCEPTED, `Expected status code ${HTTP_ACCEPTED} got ${res.statusCode}`)
     t.truthy(res.data)
-    console.log(res.data)
 })
 
 test.serial('Check if like is Deleted', async (t) => {

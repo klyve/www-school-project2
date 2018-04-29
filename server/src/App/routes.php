@@ -12,18 +12,52 @@ Route::get('/', function() {
     return ['hey'];
 });
 
-Route::delete('/playlist/{playlistid}/video/{id}', 
-                'PlaylistVideosController.deletePlaylistVideo')
+
+// 
+//  USER ROUTES @TODO document this
+// 
+
+// UsersController
+Route::get('/user', "UsersController.getUser");
+
+Route::put('/user', 'UsersController.putUser')
     ->withMiddlewares(['IsAuthenticated']);
 
-// PlaylistVideosController
-Route::post('/playlist/{playlistid}/video', 'PlaylistVideosController.postPlaylistVideo')
+Route::delete('/user', 'UsersController.deleteUser')
     ->withMiddlewares(['IsAuthenticated']);
 
-Route::post('playlist/{playlistid}/reorder', 'PlaylistVideosController.reorderPlaylist')
+// AuthController
+Route::post('/user/login', 'AuthController.postLogin')
+    ->withValidators(['UserValidations.login']);
+
+Route::post('/user/register', 'AuthController.postRegister')
+    ->withValidators(['UserValidations.register']);
+
+Route::put('/user/password', 'AuthController.putPassword')
+    ->withMiddlewares(['IsAuthenticated'])
+    ->withValidators(['UserValidations.changePassword']);
+
+Route::post('user/refresh', 'AuthController.refreshToken')
     ->withMiddlewares(['IsAuthenticated']);
 
-    
+
+
+
+//
+// VIDEO ROUTES
+//
+// VideosController
+Route::post('/video', 'VideosController.postVideo')
+    ->withMiddlewares(['IsAuthenticated']);
+
+Route::put('/video/{videoid}', 'VideosController.putVideo')
+    ->withMiddlewares(['IsAuthenticated']);
+
+        
+Route::delete('/video/{videoid}', 'VideosController.deleteVideo')
+    ->withMiddlewares(['IsAuthenticated']);
+
+
 // Video rate controller
 Route::put('/video/{videoid}/rate', 'VideoRatingsController.putRating')
     ->withMiddlewares(['IsAuthenticated']);
@@ -42,8 +76,8 @@ Route::put('/video/{videoid}/comment/{commentid}', 'CommentsController.putCommen
 Route::delete('/video/{videoid}/comment/{commentid}', 'CommentsController.deleteComment')
     ->withMiddlewares(['IsAuthenticated']);
 
-// ->withMiddlewares(['IsAuthenticated'])
-//->withValidators(['UserValidations.login']);
+
+// VideoTags Controller
 Route::post('/video/{videoid}/tag', 'VideoTagsController.postTag')
     ->withMiddlewares(['IsAuthenticated']);
 
@@ -51,47 +85,9 @@ Route::delete('/video/{videoid}/tag/{tagname}', 'VideoTagsController.deleteTag')
     ->withMiddlewares(['IsAuthenticated']);
 
 
-// SubscriptionController
-Route::post('/playlist/{playlistid}/subscribe', 'SubscriptionsController.postSubscriptions')
-    ->withMiddlewares(['IsAuthenticated']);
-
-Route::delete('/playlist/{playlistid}/subscribe', 'SubscriptionsController.deleteSubscriptions')
-    ->withMiddlewares(['IsAuthenticated']);
-
-
-Route::post('/user/login', 'AuthController.postLogin')
-    ->withValidators(['UserValidations.login']);
-
-Route::post('/user/register', 'AuthController.postRegister')
-    ->withValidators(['UserValidations.register']);
-
-Route::put('/user/password', 'AuthController.putPassword')
-    ->withMiddlewares(['IsAuthenticated'])
-    ->withValidators(['UserValidations.changePassword']);
-
-
-Route::post('user/refresh', 'AuthController.refreshToken')
-    ->withMiddlewares(['IsAuthenticated']);
-
-
-// VideosController
-Route::post('/video', 'VideosController.postVideo')
-    ->withMiddlewares(['IsAuthenticated']);
-
-Route::put('/video/{videoid}', 'VideosController.putVideo')
-    ->withMiddlewares(['IsAuthenticated']);
-
-        
-Route::delete('/video/{videoid}', 'VideosController.deleteVideo')
-    ->withMiddlewares(['IsAuthenticated']);
-
-
-
-// FilesController
-Route::post('/tempfile', 'FilesController.postTempfile')
-    ->withMiddlewares(['IsAuthenticated']);
-
-
+//
+// PLAYLIST ROUTES
+//
 
 // PlaylistsController
 Route::post('/playlist', 'PlaylistsController.postPlaylist')
@@ -103,21 +99,25 @@ Route::put('/playlist/{playlistid}', 'PlaylistsController.putPlaylist')
 Route::delete('/playlist/{playlistid}', 'PlaylistsController.deletePlaylist')
     ->withMiddlewares(['IsAuthenticated']);
 
-
-
-
-
-// UsersController
-Route::get('/user', "UsersController.getUser");
-
-Route::put('/user', 'UsersController.putUser')
+// PlaylistVideosController
+Route::post('/playlist/{playlistid}/video', 'PlaylistVideosController.postPlaylistVideo')
     ->withMiddlewares(['IsAuthenticated']);
 
-Route::delete('/user', 'UsersController.deleteUser')
+Route::post('playlist/{playlistid}/reorder', 'PlaylistVideosController.reorderPlaylist')
+    ->withMiddlewares(['IsAuthenticated']);
+
+Route::delete('/playlist/{playlistid}/video/{id}', 'PlaylistVideosController.deletePlaylistVideo')
     ->withMiddlewares(['IsAuthenticated']);
 
 
-// Tags controller
+// SubscriptionController
+Route::post('/playlist/{playlistid}/subscribe', 'SubscriptionsController.postSubscriptions')
+    ->withMiddlewares(['IsAuthenticated']);
+
+Route::delete('/playlist/{playlistid}/subscribe', 'SubscriptionsController.deleteSubscriptions')
+    ->withMiddlewares(['IsAuthenticated']);
+
+
 // PlaylisTagController
 Route::post('/playlist/{playlistid}/tag', 'PlaylistTagController.postTag')
     ->withMiddlewares(['IsAuthenticated']);
@@ -125,12 +125,14 @@ Route::post('/playlist/{playlistid}/tag', 'PlaylistTagController.postTag')
 Route::delete('/playlist/{playlistid}/tag/{tagname}', 'PlaylistTagController.deleteTag')
     ->withMiddlewares(['IsAuthenticated']);
 
-// VideoTagController
-Route::post('/video/{videoid}/tag', 'VideoTagsController.postTag')
+
+//
+// OTHER ROUTES
+//
+// FilesController
+Route::post('/tempfile', 'FilesController.postTempfile')
     ->withMiddlewares(['IsAuthenticated']);
 
-Route::delete('/video/{videoid}/tag/{tagname}', 'VideoTagsController.deleteTag')
-    ->withMiddlewares(['IsAuthenticated']);
 
 
 // Route::get('adsfgnjwd', 'gnrgwklgweg')

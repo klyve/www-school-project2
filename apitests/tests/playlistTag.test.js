@@ -73,13 +73,12 @@ test.serial('Add tag to playlist', async (t) =>{
 	}
 });
 
-test.after('Delete tag from playlist', async (t) =>{
+test.serial('Delete tag from playlist', async (t) =>{
 	t.plan(3);
 	const res1 = await axios.delete(	// Delete a tag from a playlist containing tag.
 		`${API}/playlist/${urlVars.playlistid[0]}/tag/${tag.name}`, axiosBearer(userToken)
 	);
 
-	console.log(res1.data)
 	t.true(res1.status === 202)			// Expect accepted, marked as deleted.
 
 	try{							// Sends a tag to a playlist that does not belong to user.
