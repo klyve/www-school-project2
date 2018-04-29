@@ -1,6 +1,6 @@
 import test from 'ava';
 const { API } = require('../configs');
-const { testDataIntegrity, axiosBearer, axiosFile } = require('../methods');
+const { testDataIntegrity, axiosBearer, axiosFile, isEqualsShallow } = require('../methods');
 const axios = require('axios');
 const fs = require("fs");
 
@@ -20,20 +20,6 @@ const credentials = {
     password: 'password1',
 };
 
-let newVideodata = {
-    title: '10 Javascript Frameworks you HAVE TO LEARN in 2018',
-    description: 'Your life will be an absolute missery if you dont learn these super important frameworks!',
-    fileThumbnail: null, // provided by return from tempfile upload
-    fileVideo: null,     // provided by return from tempfile upload
-}
-
-let updateVideodata = {
-    title: '10 Javascript Frameworks in 2018',
-    description: 'Your life will be in RUINS if you dont learn these super important frameworks!'
-}
-
-
-let videoid = null
 let userToken  = null
 
 test.before(async (t) => {
@@ -49,6 +35,13 @@ test.before(async (t) => {
     t.pass();
 });
 
+
+let newVideodata = {
+    title: '10 Javascript Frameworks you HAVE TO LEARN in 2018',
+    description: 'Your life will be an absolute missery if you dont learn these super important frameworks!',
+    fileThumbnail: null, // provided by return from tempfile upload
+    fileVideo: null,     // provided by return from tempfile upload
+}
 
 test.serial('Upload thumbnail file', async t => {
 
@@ -114,24 +107,38 @@ test.serial('Upload video file', async t => {
     }
 });
 
+let videoid = null
+
 test.serial('Post video', async t => {
     t.plan(2);
     
+    const res = await axios.post(`${API}/video`, newVideodata, axiosBearer(userToken))
+                           .catch(err => { console.log(err.responsee); t.fail("Caught error") })
 
-    try {
-        const res = await axios.post(`${API}/video`, newVideodata, axiosBearer(userToken))
-        t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`)
-        
-        videoid = res.data.videoid;
-
-        t.truthy(res.data.videoid);
-
-    } catch (err) {
-        t.fail()
-    }
-
+    t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`)
+    
+    videoid = res.data.videoid;
+    t.truthy(res.data.videoid);
 });
 
+test.serial('Check if video was created', async t => {
+
+    let query = `{
+        video(id: ${videoid}) {
+            title,
+            description
+        }
+    }
+    `
+    const res = await axios.get(`${API}/graphql?query=${query}`, axiosBearer(userToken))
+    t.truthy(res.data.data)
+    t.true(isEqualsShallow(res.data.data.video, {title: newVideodata.title, description: newVideodata.description}), "updated object does not match intended")
+})
+
+let updateVideodata = {
+    title: '10 Javascript Frameworks in 2018',
+    description: 'Your life will be in RUINS if you dont learn these super important frameworks!'
+}
 
 
 test.serial('Put video', async t => {
@@ -143,9 +150,23 @@ test.serial('Put video', async t => {
         description: updateVideodata.description
     }, axiosBearer(userToken))
 
-
     t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.statusCode}`)
 });
+
+test.serial('Check if video was updated', async t => {
+
+    let query = `{
+        video(id: ${videoid}) {
+            title,
+            description
+        }
+    }
+    `
+    const res = await axios.get(`${API}/graphql?query=${query}`, axiosBearer(userToken))
+    t.truthy(res.data.data)
+    t.true(isEqualsShallow(res.data.data.video, updateVideodata), "updated object does not match intended")
+})
+
 
 
 test.serial('Delete video', async t => {
