@@ -95,7 +95,7 @@ test.serial('Remove video from playlist', async (t) => {
 // @TODO have a way to delete entries in link tables. This would be OK as we absolutely dont want to store links
 //        for future references... as they are not data at all - JSolsvik 27.04.2018
 test.serial('Check if video was removed from playlist', async (t) => {
-    t.plan(2)
+    t.plan(3)
     let query = `{
       playlist(id:${playlistvideo.playlistid}) {
         nodes {
@@ -107,6 +107,7 @@ test.serial('Check if video was removed from playlist', async (t) => {
 
     const res   = await axios.post(`${API}/graphql?query=${query}`, axiosBearer(userToken));
 
+    t.truthy(res.data.data, "Playlist undefined")
 
     let filtered = res.data
                       .data
@@ -157,9 +158,10 @@ test.serial('Check if playlist order changed correctly', async (t) => {
     
     const res = await axios.post(`${API}/graphql?query=${query}`, axiosBearer(userToken))
 
-    t.truthy(res.data.data.playlist.nodes, "Graphql query did not return results")
+    t.truthy(res.data.data, "Graphql query did not return results")
 
     reorderData.reordering.map(wanted => {
+
 
         let actual = res.data
                         .data
@@ -204,7 +206,7 @@ test.serial('Check if playlist order changed back again correctly', async (t) =>
                           .find(node => node.id == wanted.id)
   
           t.truthy(actual, "Result actual node should be defined")
-          t.true(wanted.position == actual.position, "Wanted position differs from actual position")
+          t.deepEqual(wanted, actual, "Wanted position differs from actual position")
       })  
 })
 

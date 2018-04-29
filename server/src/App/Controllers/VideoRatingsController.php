@@ -32,8 +32,10 @@ class VideoRatingsController extends Controller {
             'videoid' => $videoid
         ]);
 
+        // If rating already exist, update rating
         if($existingRating->id) {
             $existingRating->rating = $rating;
+            $existingRating->deleted_at = null;
             $existingRating->save();
             return Response::statusCode(HTTP_OK, "Rating updated");            
         }

@@ -19,6 +19,7 @@ class VideoRatingType extends ObjectType {
                     'videoid' => Types::id(),
                     'userid' => Types::id(),
                     'rating' => Types::int(),
+                    'deleted_at' => Types::string(),
                     'user' => [
                         'type' => Types::user(),
                     ],
