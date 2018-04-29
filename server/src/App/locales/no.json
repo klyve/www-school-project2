@@ -22,8 +22,13 @@
         "tag_conflict": "Videoen inneholder allerede taggen",
         "not_found": "Kunne ikke finne ressurs"
     },
+<<<<<<< HEAD
     "subscriptions":{
       "already_subscribed" : "You are already subscribed to this playlist"
+=======
+    "comments": {
+        "not_authorized": "Du mangler rettigheter for denne kommentaren"
+>>>>>>> 8726225928ab31081a97ec7b1ee8b7c83911b72a
     }
 
   },

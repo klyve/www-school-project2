@@ -24,8 +24,10 @@
         "not_found": "Could not find resource"
       },
       "subscriptions":{
-        "already_subscribed" : "You are already subscribed to this playlist"
+        "already_subscribed" : "You are already subscribed to this playlist",
 
+      "comments": {
+        "not_authorized": "You do not have rights for given comment"
       }
 
     },

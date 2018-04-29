@@ -32,6 +32,16 @@ Route::delete('/video/{videoid}/rate', 'VideoRatingsController.deleteRating')
     ->withMiddlewares(['IsAuthenticated']);
 
 
+// CommentsController
+Route::post('/video/{videoid}/comment', 'CommentsController.postComment')
+    ->withMiddlewares(['IsAuthenticated']);
+
+Route::put('/video/{videoid}/comment/{commentid}', 'CommentsController.putComment')
+    ->withMiddlewares(['IsAuthenticated']);
+
+Route::delete('/video/{videoid}/comment/{commentid}', 'CommentsController.deleteComment')
+    ->withMiddlewares(['IsAuthenticated']);
+
 // ->withMiddlewares(['IsAuthenticated'])
 //->withValidators(['UserValidations.login']);
 Route::post('/video/{videoid}/tag', 'VideoTagsController.postTag')
