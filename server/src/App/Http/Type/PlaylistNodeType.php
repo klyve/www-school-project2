@@ -23,6 +23,7 @@ class PlaylistNodeType extends ObjectType {
                     'videoid' => Types::id(),
                     'position' => Types::int(),
                     'video' => Types::video(),
+                    'deleted_at' => Types::string()
                 ];
             },
             'resolveField' => function($value, $args, $context, ResolveInfo $info) {

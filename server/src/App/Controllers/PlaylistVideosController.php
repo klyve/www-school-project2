@@ -36,7 +36,6 @@ class PlaylistVideosController extends Controller {
 
         // @TODO - HAndle this logic with middleware
         if( ($playlistid != $req->param('playlistid')) ) {
-            var_dump($playlistid, $req->param('playlistid'));
             return new Error(ErrorCode::get('id_mismatch'));
         }
 
@@ -55,10 +54,22 @@ class PlaylistVideosController extends Controller {
             return new Error(ErrorCode::get('not_found'));
         }
 
+        // Find max position of active videos in playlist
+        $allvideos = $playlistVideos->all([
+            'playlistid' =>  $playlistid]);
+        
+        $max = 0;
+        foreach($allvideos as $vid) {
+            if(is_null($vid->deleted_at)) {
+                $max = max(array($max, $vid->position));
+            }
+        }
+        $max += 1;
 
         $playlistVideos->playlistid = $playlistid;
         $playlistVideos->videoid    = $videoid;
-        $playlistVideos->position   = $req->input('position');
+        
+        $playlistVideos->position = $max;
         $lastInsertId = $playlistVideos->save();
 
         if (!$lastInsertId) {
@@ -104,4 +115,39 @@ class PlaylistVideosController extends Controller {
         $res = ['message' => Language::get('success.deleted')];
         return Response::statusCode(HTTP_ACCEPTED, $res);
     }
+
+
+    public function reorderPlaylist(Request $req,
+                                    PlaylistsModel $playlists,
+                                    PlaylistVideosModel $playlistVideos) 
+    {
+        $userid     = $req->token()->userid;
+        $playlistid = $req->param('playlistid');
+        $reordering = $req->input('reordering');
+
+        // @NOTE - checking if user owns the playlist
+        $userplaylist = $playlists->find([
+            'id'     => $playlistid,
+            'userid' => $userid
+        ]);
+
+        if(!$userplaylist->id) {
+            return new Error(ErrorCode::get('not_found'));
+        }
+
+        // @TODO make this for-loop into a transaction, which can be rolled back if something ffails - JSolsvik 29.04.18
+        // @assumption that all positions have been validated
+        foreach($reordering as $r) {
+            $playlistVideo = $playlistVideos->find(['id' => $r['id']]);
+            if (!$playlistVideo->id) {
+                return new Error(ErrorCode::get('not_found'));
+            }
+
+            $playlistVideo->position = $r['position'];
+            $playlistVideo->save();
+        }
+
+        return Response::statusCode(200, "Playlist was reordered");
+    }
+
 }

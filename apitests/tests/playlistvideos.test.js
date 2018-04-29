@@ -49,7 +49,6 @@ test.serial('Add video to playlist', async (t) => {
 
     const res = await axios.post(`${API}/playlist/${playlistvideo.playlistid}/video`, playlistvideo, axiosBearer(userToken))
 
-
     t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`)
 
     playlistvideo.id = res.data.id
@@ -96,47 +95,119 @@ test.serial('Remove video from playlist', async (t) => {
 
 // @TODO have a way to delete entries in link tables. This would be OK as we absolutely dont want to store links
 //        for future references... as they are not data at all - JSolsvik 27.04.2018
-test.skip('Check if video was removed from playlist', async (t) => {
-  /*
+test.serial('Check if video was removed from playlist', async (t) => {
     t.plan(2)
+    let query = `{
+      playlist(id:${playlistvideo.playlistid}) {
+        nodes {
+          id
+          deleted_at
+        }
+      }
+    }`
 
-    const query =  `{ playlist(id: ${playlistvideo.playlistid}) {  videos{  id, deleted_at  }   }}`;
     const res   = await axios.post(`${API}/graphql?query=${query}`, axiosBearer(userToken));
 
-    console.log(res.data)
 
     let filtered = res.data
                       .data
                       .playlist
-                      .videos
-                      .filter(obj => obj.id == playlistvideo.videoid)
+                      .nodes
+                      .filter(obj => obj.id == playlistvideo.id && !obj.deleted_at)
 
     t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.status}`)
-    console.log(filtered.length)
-    t.true( filtered.length === 0, `Found playlistvideos, should have been deleted 
+    t.true( filtered.length === 0, `Playlistvideo not marked for deletion 
                                   playlistid: ${playlistvideo.playlistid}
-                                  videoid:    ${playlistvideo.videoid}`)
-*/
+                                  videoid:    ${playlistvideo.videoid}
+                                  id:         ${playlistvideo.id}`)
+})
+
+let reorderDataBefore = {
+    playlistid: playlistvideo.playlistid,
+    reordering : [
+       {id: 5, position: 1},
+       {id: 6, position: 2}
+    ]
+}
+
+let reorderData = {
+    playlistid: playlistvideo.playlistid,
+    reordering : [
+       {id: 5, position: 2},
+       {id: 6, position: 1}
+    ]
+}
+
+
+test.serial('Change playlist order', async (t) => {
+    
+    const query = `${API}/playlist/${reorderData.playlistid}/reorder`
+    const res   = await axios.post(query, reorderData, axiosBearer(userToken));
+    t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.status}`)
+});
+
+test.serial('Check if playlist order changed correctly', async (t) => {
+    const query = `{
+      playlist(id:${playlistvideo.playlistid}) {
+        nodes {
+          id
+          position
+        }
+      }
+    }`
+    
+    const res = await axios.post(`${API}/graphql?query=${query}`, axiosBearer(userToken))
+
+    t.truthy(res.data.data.playlist.nodes, "Graphql query did not return results")
+
+    reorderData.reordering.map(wanted => {
+
+        let actual = res.data
+                        .data
+                        .playlist
+                        .nodes
+                        .find(node => node.id == wanted.id)
+
+        t.truthy(actual, "Result actual node should be defined")
+        t.true(wanted.position == actual.position, "Wanted position differs from actual position")
+    })
 })
 
 
-test.todo('Change playlist order')/*, async (t) => {
-    
-})*/
+
+test.serial('Change playlist order back', async (t) => {
+    const query = `${API}/playlist/${reorderDataBefore.playlistid}/reorder`
+    const res   = await axios.post(query, reorderDataBefore, axiosBearer(userToken));
+    t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.status}`)
+});
 
 
-test.todo('Check if playlist order changed correctly') /*async (t) => {
-    
-})*/
-
-test.todo('Change playlist order back')/* async (t) => {
-    
-})*/
-
-
-test.todo('Check if playlist order changed back again correctly') /*async (t) => {
-    
-})*/
+test.serial('Check if playlist order changed back again correctly', async (t) => {
+    const query = `{
+        playlist(id:${playlistvideo.playlistid}) {
+          nodes {
+            id
+            position
+          }
+        }
+      }`
+      
+      const res = await axios.post(`${API}/graphql?query=${query}`, axiosBearer(userToken))
+  
+      t.truthy(res.data.data.playlist.nodes, "Graphql query did not return results")
+  
+      reorderDataBefore.reordering.map(wanted => {
+  
+          let actual = res.data
+                          .data
+                          .playlist
+                          .nodes
+                          .find(node => node.id == wanted.id)
+  
+          t.truthy(actual, "Result actual node should be defined")
+          t.true(wanted.position == actual.position, "Wanted position differs from actual position")
+      })  
+})
 
 
 

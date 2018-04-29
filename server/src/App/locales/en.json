@@ -22,6 +22,10 @@
         "not_authorized": "You do not have rights for given video",
         "tag_conflict": "The video already contains the tag",
         "not_found": "Could not find resource"
+      },
+      "subscriptions":{
+        "already_subscribed" : "You are already subscribed to this playlist"
+
       }
 
     },

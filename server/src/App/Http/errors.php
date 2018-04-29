@@ -20,7 +20,6 @@ $errors = [
             "code" => 401,
         ],
     ],
-
     'playlist' => [
         'not_authorized' => [
             "error" => 1,
@@ -61,7 +60,13 @@ $errors = [
         'message' => Language::get('errors.id_mismatch'),
         'code' => 400
     ],
-    
+    'subscriptions' => [
+        'already_subscribed' => [
+            "error" => 1,
+            "message" => Language::get('errors.subscriptions.already_subscribed'),
+            "code" => 409,
+        ]
+    ],
     'videos' => [
         'not_authorized' => [
             "error" => 1,
