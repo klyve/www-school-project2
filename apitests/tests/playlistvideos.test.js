@@ -147,7 +147,7 @@ test.serial('Change playlist order', async (t) => {
 });
 
 // @BUG 'Cannot query field "position" on type "VideoRatingType"
-test.skip('Check if playlist order changed correctly', async (t) => {
+test.serial('Check if playlist order changed correctly', async (t) => {
     const query = `{
       playlist(id:${playlistvideo.playlistid}) {
         nodes {
@@ -185,7 +185,7 @@ test.serial('Change playlist order back', async (t) => {
 
 
 // @BUG 'Cannot query field "position" on type "VideoRatingType"
-test.skip('Check if playlist order changed back again correctly', async (t) => {
+test.serial('Check if playlist order changed back again correctly', async (t) => {
     const query = `{
         playlist(id:${playlistvideo.playlistid}) {
           nodes {
@@ -207,7 +207,8 @@ test.skip('Check if playlist order changed back again correctly', async (t) => {
                           .find(node => node.id == wanted.id)
   
           t.truthy(actual, "Result actual node should be defined")
-          t.deepEqual(wanted, actual, "Wanted position differs from actual position")
+          t.true(wanted.id == actual.id, "Wanted id differs from actual id")
+          t.true(wanted.position == actual.position, "Wanted position differs from actual position")
       })  
 })
 

@@ -25,7 +25,7 @@ use \App\Http\Type\VideoRatingType;
  */
 class Types
 {
-    // Object types:
+    // Object types CACHE:
     private static $query;
     private static $user;
     private static $video;
@@ -34,7 +34,8 @@ class Types
     private static $search;
     private static $node;
     private static $tags;
-    
+    private static $rating;
+
     /**
      * @return QueryType
      */
@@ -104,7 +105,7 @@ class Types
      */
     public static function videoRating()
     {
-        return self::$node ?: (self::$node = new VideoRatingType());
+        return self::$rating ?: (self::$rating = new VideoRatingType());
     }
 
 
