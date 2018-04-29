@@ -25,7 +25,7 @@ Route::post('playlist/{playlistid}/reorder', 'PlaylistVideosController.reorderPl
 
     
 // Video rate controller
-Route::post('/video/{videoid}/rate', 'VideoRateController.rateVideo')
+Route::put('/video/{videoid}/rate', 'VideoRateController.rateVideo')
     ->withMiddlewares(['IsAuthenticated']);
 
 Route::delete('/video/{videoid}/rate', 'VideoRateController.unrateVideo')

@@ -43,7 +43,7 @@ test.todo('Check like count')
 
 test.serial('Like video', async (t) => {
 
-    const res = await axios.post(`${API}/video/${likeDislikeVideoId}/rate`, axiosBearer(userToken))
+    const res = await axios.put(`${API}/video/${likeDislikeVideoId}/rate`, axiosBearer(userToken))
 })
 
 test.serial('Check if video is liked', async (t) => {
@@ -55,7 +55,7 @@ test.todo('Check if like count increased')
 
 
 test.serial('Dislike video', async (t) => {
-    const res = await axios.post(`${API}/video/${likeDislikeVideoId}/rate`, axiosBearer(userToken))
+    const res = await axios.put(`${API}/video/${likeDislikeVideoId}/rate`, axiosBearer(userToken))
 })
 
 test.serial('Check if video is disliked', async (t) => {

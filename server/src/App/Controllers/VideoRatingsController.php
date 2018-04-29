@@ -19,17 +19,57 @@ const HTTP_ACCEPTED      = 202;  // Marked for  deletion, not deleted yet
 
 class VideoRatingsController extends Controller {
 
-    public function postRating(Request $req, 
+    public function putRating(Request $req, 
                                VideosModel $videos,
                                RatingsModel $ratings) {
-                                   
-        return Response::statusCode(HTTP_OK, "Not implemented");
+        
+        $userid = $req->token()->userid;
+        $videoid = $req->param('videoid');
+        $rating = $req->input('rating');
+
+        $existingRating = $ratings->find([
+            'userid' => $userid,
+            'videoid' => $videoid
+        ]);
+
+        if($existingRating->id) {
+            $existingRating->rating = $rating;
+            $existingRating->save();
+            return Response::statusCode(HTTP_OK, "Rating updated");            
+        }
+
+        $ratings->userid = $userid;
+        $ratings->videoid = $videoid;
+        $ratings->rating = $req->input('rating');
+        
+        $lastinsertid = $results->save();
+
+        if (!$lastinsertid) {
+            return new Error(ErrorCode::get('sql_insert_error'));
+        }
+
+        return Response::statusCode(HTTP_OK, "Rating created");
     }
 
     public function deleteRating(Request $req, 
                                  VideosModel $videos,
                                  RatingsModel $ratings) {
 
-        return Response::statusCode(HTTP_OK, "Not implemented");        
+        $userid = $req->token()->userid;
+        $videoid = $req->param('videoid');
+
+        $existingRating = $ratings->find([
+            'userid' => $userid,
+            'videoid' => $videoid
+        ]);
+
+        if (!$existingRating->id) {
+            return new Error(ErrorCode::get('not_found'));
+        }
+
+        $existingRating->deleted_at = date("Y-m-d H:i:s");
+        $existingRating->save();
+
+        return Response::statusCode(HTTP_ACCEPTED, "Rating deleted");        
     }
 }
