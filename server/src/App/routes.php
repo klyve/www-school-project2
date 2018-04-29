@@ -12,6 +12,16 @@ Route::get('/', function() {
     return ['hey'];
 });
 
+// CommentsController
+Route::post('/video/{videoid}/comment', 'CommentsController.postComment')
+    ->withMiddlewares(['IsAuthenticated']);
+
+Route::put('/video/{videoid}/comment/{commentid}', 'CommentsController.putComment')
+    ->withMiddlewares(['IsAuthenticated']);
+
+Route::delete('/video/{videoid}/comment/{commentid}', 'CommentsController.deleteComment')
+    ->withMiddlewares(['IsAuthenticated']);
+
 // ->withMiddlewares(['IsAuthenticated'])
 //->withValidators(['UserValidations.login']);
 Route::post('/video/{videoid}/tag', 'VideoTagsController.postTag')
@@ -76,6 +86,7 @@ Route::post('/video/{videoid}/tag', 'VideoTagsController.postTag')
 
 Route::delete('/video/{videoid}/tag/{tagname}', 'VideoTagsController.deleteTag')
     ->withMiddlewares(['IsAuthenticated']);
+
 
 // Route::get('adsfgnjwd', 'gnrgwklgweg')
 //     ->withMiddlewares(['IsAuthenticated'])

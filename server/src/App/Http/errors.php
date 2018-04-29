@@ -55,5 +55,13 @@ $errors = [
             "message" => Language::get('errors.videos.not_found'),
             "code" => 404, 
         ]
+    ],
+
+    'comments' => [
+        'not_authorized' => [
+            "error" => 1,
+            "message" => Language::get('errors.comments.not_authorized'),
+            "code" => 401,
+        ]
     ]
 ];

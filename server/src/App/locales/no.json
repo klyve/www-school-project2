@@ -12,6 +12,9 @@
         "not_authorized": "Du mangler rettigheter for denne videoen",
         "tag_conflict": "Videoen inneholder allerede taggen",
         "not_found": "Kunne ikke finne ressurs"
+    },
+    "comments": {
+        "not_authorized": "Du mangler rettigheter for denne kommentaren"
     }
   }
 }

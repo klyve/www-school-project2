@@ -12,6 +12,9 @@
         "not_authorized": "You do not have rights for given video",
         "tag_conflict": "The video already contains the tag",
         "not_found": "Could not find resource"
+      },
+      "comments": {
+        "not_authorized": "You do not have rights for given comment"
       }
     }
 }
