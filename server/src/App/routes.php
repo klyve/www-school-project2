@@ -20,8 +20,15 @@ Route::delete('/playlist/{playlistid}/video/{id}',
 Route::post('/playlist/{playlistid}/video', 'PlaylistVideosController.postPlaylistVideo')
     ->withMiddlewares(['IsAuthenticated']);
 
-
 Route::post('playlist/{playlistid}/reorder', 'PlaylistVideosController.reorderPlaylist')
+    ->withMiddlewares(['IsAuthenticated']);
+
+    
+// Video rate controller
+Route::post('/video/{videoid}/rate', 'VideoRateController.rateVideo')
+    ->withMiddlewares(['IsAuthenticated']);
+
+Route::delete('/video/{videoid}/rate', 'VideoRateController.unrateVideo')
     ->withMiddlewares(['IsAuthenticated']);
 
 

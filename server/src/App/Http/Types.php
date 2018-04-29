@@ -11,6 +11,7 @@ use \App\Http\Type\PlaylistType;
 use \App\Http\Type\SearchType;
 use \App\Http\Type\TagsType;
 use \App\Http\Type\PlaylistNodeType;
+use \App\Http\Type\VideoRatingType;
 
 /**
  * Class Types
@@ -98,6 +99,13 @@ class Types
         return self::$node ?: (self::$node = new PlaylistNodeType());
     }
 
+    /**
+     * @return VideoRatingType
+     */
+    public static function videoRating()
+    {
+        return self::$node ?: (self::$node = new VideoRatingType());
+    }
 
 
 

@@ -2,7 +2,6 @@ import test from 'ava'
 const { API } = require('../configs')
 const { testDataIntegrity, axiosBearer, isEqualsShallow } = require('../methods')
 const axios = require('axios')
-const fs = require("fs")
 
 
 // HTTP STATUS CODES
@@ -32,7 +31,7 @@ let userToken = null
 
 
 // Log in user
-test.beforeEach(async (t) => {
+test.before(async (t) => {
     t.plan(10)
 
     const res = await axios.post(`${API}/user/login`, credentials)
