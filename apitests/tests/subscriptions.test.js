@@ -41,7 +41,7 @@ test.serial('Subscribe to playlist', async (t) =>{
 	const res1 = await axios.post(	// Subscribe to a playlist the user has not subscribed to.
 		`${API}/playlist/${urlVars.playlistid}/subscribe`, null, axiosBearer(userToken)
 	);
-	t.true(res1.status === 201);	// Expect beeing subscribed to playlist.
+	t.true(res1.status === 201 || res1.status === 200);	// Expect beeing subscribed to playlist.
 
 	const res3 = await axios.post(	
 		`${API}/playlist/${urlVars.playlistid}/subscribe`, null, axiosBearer(userToken)
