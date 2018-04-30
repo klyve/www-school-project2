@@ -13,6 +13,7 @@
     </style>
 
     <h1>Your username is [[username]]!</h1>
+    
     <main-template></main-template>
 
   </template>
@@ -26,8 +27,6 @@
       static get is() { return 'kruskontroll-app'; }
       ready() {
         super.ready();
-        //console.log("IS READY'");
-        //this.dispatch('')
 
         window.setTimeout(() => {
           this.dispatch({
