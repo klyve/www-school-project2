@@ -1,0 +1,65 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../bower_components/slate-font-awesome/slate-font-awesome.html">
+
+<link rel="import" href="../../styles.html">
+<link rel="import" href="../../../actions/videos.html">
+<link rel="import" href="../../../store/store.html">
+<link rel="import" href="./video-item.html">
+
+
+
+<dom-module id="video-grid">
+  <template>
+      <style include="shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+    <style include="slate-font-awesome"></style>
+
+    <div class="content-grid">
+        <div class="title">
+            <h1>Videos</h1>
+        </div>
+
+        <div class="band">
+            <template is="dom-repeat" items="{{videos}}">
+                <video-item item="{{item}}" index={{index}} class$="{{grid(index)}}"></video-item>
+            </template>
+        </div>
+    </div>
+
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class VideoGrid extends VideosActions(ReduxStore(Polymer.Element)) {
+
+        static get is() { return 'video-grid'; }
+        ready() {
+            super.ready();
+            this.dispatch(this.getDashboardVideos());
+        }
+        grid(index) {
+            return `item-${index+1}`;
+        }
+        static get properties() {
+            return {
+                prop1: {
+                    type: String,
+                    value: 'kruskontroll-app'
+                },
+                videos: {
+                    type: Array,
+                    statePath: 'videos.videos',
+                },
+            };
+        }
+    }
+    
+    window.customElements.define(VideoGrid.is, VideoGrid);
+  </script>
+</dom-module>

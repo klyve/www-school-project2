@@ -4,15 +4,15 @@
 <script src="../../node_modules/redux-thunk/dist/redux-thunk.js"></script>
 
 <link rel="import" href="reducers/user.html">
-<link rel="import" href="reducers/test.html">
+<link rel="import" href="reducers/videos.html">
 <!-- <script src="reducers/test.js"></script>
 <script src="reducers/user.js"></script> -->
 
 <script>
     
     var reducers = Redux.combineReducers({
-        testReducer,
-        user: userReducer        
+        user: userReducer,
+        videos: videosReducer,
     });
     const createStoreWithMiddleware = Redux.applyMiddleware(ReduxThunk.default)(Redux.createStore);
     const store = createStoreWithMiddleware(reducers);

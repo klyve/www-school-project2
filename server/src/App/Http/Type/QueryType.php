@@ -41,6 +41,10 @@ class QueryType extends ObjectType
                     ]
                     
                 ],
+                'videos' => [
+                    'type' => Types::listOf(Types::video()),
+                    'description' => 'List of videos for the user',
+                ],
                 'playlist' => [
                     'type' => Types::playlist(),
                     'description' => 'return a playlist by id',
@@ -69,6 +73,10 @@ class QueryType extends ObjectType
     }
     public function hello() {
         return 'Your graphql-php endpoint is ready! Use GraphiQL to browse API';
+    }
+
+    public function videos($rootValue, $args, $req, $info) {
+        return (new VideosModel())->all();
     }
 
     public function viewer($rootValue, $args, $req, $info) {

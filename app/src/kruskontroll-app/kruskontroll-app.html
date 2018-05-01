@@ -10,6 +10,7 @@
 <link rel="import" href="../actions/user.html">
 <link rel="import" href="./components/main/template/main_template.html">
 <link rel="import" href="./components/main/template/login_template.html">
+<link rel="import" href="./components/main/template/register_template.html">
 <link rel="stylesheet" href="../../main.css">
 <dom-module id="kruskontroll-app">
   <template>
@@ -32,7 +33,7 @@
 
     <iron-pages selected="[[routeData.view]]" attr-for-selected="name" fallback-selection="main">
       <login-template name="login"></login-template>
-      <h1 name="register">Register</h1>
+      <register-template name="register"></register-template>
       <main-template name="main"></main-template>
     </iron-pages>
     

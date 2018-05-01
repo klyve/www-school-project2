@@ -193,6 +193,8 @@ class Route {
 
     protected static function regexMatch($routes, $route) {
         foreach($routes as $obj) {
+            if(!($obj instanceof RouteObject)) continue;
+            
             if(preg_match($obj->getRegex(), trim($route, '/'), $matches)) {
                 foreach ($matches as $k => $v) {
                     if (!is_int($k)) {

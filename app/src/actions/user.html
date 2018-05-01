@@ -8,6 +8,11 @@
     const POST_LOGIN_REQUEST = 'POST_LOGIN_REQUEST';
     const POST_LOGIN_FAILURE = 'POST_LOGIN_FAILURE';
     const POST_LOGIN_SUCCESS = 'POST_LOGIN_SUCCESS';
+
+    const POST_REGISTER_REQUEST = 'POST_REGISTER_REQUEST';
+    const POST_REGISTER_FAILURE = 'POST_REGISTER_FAILURE';
+    const POST_REGISTER_SUCCESS = 'POST_REGISTER_SUCCESS';
+
     const DO_LOGOUT_SUCCESS = 'DO_LOGOUT_SUCCESS';
 
 
@@ -18,7 +23,6 @@
             fetching: true,
         }
     });
-
     const postLoginFailure = (error) => ({
         type: POST_LOGIN_FAILURE,
         payload:{
@@ -26,7 +30,6 @@
             error
         }
     });
-
     const postLoginSuccess = (user) => ({
         type: POST_LOGIN_SUCCESS,
         payload:{
@@ -34,6 +37,32 @@
             ...user,
         }
     });
+
+
+    const postRegisterRequest = () => ({
+        type: POST_REGISTER_REQUEST,
+        payload:{
+            fetching: true,
+        }
+    });
+    const postRegisterFailure = (error) => ({
+        type: POST_REGISTER_FAILURE,
+        payload:{
+            fetching: false,
+            error
+        }
+    });
+
+    const postRegisterSuccess = (user) => ({
+        type: POST_REGISTER_SUCCESS,
+        payload:{
+            fetching: false,
+            ...user,
+        }
+    });
+
+
+
 
     const doLogoutUser = (user) => ({
         type: DO_LOGOUT_SUCCESS,
@@ -87,6 +116,28 @@
                 }
             }
 
+
+            postRegister() {
+                return async (dispatch) => {
+                    dispatch(postRegisterRequest());
+                    post('user/register', {
+                        name: this.fullName,
+                        email: this.username,
+                        password: this.password,
+                    })
+                    .then(res => {
+                        const data = res.data;
+                        dispatch(postLoginSuccess(data));
+                        storeObject(data);
+                        window.history.pushState({}, null, '#/');
+                        window.dispatchEvent(new CustomEvent('location-changed'));
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+                }
+            }
+
             getSessionData() {
                 return dispatch => {
                     const token = getStorageItem('token');
@@ -108,21 +159,5 @@
             }
         }
     });
-
-
-
-    // graphql(`
-    //     query {
-    //         user(id: ${id}) {
-    //             name
-    //         }
-    //     }
-    // `)
-    // .then(res => res.data)
-    // .then(console.log)
-    // .catch(console.log);
-
-    
-    // console.log(axios.post);
 
 </script>

@@ -26,12 +26,15 @@
                 <iron-form>
                     <form class="login100-form validate-form">
                         <span class="login100-form-title">
-                            Member Login 
+                            Register user
                             <template is="dom-if" if="[[fetching]]">
                                 <h1>Is fetching</h1>
                             </template>
                         </span>
 
+                        <div class="wrap-input100 validate-input" data-validate = "Name is required">
+                            <paper-input always-float-label label="Name" name="name" value="{{fullName}}"></paper-input>
+                        </div>
                         <div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
                             <paper-input always-float-label label="Email" name="username" value="{{username}}"></paper-input>
                         </div>
@@ -41,23 +44,14 @@
                         </div>
                         
                         <div class="container-login100-form-btn">
-                            <button class="login100-form-btn" on-click="loginUser">
-                                Login
+                            <button class="login100-form-btn" on-click="registerUser">
+                                Register
                             </button>
                         </div>
 
-                        <div class="text-center p-t-12">
-                            <span class="txt1">
-                                Forgot
-                            </span>
-                            <a class="txt2" href="#">
-                                Username / Password?
-                            </a>
-                        </div>
-
                         <div class="text-center p-t-136">
-                            <a class="txt2" href="#">
-                                Create your Account
+                            <a class="txt2" href="#/login">
+                                Sign in
                                 <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
                             </a>
                         </div>
@@ -70,35 +64,28 @@
   </template>
 
   <script>
-    /**
-     * @customElement
-     * @polymer
-     */
-   
+
     class RegisterTemplate extends UserActions(ReduxStore(Polymer.Element)) {
 
       static get is() { return 'register-template'; }
         
-      loginUser() {
-          this.dispatch(this.postLogin());
+      registerUser() {
+          this.dispatch(this.postRegister());
       }
 
-      changeUsername() {
-          console.log(arguments);
-      }
       static get properties() {
         return {
-          prop1: {
+          fullName: {
             type: String,
-            value: 'kruskontroll-app'
+            value: 'Bjarte',
+          },
+          username: {
+            type: String,
+            value: 'useremail10@kruskontroll.no',
           },
           password: {
             type: String,
             value: 'password1',
-          },
-          username: {
-            type: String,
-            value: 'useremail1@kruskontroll.no',
           },
           fetching: {
             type: Boolean,
