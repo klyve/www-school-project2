@@ -8,7 +8,7 @@
 const initialUserState = {
     token: false,
     id: false,
-    name: 'Test',
+    name: '',
     email: '',
     fetching: false,
     usergroup: 0,
@@ -20,7 +20,6 @@ const userReducer = (state = initialUserState, action) => {
     console.log(action);
     switch(action.type) {
         case 'UPDATE_USERNAME': {
-            
             return {
                 ...state,
                 ...action.payload
@@ -40,6 +39,12 @@ const userReducer = (state = initialUserState, action) => {
                 ...state,
                 ...action.payload,
             };
+            // const user = Object.assign({}, state, action.payload);
+            // return user;
+        }break;
+
+        case DO_LOGOUT_SUCCESS: {
+            return initialUserState;
             // const user = Object.assign({}, state, action.payload);
             // return user;
         }break;

@@ -39,15 +39,21 @@
                 <li class="nav-item">
                   <a href="#">
                     <i class="fa fa-bell"></i>
-                    <!-- <span class="count">
-                      7
-                    </span> -->
+                    
                   </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="usercard">
-                      [[userletter]]
-                    </a>
+                    <template is="dom-if" if="[[username]]">
+                        <a href="" class="usercard" on-click="logout">
+                          [[userletter]]
+                        </a>
+                    </template>
+                    <template is="dom-if" if="[[!username]]">
+                        <a href="/login" class="">
+                          sign in
+                        </a>
+                    </template>
+                    
                   </li>
               </ul>
             </div>
@@ -187,22 +193,22 @@
         this.dispatch(this.getUser());
       }
 
+      logout() {
+        this.dispatch(this.logoutUser());
+      }
+
       getUserFirstLetter(username) {
         return username !== '' ? username[0] : 'U';
       }
       static get properties() {
         return {
-          prop1: {
-            type: String,
-            value: 'kruskontroll-app'
-          },
-          message: {
-            type: String,
-            statePath: 'testReducer.message'
-          },
           username: {
             type: String,
             statePath: 'user.name',
+          },
+          token: {
+            type: String,
+            statePath: 'user.token',
           },
           toggled: {
             type: String,
