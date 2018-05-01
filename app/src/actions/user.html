@@ -1,4 +1,5 @@
 <link rel="import" href="../utilities/http.html">
+<script src="../utilities/storage.js"></script>
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 
@@ -43,6 +44,15 @@
                super();
             }
 
+
+            getUser() {
+                return dispatch => {
+                    get('user')
+                    .then(res => console.log("USER DATA", res))
+                    .catch(err => console.log("ERROR:", err));
+                }
+            }
+
             postLogin() {
                 return async (dispatch) => {
                     dispatch(postLoginRequest());
@@ -51,25 +61,37 @@
                         password: this.password,
                     })
                     .then(res => {
-                        dispatch(postLoginSuccess(res.data));
+                        const data = res.data;
+                        dispatch(postLoginSuccess(data));
+                        console.log(data);
+                        storeObject(data);
                         window.history.pushState({}, null, '/');
                         window.dispatchEvent(new CustomEvent('location-changed'));
-
                     })
                     .catch(error => {
-                        console.log(error.response.data);
+                        console.log(error);
                     });
 
-                    // try {
-                    //     const login = await post('user/login', {
-                    //         email: this.username,
-                    //         password: this.password,
-                    //     });
-                    //     console.log(login);
-                    // }catch(error) {
-                        
-                    // }
+                }
+            }
+
+            getSessionData() {
+                return dispatch => {
+                    const token = getStorageItem('token');
+                    const email = getStorageItem('email');
+                    const name = getStorageItem('name');
+                    const usergroup = getStorageItem('usergroup');
                     
+                    // Validate token?
+                    if(token) { 
+                        dispatch(postLoginSuccess({
+                            token,
+                            email,
+                            name,
+                            usergroup,
+                        }))
+                    }
+
 
                 }
             }

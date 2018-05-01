@@ -1,0 +1,11 @@
+const storeItem = (key, value) => {
+    localStorage.setItem(key, value);
+}
+
+const storeObject = obj => {
+    Object.entries(obj).forEach(([key, value]) => {
+        localStorage.setItem(key, value);
+    });
+}
+
+const getStorageItem = (key) => localStorage.getItem(key);
