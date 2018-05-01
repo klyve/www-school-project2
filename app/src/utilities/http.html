@@ -8,8 +8,12 @@
         }
     });
 
-    const get = () => {
-
+    const get = (path) => {
+        return axios.get(SERVER+path, bindParams());
+    }
+    
+    const post = (path, data) => {
+        return axios.post(SERVER+path, data, bindParams());
     }
 
     const graphql = graphqlQuery => {

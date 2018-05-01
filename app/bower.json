@@ -6,7 +6,11 @@
     "polymer": "Polymer/polymer#^2.0.0",
     "polymer-redux": "^1.0.5",
     "app-route": "PolymerElements/app-route#^2.1.0",
-    "brum-global-variable": "SieBrum/brum-global-variable#^1.0.6"
+    "brum-global-variable": "SieBrum/brum-global-variable#^1.0.6",
+    "iron-pages": "PolymerElements/iron-pages#^2.1.1",
+    "slate-font-awesome": "JeffLeFoll/slate-font-awesome#^4.7.3",
+    "iron-form": "PolymerElements/iron-form#^2.3.0",
+    "paper-input": "PolymerElements/paper-input#^2.2.2"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0",

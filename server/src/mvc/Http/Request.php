@@ -26,6 +26,7 @@ class Request {
     protected $_params = [];
 
     protected $_token = null;
+    protected $_user = null;
     /**
      * [__construct description]
      */
@@ -47,7 +48,7 @@ class Request {
         }
 
         $this->_token = $this->getBearerToken();
-
+        
         $this->_params = Route::$_requestParams;
     }
 
@@ -67,7 +68,6 @@ class Request {
             $requestHeaders = apache_request_headers();
             // Server-side fix for bug in old Android versions (a nice side-effect of this fix means we don't care about capitalization for Authorization)
             $requestHeaders = array_combine(array_map('ucwords', array_keys($requestHeaders)), array_values($requestHeaders));
-            //print_r($requestHeaders);
             if (isset($requestHeaders['Authorization'])) {
                 $headers = trim($requestHeaders['Authorization']);
             }
@@ -87,6 +87,9 @@ class Request {
         }
         return null;
     }
+
+
+    
 
 /**
  * @TODO: [only description]
@@ -175,6 +178,15 @@ class Request {
     }
     public function hasToken() {
         return !!$this->_token;
+    }
+
+
+    public function setUser($user) {
+        $this->_user = $user;
+    }
+
+    public function user() {
+        return $this->_user;
     }
 
 }

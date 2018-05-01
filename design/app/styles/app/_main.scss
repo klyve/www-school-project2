@@ -5,6 +5,7 @@ body {
     background: #fff;
     font-size: 1rem;
     font-family: "opensans-regular", sans-serif;
+    -webkit-font-smoothing: antialiased;
     font-weight: 400;
 }
 
@@ -235,49 +236,49 @@ header {
 }
 
 
-body {
-    &.expanded-menu {
-        header {
-            .logo {
-                width: $sidebar-extended;
-            }
-            .navbar-menu-wrapper {
-                width: calc(100vw - #{$sidebar-extended});
-            }
-        }
-        .sidebar {
+
+.expanded-menu {
+    header {
+        .logo {
             width: $sidebar-extended;
-
-
-            ul {
-                li {
-                    a {
-                        text-align: left;
-                        border-bottom: none;
-                        padding-left: 20px;
-                        display: flex;
-                        align-items: center;
-                        min-width: $sidebar-extended;
-                        i {
-                        }
-                        span {
-                            display: block;
-                            margin-left: 10px;
-                            opacity: 1;
-                        }
-                    }
-                    &.heading {
-                        display: block;
-                    }
-
-                }
-            }
         }
-        .content-container {
-            min-width: calc(100% - #{$sidebar-extended});
+        .navbar-menu-wrapper {
+            width: calc(100vw - #{$sidebar-extended});
         }
     }
+    .sidebar {
+        width: $sidebar-extended;
+
+
+        ul {
+            li {
+                a {
+                    text-align: left;
+                    border-bottom: none;
+                    padding-left: 20px;
+                    display: flex;
+                    align-items: center;
+                    min-width: $sidebar-extended;
+                    i {
+                    }
+                    span {
+                        display: block;
+                        margin-left: 10px;
+                        opacity: 1;
+                    }
+                }
+                &.heading {
+                    display: block;
+                }
+
+            }
+        }
+    }
+    .content-container {
+        min-width: calc(100% - #{$sidebar-extended});
+    }
 }
+
 
 
 

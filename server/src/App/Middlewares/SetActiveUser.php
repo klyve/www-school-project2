@@ -15,9 +15,10 @@
 use \MVC\Http\Response;
 use \MVC\Http\Error;
 use \MVC\Http\ErrorCode;
+use \MVC\Helpers\Auth;
 use App\Models\UsersModel;
 
-class IsAuthenticated {
+class SetActiveUser {
 
   /**
    * @param $request the request
@@ -25,28 +26,25 @@ class IsAuthenticated {
    * @return redirect @TODO describe whats returned
    */
     public function run($request, $next) {
-        $token = $request->token();
-        $statusCode = new Error(ErrorCode::get('user.authentication_required'));
-        if(!$token) {
-            return Response::send($statusCode);
+        if(Auth::user()) {
+            $next($request);
         }
 
+        $token = $request->token();
+        if(!$token) {
+            $next($request);
+        }
+        
         $userId = $request->token()->userid;
         if(!$userId) {
-            return Response::send($statusCode);
+            $next($request);
         }
 
         $user = new UsersModel();
         $user->find([
             'id' => $userId
         ]);
-        
-        if(!$user->id) {
-            return Response::send($statusCode);
-        }
-
-        // @TODO check if token->userid matches /user/{userid}/
-        //  Basically ADD ACCESS CONTROL!
+        Auth::setUser($user);
 
         $next($request);
     }

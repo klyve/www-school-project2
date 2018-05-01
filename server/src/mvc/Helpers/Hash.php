@@ -91,12 +91,12 @@ class Hash {
     $issuer = Config::get('token.issuer');
     $builder = new TokenBuilder();
 
-      $token = $builder->addPayload($data)
-          ->setSecret($secret)
-          ->setExpiration($expiration)
-          ->setIssuer($issuer)
-          ->build();
-        return $token;
+    $token = $builder->addPayload($data)
+        ->setSecret($secret)
+        ->setExpiration($expiration)
+        ->setIssuer($issuer)
+        ->build();
+      return $token;
   }
 
   public static function verifyJWT($token) {

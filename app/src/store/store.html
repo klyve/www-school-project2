@@ -3,8 +3,10 @@
 <script src="../../node_modules/redux/dist/redux.js"></script>
 <script src="../../node_modules/redux-thunk/dist/redux-thunk.js"></script>
 
-<script src="reducers/test.js"></script>
-<script src="reducers/user.js"></script>
+<link rel="import" href="reducers/user.html">
+<link rel="import" href="reducers/test.html">
+<!-- <script src="reducers/test.js"></script>
+<script src="reducers/user.js"></script> -->
 
 <script>
     
@@ -12,7 +14,7 @@
         testReducer,
         user: userReducer        
     });
-    const createStoreWithMiddleware = Redux.applyMiddleware(ReduxThunk.default, )(Redux.createStore);
+    const createStoreWithMiddleware = Redux.applyMiddleware(ReduxThunk.default)(Redux.createStore);
     const store = createStoreWithMiddleware(reducers);
 
     // Export the ReduxMixin

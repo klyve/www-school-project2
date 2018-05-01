@@ -1,0 +1,113 @@
+<link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../../../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../../../../bower_components/slate-font-awesome/slate-font-awesome.html">
+
+<link rel="import" href="../../../../store/store.html">
+<link rel="import" href="../../../../actions/user.html">
+<link rel="import" href="../../../styles.html">
+
+
+<dom-module id="login-template">
+  <template>
+      <style include="shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+    <style include="slate-font-awesome"></style>
+
+    <div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100">
+				<div class="login100-pic js-tilt" data-tilt>
+					<img src="images/login_logo.png" alt="IMG">
+				</div>
+                <iron-form>
+                    <form class="login100-form validate-form">
+                        <span class="login100-form-title">
+                            Member Login 
+                            <template is="dom-if" if="[[fetching]]">
+                                <h1>Is fetching</h1>
+                            </template>
+                        </span>
+
+                        <div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+                            <paper-input always-float-label label="Email" name="username" value="{{username}}"></paper-input>
+                        </div>
+
+                        <div class="wrap-input100 validate-input" data-validate = "Password is required">
+                            <paper-input always-float-label type="password" label="Password" name="password" value="{{password}}"></paper-input>
+                        </div>
+                        
+                        <div class="container-login100-form-btn">
+                            <button class="login100-form-btn" on-click="loginUser">
+                                Login
+                            </button>
+                        </div>
+
+                        <div class="text-center p-t-12">
+                            <span class="txt1">
+                                Forgot
+                            </span>
+                            <a class="txt2" href="#">
+                                Username / Password?
+                            </a>
+                        </div>
+
+                        <div class="text-center p-t-136">
+                            <a class="txt2" href="#">
+                                Create your Account
+                                <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </form>
+                </iron-form>
+			</div>
+		</div>
+    </div>
+
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+   
+    class LoginTemplate extends UserActions(ReduxStore(Polymer.Element)) {
+
+      static get is() { return 'login-template'; }
+        
+      loginUser() {
+          this.dispatch(this.postLogin());
+      }
+
+      changeUsername() {
+          console.log(arguments);
+      }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'kruskontroll-app'
+          },
+          password: {
+            type: String,
+            value: 'password1',
+          },
+          username: {
+            type: String,
+            value: 'useremail1@kruskontroll.no',
+          },
+          fetching: {
+            type: Boolean,
+            statePath: 'user.fetching'
+          },
+        };
+      }
+    }
+    
+    window.customElements.define(LoginTemplate.is, LoginTemplate);
+  </script>
+</dom-module>
