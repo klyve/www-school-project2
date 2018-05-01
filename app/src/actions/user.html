@@ -29,7 +29,7 @@
         type: POST_LOGIN_SUCCESS,
         payload:{
             fetching: false,
-            user,
+            ...user,
         }
     });
 
@@ -46,20 +46,31 @@
             postLogin() {
                 return async (dispatch) => {
                     dispatch(postLoginRequest());
-                    try {
-                        const login = await post('user/login', {
-                            email: this.username,
-                            password: this.password,
-                        });
-                        console.log(login);
-                    }catch(err) {
-                        console.log("ERR", err);
-                    }
+                    post('user/login', {
+                        email: this.username,
+                        password: this.password,
+                    })
+                    .then(res => {
+                        dispatch(postLoginSuccess(res.data));
+                        window.history.pushState({}, null, '/');
+                        window.dispatchEvent(new CustomEvent('location-changed'));
+
+                    })
+                    .catch(error => {
+                        console.log(error.response.data);
+                    });
+
+                    // try {
+                    //     const login = await post('user/login', {
+                    //         email: this.username,
+                    //         password: this.password,
+                    //     });
+                    //     console.log(login);
+                    // }catch(error) {
+                        
+                    // }
                     
 
-                    window.setTimeout(() => {
-                        dispatch(postLoginSuccess({}));
-                    }, 1000);
                 }
             }
         }

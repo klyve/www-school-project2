@@ -26,19 +26,21 @@ test.serial('register a user', async (t) => {
     if(res.status !== 200)
         t.fail(`Expected status code 200 got ${res.status}`);
     t.pass();
-    
 
-    testDataIntegrity(res, ['email', 'name', 'token', 'usergroup'], t);
+
+    testDataIntegrity(res.data, ['email', 'name', 'token', 'usergroup'], t);
 
 
     try {
         const res2 = await axios.post(`${API}/user/register`, credentials)
+
     } catch(err) {
         if(err.response.status !== 409)
             t.fail(`Expected status code 409 got ${err.response.status}`);
         t.pass();
 
-        testDataIntegrity(err.response, ['error', 'message', 'code'], t);
+
+        testDataIntegrity(err.response.data, ['error', 'message', 'code'], t);
         t.pass();
     }
 });
@@ -50,7 +52,7 @@ test.serial('Log in a user', async (t) => {
     const res = await axios.post(`${API}/user/login`, credentials)
     t.is(res.status, 200, `Expected status code 200 got ${res.status}`);
 
-    testDataIntegrity(res, ['email', 'name', 'token', 'usergroup'], t);
+    testDataIntegrity(res.data, ['email', 'name', 'token', 'usergroup'], t);
     
     userToken = res.data.token
     t.pass();
@@ -62,7 +64,7 @@ test.serial('Refresh token', async(t) => {
     const res = await axios.post(`${API}/user/refresh`, {}, axiosBearer(userToken))
     t.is(res.status, 200, `Expected status code 200 got ${res.status}`);
 
-    testDataIntegrity(res, ['email', 'name', 'token', 'usergroup'], t);
+    testDataIntegrity(res.data, ['email', 'name', 'token', 'usergroup'], t);
     
     userToken = res.data.token
     t.pass();
@@ -70,19 +72,19 @@ test.serial('Refresh token', async(t) => {
 });
 
 
-test.serial('Log out', async(t) => {
+test.todo('Log out')/*, async(t) => {
     t.fail("Test not implemeted")
-});
+});*/
 
 
-test.serial('Check if logged out', async(t) => {
+test.todo('Check if logged out')/* async(t) => {
     t.fail("Test not implemeted")
-});
+});*/
 
 
-test.serial('Log in again', async(t) => {
+test.todo('Log in again')/*async(t) => {
     t.fail("Test not implemeted")
-});
+});*/
 
 
 test.serial('Change password of user', async (t) => {

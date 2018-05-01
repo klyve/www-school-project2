@@ -11,6 +11,7 @@ use \App\Http\Type\PlaylistType;
 use \App\Http\Type\SearchType;
 use \App\Http\Type\TagsType;
 use \App\Http\Type\PlaylistNodeType;
+use \App\Http\Type\VideoRatingType;
 
 /**
  * Class Types
@@ -24,7 +25,7 @@ use \App\Http\Type\PlaylistNodeType;
  */
 class Types
 {
-    // Object types:
+    // Object types CACHE:
     private static $query;
     private static $user;
     private static $video;
@@ -33,7 +34,8 @@ class Types
     private static $search;
     private static $node;
     private static $tags;
-    
+    private static $rating;
+
     /**
      * @return QueryType
      */
@@ -98,6 +100,13 @@ class Types
         return self::$node ?: (self::$node = new PlaylistNodeType());
     }
 
+    /**
+     * @return VideoRatingType
+     */
+    public static function videoRating()
+    {
+        return self::$rating ?: (self::$rating = new VideoRatingType());
+    }
 
 
 

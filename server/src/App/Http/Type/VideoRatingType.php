@@ -4,28 +4,28 @@ use \GraphQL\Type\Definition\ObjectType;
 use \GraphQL\Type\Definition\ResolveInfo;
 use \GraphQL\Type\Definition\Type;
 use \App\Http\Types;
+use \App\Models\RatingsModel;
 use \App\Models\UsersModel;
-use \App\Models\VideosModel;
-use \App\Models\PlaylistVideosModel;
-use \App\Models\PlaylistTagsModel;
-use \App\Models\TagsModel;
 
 
-class PlaylistNodeType extends ObjectType {
+class VideoRatingType extends ObjectType {
     public function __construct() {
         $config = [
-            'name' => 'PlaylistNodeType',
-            'description' => 'Playlist node',
+            'name' => 'VideoRatingType',
+            'description' => 'Video rating: like | dislike',
             'fields' => function() {
                 return [
                     'id' => Types::id(),
-                    'playlistid' => Types::id(),
                     'videoid' => Types::id(),
-                    'position' => Types::int(),
-                    'video' => Types::video(),
-                    'deleted_at' => Types::string()
+                    'userid' => Types::id(),
+                    'rating' => Types::int(),
+                    'deleted_at' => Types::string(),
+                    'user' => [
+                        'type' => Types::user(),
+                    ],
                 ];
             },
+
             'resolveField' => function($value, $args, $context, ResolveInfo $info) {
                 $method = 'resolve' . ucfirst($info->fieldName);
                 
@@ -39,11 +39,8 @@ class PlaylistNodeType extends ObjectType {
         parent::__construct($config);
     }
 
-    public function resolveVideo($playlistNode, $args) {
-        return (new VideosModel())->find([
-            'id' => $playlistNode->videoid,
-        ]);
+    public function resolveUser($videorating, $args) {
+        $user = new UsersModel();
+        return $user->find(['id' => $videorating->userid]);
     }
-
-
 }

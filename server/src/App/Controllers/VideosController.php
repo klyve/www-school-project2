@@ -20,57 +20,82 @@ const HTTP_NOT_FOUND      = 404;
 const HTTP_NOT_IMPLMENTED = 501;
 const HTTP_INTERNAL_ERROR = 500;
 
+const DS = DIRECTORY_SEPARATOR;
 
 class VideosController extends Controller {
   
   // @route POST /user/{userid}/video
-  public function postVideo(Request $req) {
+  public function postVideo(VideosModel $newVideo, Request $req) {
 
 
     // @assumption userid matches token
     $token = $req->token();
     $userid = $token->userid;
 
-    $newVideo              = new VideosModel();
     $newVideo->userid      = $userid;
     $newVideo->title       = $req->input('title');
     $newVideo->description = $req->input('description');
     $newVideo->filesubtitle  = Hash::md5($userid . $newVideo->title  . microtime() ) . ".srt";
     $newVideo->filethumbnail = $req->input('fileThumbnail');
     $newVideo->filevideo     = $req->input('fileVideo');
-    $videoid = $newVideo->save();
- 
 
-    $tempdir      = WWW_ROOT."/public/temp/$userid";
-    $destdirSub   = WWW_ROOT."/public/media/subtitles/$userid";
-    $destdirThumb = WWW_ROOT."/public/media/thumbnails/$userid";
-    $destdirVideo = WWW_ROOT."/public/media/videos/$userid";
 
-    File::makeDirIfNotExist($destdirSub);
-    File::makeDirIfNotExist($destdirThumb);
-    File::makeDirIfNotExist($destdirVideo);
+    //
+    // @TODO Move this into a function in  FILE.php
+    //
 
-    $tempfileThumb = "$tempdir/$newVideo->filethumbnail";
-    $tempfileVideo = "$tempdir/$newVideo->filevideo";
+    // Setup proper filepaths
+    $tempdir       = WWW_ROOT.DS."public".DS."temp".DS.$userid;
 
-    $err = File::moveFile($tempfileThumb, "$destdirThumb/$newVideo->filethumbnail");
+    $mediaDir      =  WWW_ROOT.DS."public".DS."media";
+    $subtitlesDir  = $mediaDir.DS."subtitles".DS.$userid;
+    $thumbnailsDir = $mediaDir.DS."thumbnails".DS.$userid;
+    $videosDir     = $mediaDir.DS."videos".DS.$userid;
+
+    $thumbTemp = $tempdir.DS.$newVideo->filethumbnail;
+    $videoTemp = $tempdir.DS.$newVideo->filevideo;
+
+    $thumbDest    = $thumbnailsDir.DS.$newVideo->filethumbnail;
+    $videoDest    = $videosDir.DS.$newVideo->filevideo;
+    $subtitleDest = $subtitlesDir.DS.$newVideo->filesubtitle;
+
+    File::makeDirIfNotExist($subtitlesDir);
+    File::makeDirIfNotExist($thumbnailsDir);
+    File::makeDirIfNotExist($videosDir);
+
+
+    // Do file operations
+    $err = File::moveFile($thumbTemp, $thumbDest);
     if ($err) {
         return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to move file");
     }
 
-    $err = File::moveFile($tempfileVideo, "$destdirVideo/$newVideo->filevideo");
+    $err = File::moveFile($videoTemp, $videoDest);
     if ($err) {
         return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to move file");
     }
 
-    $err = File::newFile("$destdirSub/$newVideo->filesubtitle");
+    $err = File::newFile($subtitleDest);
     if ($err) {
         return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to new file");
     }
 
-    rmdir($tempdir);
+    if (!rmdir($tempdir)) {
+        return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to remove users temp directory");
+    }
+    
+    //
+    // @TODO Move THE ABOVE into a function in  FILE.php
+    //
 
-    $res = array('videoid' => $videoid, 'message' => "Created a new video");
+    
+    // Finally save the new video in the database if all fil operations went through.
+    $videoid = $newVideo->save();
+    if(!$videoid) {
+        return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to create new video in database");
+    }
+
+    $res = ['videoid' => $videoid, 'message' => "Created a new video"];
     return Response::statusCode(HTTP_CREATED, $res);
   }
 
@@ -106,13 +131,47 @@ class VideosController extends Controller {
   // @route DELETE /user/{userid}/video/{videoid}
   public function deleteVideo(VideosModel $video, Request $req) {
 
+    $userid = $req->token()->userid;
     $deleteVideo = $video->find([
             'id' => $req->param('videoid')
     ]);
+
     if(!$deleteVideo->id) {
         return Response::statusCode(HTTP_NOT_FOUND);
     }
+
+
+    //
+    // @TODO Move this into a function in  FILE.php
+    //
+
+    $mediaDir      =  WWW_ROOT.DS."public".DS."media";
+    $subtitlesDir  = $mediaDir.DS."subtitles".DS.$userid;
+    $thumbnailsDir = $mediaDir.DS."thumbnails".DS.$userid;
+    $videosDir     = $mediaDir.DS."videos".DS.$userid;
+
     
+    $err = File::moveFile($thumbnailsDir.DS.$deleteVideo->filethumbnail, $thumbnailsDir.DS."DELETED-".$deleteVideo->filethumbnail);
+    if ($err) {
+        return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to delete thumbnail file");
+    }
+
+    $err = File::moveFile($videosDir.DS.$deleteVideo->filevideo, $videosDir.DS."DELETED-".$deleteVideo->filevideo);
+    if ($err) {
+        return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to delete video file");
+    }
+
+    $err = File::moveFile($subtitlesDir.DS.$deleteVideo->filesubtitle, $subtitlesDir.DS."DELETED-".$deleteVideo->filesubtitle);
+    if ($err) {
+        return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to delete video file");
+    }
+
+    //
+    // @TODO Move THE ABOVE into a function in  FILE.php
+    //
+
+
+
     $deleteVideo->deleted_at = date ("Y-m-d H:i:s");
     $deleteVideo->save();
 

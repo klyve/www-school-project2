@@ -170,6 +170,7 @@ class Model {
  */
     public function save() {
         $compileVars = $this->findObjects();
+
         if($this->_dirty)
             return $this->update($this->_findVars);
 
@@ -184,6 +185,7 @@ class Model {
         if(!$data) {
             $data = $this->findObjects();
         }
+
         $query = SQL::update($data, $selector, $this->table);
         $queryData = array_merge($data, $selector);
 

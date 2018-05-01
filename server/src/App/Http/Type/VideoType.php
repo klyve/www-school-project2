@@ -9,6 +9,7 @@ use \App\Models\UsersModel;
 use \App\Models\CommentsModel;
 use \App\Models\VideoTagsModel;
 use \App\Models\TagsModel;
+use \App\Models\RatingsModel;
 
 
 class VideoType extends ObjectType
@@ -48,6 +49,18 @@ class VideoType extends ObjectType
                         'type' => Types::listOf(Types::tags()),
                         'description' => 'Return tags associated with a video',
                     ],
+                    'ratings' => [
+                        'type' => Types::listOf(Types::videoRating()),
+                        'description' => 'Return ratings: dislike | like | neutral'
+                    ],
+                    'rating' => [
+                        'type' => Types::videoRating(),
+                        'description' => 'Return single rating for a given userid',
+                        'args' => [
+                            'userid' => Types::nonNull(Types::id())
+                        ]
+                    ],
+
                     'user' => [
                         'type' => Types::user(),
                     ],
@@ -79,6 +92,16 @@ class VideoType extends ObjectType
     public function resolveComments($video, $args) {
         $comments = new CommentsModel();
         return $comments->all(['videoid' => $video->id]);
+    }
+
+    public function resolveRatings($video, $args) {
+        $ratings = new RatingsModel();
+        return $ratings->all(['videoid' => $video->id]);
+    }
+
+    public function resolveRating($video, $args) {
+        $ratings = new RatingsModel();
+        return $ratings->find(['videoid' => $video->id, 'userid' => $video->userid]);
     }
 
     public function resolveComment($video, $args) {

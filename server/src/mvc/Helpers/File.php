@@ -13,6 +13,7 @@
  * @link       https://bitbucket.org/klyve/imt2291-project1-spring2018
  * @since      File available since Release 1.0
  */
+const DS = DIRECTORY_SEPARATOR;
 
 class File {
 
@@ -55,9 +56,9 @@ class File {
     
     function makeDirIfNotExist($dir) {
 
-      if(!file_exists($dir)) {
-          @mkdir($dir);
-      }
+        if(!file_exists($dir)) {
+            @mkdir($dir);
+        }
     }
 
     // @return 1 if ERROR
@@ -72,6 +73,7 @@ class File {
 
     // @return 1 if ERROR
     function newFile($dest) {
+
         $output = fopen("$dest", "w");
         if(!$output) {
             return 1;

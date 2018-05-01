@@ -10,7 +10,7 @@ class RatingsModel extends \MVC\Core\Model {
   public $videoid;
   // Foreign key
   public $userid;
-  // 0 dislike, 1 like
+  // 0 dislike, 1 like,
   public $rating;
 
   public $exclude = ['id'];
