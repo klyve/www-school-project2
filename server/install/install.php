@@ -1,3 +1,3 @@
 
 <?php
-echo "Kruskontroll application installed"
+echo "Kruskontroll application installed";

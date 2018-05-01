@@ -25,7 +25,7 @@
 <form id="form-install-id"
       class="form-install" 
       method="post"
-      action="install/install.php"
+      action="install.php"
       autocomplete="on">
 
 
@@ -107,7 +107,7 @@
 
     <button id="form-button-id"
             name="form-button"
-            type="button" 
+            type="submit"
             class="button-install"
            >Submit</button>
 
