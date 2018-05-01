@@ -58,17 +58,19 @@ test.serial('Like video', async (t) => {
 // we don't know the user yet.
 test.serial('Check if video is liked exactly one time', async (t) => {
 
-    const query = `{
-      video(id: ${likeDislikeVideoId}) {
-        ratings {
-          user {
-            name
+    const data = {
+      query: `{
+        video(id: ${likeDislikeVideoId}) {
+          ratings {
+            user {
+              name
+            }
+            rating
           }
-          rating
         }
-      }
-    }`
-    const res = await axios.get(`${API}/graphql?query=${query}`, axiosBearer(userToken))
+      }`
+    }
+    const res = await axios.post(`${API}/graphql?query`, data, axiosBearer(userToken))
 
     t.truthy(res.data.data)
 
@@ -89,14 +91,16 @@ let afterDislikeCount  = null;
 
 test.serial('Check like and dislike counts before', async (t) => {
 
-    const query = `{
-      video (id: ${likeDislikeVideoId}) {
-        ratings {
-          rating 
+    const data = {
+      query: `{
+        video (id: ${likeDislikeVideoId}) {
+          ratings {
+            rating 
+          }
         }
-      }
-    }`
-    const res = await axios.get(`${API}/graphql?query=${query}`, axiosBearer(userToken))
+      }`
+    }
+    const res = await axios.post(`${API}/graphql`, data, axiosBearer(userToken))
                            .catch(err => { console.log(err.response); t.fail("axios.get Cought error") })
 
 
@@ -133,17 +137,19 @@ test.serial('Dislike video', async (t) => {
 
 test.serial('Check if video is disliked exactly one time', async (t) => {
 
-    const query = `{
-      video(id: ${likeDislikeVideoId}) {
-        ratings {
-          user {
-            name
+    const data = {
+      query: `{
+        video(id: ${likeDislikeVideoId}) {
+          ratings {
+            user {
+              name
+            }
+            rating
           }
-          rating
         }
-      }
-    }`
-    const res = await axios.get(`${API}/graphql?query=${query}`, axiosBearer(userToken))
+      }`
+    }
+    const res = await axios.post(`${API}/graphql`, data, axiosBearer(userToken))
 
     t.truthy(res.data.data)
 
@@ -159,14 +165,16 @@ test.serial('Check if video is disliked exactly one time', async (t) => {
 
 test.serial('Check like and dislike count after ', async (t) => {
 
-    const query = `{
-      video (id: ${likeDislikeVideoId}) {
-        ratings {
-          rating 
+    const data = {
+      query: `{
+        video (id: ${likeDislikeVideoId}) {
+          ratings {
+            rating 
+          }
         }
-      }
-    }`
-    const res = await axios.get(`${API}/graphql?query=${query}`, axiosBearer(userToken))
+      }`
+    }
+    const res = await axios.post(`${API}/graphql`, data, axiosBearer(userToken))
                            .catch(err => { console.log(err.response); t.fail("axios.get Cought error") })
 
 
@@ -198,18 +206,20 @@ test.serial('Delete like',  async (t) => {
 })
 
 test.serial('Check if like is Deleted', async (t) => {
-    const query = `{
-      video(id: ${likeDislikeVideoId}) {
-        ratings {
-          user {
-            name
+    const data = {
+      query: `{
+        video(id: ${likeDislikeVideoId}) {
+          ratings {
+            user {
+              name
+            }
+            deleted_at
           }
-          deleted_at
         }
-      }
-    }`
+      }`
+    }
 
-    const res = await axios.get(`${API}/graphql?query=${query}`, axiosBearer(userToken))
+    const res = await axios.post(`${API}/graphql`, data, axiosBearer(userToken))
 
     t.truthy(res.data.data)
 
@@ -225,17 +235,19 @@ test.serial('Check if like is Deleted', async (t) => {
 test.serial('Check if no like is registered by default', async (t) => {
     const notRatedVideoId = 5
 
-    const query = `{
-      video(id: ${notRatedVideoId}) {
-        ratings {
-          user {
-            name
+    const data = {
+      query: `{
+        video(id: ${notRatedVideoId}) {
+          ratings {
+            user {
+              name
+            }
+            rating
           }
-          rating
         }
-      }
-    }`
-    const res = await axios.get(`${API}/graphql?query=${query}`, axiosBearer(userToken))
+      }`
+    }
+    const res = await axios.post(`${API}/graphql`, data, axiosBearer(userToken))
     t.truthy(res.data.data)
 
     let deletedRating = res.data

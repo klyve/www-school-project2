@@ -7,10 +7,17 @@ import os
 import sys
 
 
-def changeWorkingDirectoryToScriptDirectory():
-    return
+def change_working_directory_to_script_directory():
+    scriptpath = os.path.dirname(os.path.realpath(__file__))
+    os.chdir(scriptpath)
 
-def setenv(webhost,webport,dbhost,dbport,dbpass=""):
+
+def setdevenv(webhost="127.0.0.1",
+              webport="3000",
+              apihost="127.0.0.1",
+              apiport="4000",
+              dbhost="127.0.0.1",
+              dbport="3306"):
 
     with open(".env", "w") as envfile:
         envfile.write("DIR=\"$( cd \"$( dirname \"${BASH_SOURCE[0]}\" )\" && pwd )\"\n")
@@ -20,21 +27,23 @@ def setenv(webhost,webport,dbhost,dbport,dbpass=""):
         envfile.write("export KRUS_ROOT=$DIR\n")
         envfile.write("export KRUS_WEB_HOST="+webhost+"\n")
         envfile.write("export KRUS_WEB_PORT="+webport+"\n")
+        envfile.write("export KRUS_API_HOST="+apihost+"\n")
+        envfile.write("export KRUS_API_PORT="+apiport+"\n")
         envfile.write("export KRUS_DB_HOST="+dbhost+"\n")
         envfile.write("export KRUS_DB_PORT="+dbport+"\n")
-        envfile.write("export KRUS_DB_PASS="+dbpass+"\n")
 
         envfile.write("echo KRUS_ROOT:     $KRUS_ROOT\n")
         envfile.write("echo KRUS_WEB_HOST: $KRUS_WEB_HOST\n")
         envfile.write("echo KRUS_WEB_PORT: $KRUS_WEB_PORT\n")
+        envfile.write("echo KRUS_API_HOST: $KRUS_API_HOST\n")
+        envfile.write("echo KRUS_API_PORT: $KRUS_API_PORT\n")
         envfile.write("echo KRUS_DB_HOST:  $KRUS_DB_HOST\n")
         envfile.write("echo KRUS_DB_PORT:  $KRUS_DB_PORT\n")
-        envfile.write("echo KRUS_DB_PASS:  $KRUS_DB_PASS\n")
 
 
     with open("apitests/.env", "w") as envfile:
-        envfile.write("KRUS_WEB_HOST="+webhost+"\n")
-        envfile.write("KRUS_WEB_PORT="+webport+"\n")
+        envfile.write("KRUS_API_HOST="+apihost+"\n")
+        envfile.write("KRUS_API_PORT="+apiport+"\n")
 
 
 def install():
@@ -54,20 +63,21 @@ def test():
     call(["php", "server/toolbox", "seed:refresh"]);
 
     os.chdir("apitests")
-    call(["ava", "--fail-fast", "--verbose", "tests/"])
+    call(["ava", "--fail-fast", "--verbose", "--watch", "tests/"])
     os.chdir("..")
 
 def listenv():
     print("KRUS_ROOT:",     os.environ.get("KRUS_ROOT"))
     print("KRUS_WEB_HOST:", os.environ.get("KRUS_WEB_HOST"))
     print("KRUS_WEB_PORT:", os.environ.get("KRUS_WEB_PORT"))
+    print("KRUS_API_HOST:", os.environ.get("KRUS_API_HOST"))
+    print("KRUS_API_PORT:", os.environ.get("KRUS_API_PORT"))
     print("KRUS_DB_HOST:",  os.environ.get("KRUS_DB_HOST"))
     print("KRUS_DB_PORT:",  os.environ.get("KRUS_DB_PORT"))
-    print("KRUS_DB_PASS:",  os.environ.get("KRUS_DB_PASS"))
 
 def serve():
-    host = os.environ.get("KRUS_WEB_HOST")
-    port = os.environ.get("KRUS_WEB_PORT")
+    host = os.environ.get("KRUS_API_HOST")
+    port = os.environ.get("KRUS_API_PORT")
 
     if not host or not port:
         print("ERROR you have to source .env KRUS_WEB_HOST and KRUS_WEB_PORT")
@@ -88,11 +98,10 @@ def dockerbuild():
 
 if __name__ == "__main__":
 
-    scriptpath = os.path.dirname(os.path.realpath(__file__))
-    os.chdir(scriptpath)
+    change_working_directory_to_script_directory()
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-e", "--env", nargs=2, help="web:port db:port dbpass. example 127.0.0.1:4000 :3306. Outputing .env")
+    parser.add_argument("-e","--env", nargs=3, help="Sets environemnt variables for the devenv")
     
     parser.add_argument("-l", "--list", help="List environment variables",action="store_true")
     parser.add_argument("-i", "--install", help="install all npm and composer deps",action="store_true")
@@ -114,15 +123,7 @@ if __name__ == "__main__":
         test()
 
     elif argv.env:
-
-        if ":" not in argv.env[0] or ":" not in argv.env[1]:
-            print("ERROR has to have a ':' separator like web:port db:port")
-            sys.exit()
-
-        webargs = argv.env[0].split(":")
-        dbargs  = argv.env[1].split(":")
-        #dbpass  = argv.env[2]
-        setenv(webargs[0], webargs[1],dbargs[0], dbargs[1])
+        setdevenv(webport=argv.env[0], apiport=argv.env[1], dbport=argv.env[2])
 
     elif argv.serve:
         serve()
