@@ -96,16 +96,20 @@ test.serial('Remove video from playlist', async (t) => {
 //        for future references... as they are not data at all - JSolsvik 27.04.2018
 test.serial('Check if video was removed from playlist', async (t) => {
     t.plan(3)
-    let query = `{
-      playlist(id:${playlistvideo.playlistid}) {
-        nodes {
-          id
-          deleted_at
-        }
-      }
-    }`
 
-    const res   = await axios.post(`${API}/graphql?query=${query}`, axiosBearer(userToken));
+
+    let data = {
+      query: `{
+        playlist(id:${playlistvideo.playlistid}) {
+          nodes {
+            id
+            deleted_at
+          }
+        }
+      }`
+    }
+
+    const res   = await axios.post(`${API}/graphql`, data, axiosBearer(userToken));
 
     t.truthy(res.data.data, "Playlist undefined")
 

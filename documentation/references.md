@@ -1,4 +1,10 @@
 
+#### 2018-05-01
+
+* https://www.webcomponents.org/element/PolymerElements/iron-pages/elements/iron-pages
+* https://github.com/tur-nr/polymer-redux/blob/master/demo/async.html
+* https://www.webcomponents.org/element/PolymerElements/paper-input
+
 
 #### 2018-04-18
 
