@@ -50,7 +50,6 @@ class SubscriptionsController extends Controller {
 			return response::statusCode(201, "Resubscribed to playlist");
 		}
 			
-		print_r($existingSubscription);
 		$subscriptions->userid = $currentUser->id;
 		$subscriptions->playlistid = $currentPlaylist->id;
 

@@ -162,7 +162,7 @@ Route::post('graphql', 'GraphQLController.query')
 
 // Error class
 Route::notFound(function() {
-    echo "404 not found";
+    return "404 not found";
 });
 
 Route::onInternal(function() {
