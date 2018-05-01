@@ -24,6 +24,11 @@ class AuthController extends Controller {
         return Response::statusCode(204);
     }
 
+    public function updateToken(Request $req, Response $res) {
+        $token = Hash::JWT(["key" => 'userid', 'value' => $req->token()->userid]);
+        return Response::statusCode(200, ['token' => $token]);
+    }
+
     public function postLogin(UsersModel $user, Request $req, Response $res) {
         $myUser = $user->find([
             'email' => $req->input('email'),

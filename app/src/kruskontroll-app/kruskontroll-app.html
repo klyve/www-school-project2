@@ -1,9 +1,16 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/brum-global-variable/index.html">
+
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+
 <link rel="import" href="../store/store.html">
 <link rel="import" href="../actions/user.html">
 <link rel="import" href="./components/main/template/main_template.html">
-
+<link rel="import" href="./components/main/template/login_template.html">
+<link rel="stylesheet" href="../../main.css">
 <dom-module id="kruskontroll-app">
   <template>
     <style>
@@ -12,9 +19,23 @@
       }
     </style>
 
-    <h1>Your username is [[username]]!</h1>
+    <!-- app-location binds to the app's URL -->
+    <app-location route="{{route}}"></app-location>
+
+    <!-- this app-route manages the top-level routes -->
+    <app-route
+        route="{{route}}"
+        pattern="/:view"
+        data="{{routeData}}"
+        tail="{{subroute}}"
+      ></app-route>
+
+    <iron-pages selected="[[routeData.view]]" attr-for-selected="name" fallback-selection="main">
+      <login-template name="login"></login-template>
+      <h1 name="register">Register</h1>
+      <main-template name="main"></main-template>
+    </iron-pages>
     
-    <main-template></main-template>
 
   </template>
 
@@ -30,7 +51,7 @@
 
         window.setTimeout(() => {
           this.dispatch({
-            type: 'UPDATE_USERNAME',
+            type: 'U  PDATE_USERNAME',
             payload: {
               name: 'Bjarte',
             },

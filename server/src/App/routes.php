@@ -8,7 +8,6 @@ use App\Models\UsersModel;
 Route::get('/hello', 'SimpleJSONController.sayHelloJSON');
 
 Route::get('/', function() {
-    
     return ['hey'];
 });
 
@@ -16,7 +15,6 @@ Route::get('/', function() {
 
 // ->withMiddlewares(['IsAuthenticated'])
 //->withValidators(['UserValidations.login']);
-
 
 Route::post('user/login', 'AuthController.postLogin')
     ->withValidators(['UserValidations.login']);
@@ -31,6 +29,8 @@ Route::put('user/password', 'AuthController.putPassword')
 Route::post('user/refresh', 'AuthController.refreshToken')
     ->withMiddlewares(['IsAuthenticated']);
 
+Route::get('testtoken', 'AuthController.updateToken')
+    ->withMiddlewares(['SetActiveUser']);
 
 
 // VideosController
@@ -79,8 +79,10 @@ Route::get('test', functioN() {
     var_dump($users);
 });
 
-Route::get('graphql', 'GraphQLController.query');
-Route::post('graphql', 'GraphQLController.query');
+Route::get('graphql', 'GraphQLController.query')
+    ->withMiddlewares(['SetActiveUser']);
+Route::post('graphql', 'GraphQLController.query')
+    ->withMiddlewares(['SetActiveUser']);
 
 
 // Error class

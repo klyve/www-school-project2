@@ -3,6 +3,9 @@
 use \GraphQL\Type\Definition\ObjectType;
 use \GraphQL\Type\Definition\ResolveInfo;
 use \GraphQL\Type\Definition\Type;
+
+use \MVC\Helpers\Auth;
+
 use \App\Http\Types;
 use \App\Models\UsersModel;
 use \App\Models\VideosModel;
@@ -21,6 +24,10 @@ class QueryType extends ObjectType
                     'args' => [
                         'id' => Types::nonNull(Types::id())
                     ]
+                ],
+                'viewer' => [
+                    'type' => Types::user(),
+                    'description' => 'Current user',
                 ],
                 'users' => [
                     'type' => Types::listOf(Types::user()),
@@ -62,6 +69,10 @@ class QueryType extends ObjectType
     }
     public function hello() {
         return 'Your graphql-php endpoint is ready! Use GraphiQL to browse API';
+    }
+
+    public function viewer($rootValue, $args, $req, $info) {
+        return Auth::user();
     }
 
     public function users($rootValue, $args, $req, $info) {

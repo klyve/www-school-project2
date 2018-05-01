@@ -3,5 +3,8 @@
     "rules": [
       "polymer-2"
     ]
-  }
+  },
+  "extraDependencies": [
+    "bower_components/slate-font-awesome/fonts/*.*"
+  ]
 }
