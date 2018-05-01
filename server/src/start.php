@@ -27,6 +27,7 @@ if(php_sapi_name() === 'cli') {
     echo "PHP CLI TOOL\n\r";
     MVC\Core\Cli::init($argv);
 }else {
+    ob_start();
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
     header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE');

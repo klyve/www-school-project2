@@ -29,7 +29,7 @@ class GraphQLController extends Controller {
             $req,
             (array) $data['variables']
         );
-        return $result->toArray($debug);
+        return $result->toArray();
     }
 }
 

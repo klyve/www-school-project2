@@ -26,7 +26,7 @@ class Response {
  * @return [type]       [description]
  */
     public static function send($data) {
-    
+        
         $ret = null;
         $data = self::unpackData($data);
         if(is_array($data) || gettype($data) === "object") {
@@ -34,6 +34,8 @@ class Response {
         }
         
         if($data) echo $data;
+
+        exit;
     }
 /**
  * @TODO: [json description]

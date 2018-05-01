@@ -76,9 +76,8 @@
                     .then(res => {
                         const data = res.data;
                         dispatch(postLoginSuccess(data));
-                        console.log(data);
                         storeObject(data);
-                        window.history.pushState({}, null, '/');
+                        window.history.pushState({}, null, '#/');
                         window.dispatchEvent(new CustomEvent('location-changed'));
                     })
                     .catch(error => {
@@ -105,7 +104,6 @@
                         }))
                     }
 
-
                 }
             }
         }
@@ -115,7 +113,7 @@
 
     // graphql(`
     //     query {
-    //         user(id: 1) {
+    //         user(id: ${id}) {
     //             name
     //         }
     //     }
