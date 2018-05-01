@@ -15,15 +15,24 @@
  */
 
 class Database {
+
+
+
     private static $connection = false;
     /**
      * @return $connection @TODO describe whats returned
      */
     public static function instance() {
         global $config;
+        
+        $dsn = 'mysql:dbname=' . $config['database']['database'].
+              ';host=' . $config['database']['host'].
+              ';port=' . $config['database']['port'];
+
         if(!self::$connection) {
-            self::$connection = new \PDO('mysql:dbname='.$config['database']['database'].';host=' . $config['database']['host'], $config['database']['username'], $config['database']['password'],
-            array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION));
+            self::$connection = new \PDO($dsn, $config['database']['username'], 
+                                               $config['database']['password'],
+                         array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION));
         }
         return self::$connection;
     }

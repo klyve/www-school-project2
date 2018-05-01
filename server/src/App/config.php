@@ -3,9 +3,10 @@
 $config = [
     'database' => [
         'host' => getenv('KRUS_DB_HOST'),
+        'port' => getenv('KRUS_DB_PORT'),
         'database' => 'mvc',
         'username' => 'root',
-        'password' => ''
+        'password' => '',
     ],
     'token' => [
         'secret' => 'wgh%#Q(%!=!?#%(!i0eohjweopghj=!#%)w2eoghp2q=3gjh9023',
