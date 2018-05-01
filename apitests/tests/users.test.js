@@ -8,7 +8,7 @@ const credentials = {
     email: guid()+'@stud.ntnu.no',
     name: 'bjarte',
     password: 'somepassword',
-    newpassword: 'hello123',
+    newpassword: 'hello123'
 };
 
 let userToken = null

@@ -78,8 +78,16 @@ test.serial('Create playlist', async (t) => {
 test.serial('Check if playlist was created', async (t) => {
    
     t.plan(2)
-    const res = await axios.post(`${API}/graphql?query={ playlist(id: ${playlistdata.id}) {  id, title, description }}`, axiosBearer(userToken))
-
+    let data = {
+        query:`{ 
+            playlist(id: ${playlistdata.id}) {  
+                id, 
+                title, 
+                description 
+            }
+        }`
+    };
+    const res = await axios.post(`${API}/graphql`, data, axiosBearer(userToken))
 
     t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.status}`)
     t.true( isEqualsShallow(res.data.data.playlist, playlistdata), "Shallow equal unsuccessful")
@@ -103,7 +111,8 @@ test.serial('Check if playlist updated correctly', async (t) => {
 
 
     t.plan(2)
-    const res = await axios.post(`${API}/graphql?query={ playlist(id: ${updatedPlaylistdata.id}) {  id, title, description }}`, axiosBearer(userToken))
+    const data = {query: `{ playlist(id: ${updatedPlaylistdata.id}) {  id, title, description }}`}
+    const res = await axios.post(`${API}/graphql`, data, axiosBearer(userToken))
 
 
     t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.status}`)
@@ -131,9 +140,8 @@ test.serial('Check if playlist was deleted', async (t) => {
     t.plan(2)
 
 
-    const query = `query={ playlist(id: ${updatedPlaylistdata.id}) {  id, deleted_at }}`
-    const res = await axios.post(`${API}/graphql?${query}`, axiosBearer(userToken))
-
+    const data = {query: `{ playlist(id: ${updatedPlaylistdata.id}) {  id, deleted_at }}`}
+    const res = await axios.post(`${API}/graphql`, data, axiosBearer(userToken))
 
     t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.status}`)
     //console.log(res.data.data.playlist, updatedPlaylistdata)

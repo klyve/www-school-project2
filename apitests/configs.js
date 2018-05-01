@@ -1,3 +1,5 @@
+require ('dotenv').load();
+
 module.exports = {
-    API: 'http://127.0.0.1:4000',
+    API: `http://${process.env.KRUS_API_HOST}:${process.env.KRUS_API_PORT}/index.php`,
 }

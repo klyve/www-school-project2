@@ -1,0 +1,12 @@
+version: '3'
+services:
+
+  server:
+    build: server
+    env_file: .env
+    restart: always
+    ports:
+      - ${KRUS_WEB_PORT}:80
+      - ${KRUS_DB_PORT}:3306
+    volumes:
+      - ${KRUS_ROOT}/server:/var/www/html

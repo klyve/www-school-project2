@@ -38,7 +38,7 @@ class SubscriptionsController extends Controller {
 
 
 		if ($existingSubscription->id
-		&& !$existingSubscription->deleted_at) {	
+		&& empty($existingSubscription->deleted_at)) {	
 			return response::statusCode(200, "Already Subscribed");
 		}
 			
@@ -79,7 +79,9 @@ class SubscriptionsController extends Controller {
 			'playlistid' => $currentPlaylist->id,
 		]);
 
-		if($existingSubscription->id && $existingSubscription->deleted_at == null){	// Already subscribed, delete subscription
+		// Already subscribed, delete subscription
+		if($existingSubscription->id
+		&& empty($existingSubscription->deleted_at)) {
 			
 			$subscriptions->update([
 				'id' => $existingSubscription->id,
@@ -88,7 +90,7 @@ class SubscriptionsController extends Controller {
 			]);
 
 			return response::statusCode(202, "Delete accepted");
-		}else{						// Not subscribed, subscribing.
+		} else {						// Not subscribed, subscribing.
 
 			return response::statusCode(200, "Not subscribed");
 		}

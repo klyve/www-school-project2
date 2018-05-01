@@ -61,8 +61,8 @@ test.serial('Check if video was added to playlist', async (t) => {
    
     t.plan(2)
 
-    const query =  `{ playlist(id: ${playlistvideo.playlistid}) {  videos{  id  }   }}`;
-    const res   = await axios.post(`${API}/graphql?query=${query}`, {}, axiosBearer(userToken));
+    const data = {query: `{ playlist(id: ${playlistvideo.playlistid}) {  videos{  id  }   }}`};
+    const res   = await axios.post(`${API}/graphql`,data, axiosBearer(userToken));
 
     let filtered = res.data
                       .data
@@ -96,16 +96,20 @@ test.serial('Remove video from playlist', async (t) => {
 //        for future references... as they are not data at all - JSolsvik 27.04.2018
 test.serial('Check if video was removed from playlist', async (t) => {
     t.plan(3)
-    let query = `{
-      playlist(id:${playlistvideo.playlistid}) {
-        nodes {
-          id
-          deleted_at
-        }
-      }
-    }`
 
-    const res   = await axios.post(`${API}/graphql?query=${query}`, axiosBearer(userToken));
+
+    let data = {
+      query: `{
+        playlist(id:${playlistvideo.playlistid}) {
+          nodes {
+            id
+            deleted_at
+          }
+        }
+      }`
+    }
+
+    const res   = await axios.post(`${API}/graphql`, data, axiosBearer(userToken));
 
     t.truthy(res.data.data, "Playlist undefined")
 
@@ -148,16 +152,17 @@ test.serial('Change playlist order', async (t) => {
 
 // @BUG 'Cannot query field "position" on type "VideoRatingType"
 test.serial('Check if playlist order changed correctly', async (t) => {
-    const query = `{
-      playlist(id:${playlistvideo.playlistid}) {
-        nodes {
-          id
-          position
+    const data = {
+      query: `{
+        playlist(id:${playlistvideo.playlistid}) {
+          nodes {
+            id
+            position
+          }
         }
-      }
-    }`
-    
-    const res = await axios.post(`${API}/graphql?query=${query}`, axiosBearer(userToken))
+      }`
+    }
+    const res = await axios.post(`${API}/graphql`, data, axiosBearer(userToken))
 
     t.truthy(res.data.data, "Graphql query did not return results")
 
@@ -186,16 +191,18 @@ test.serial('Change playlist order back', async (t) => {
 
 // @BUG 'Cannot query field "position" on type "VideoRatingType"
 test.serial('Check if playlist order changed back again correctly', async (t) => {
-    const query = `{
-        playlist(id:${playlistvideo.playlistid}) {
-          nodes {
-            id
-            position
+      const data = {
+        query: `{
+          playlist(id:${playlistvideo.playlistid}) {
+            nodes {
+              id
+              position
+            }
           }
-        }
-      }`
-      
-      const res = await axios.post(`${API}/graphql?query=${query}`, axiosBearer(userToken))
+        }`
+      }
+        
+      const res = await axios.post(`${API}/graphql`, data, axiosBearer(userToken))
       t.truthy(res.data.data, "Graphql query did not return results")
   
       reorderDataBefore.reordering.map(wanted => {

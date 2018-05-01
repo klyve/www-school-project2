@@ -123,14 +123,15 @@ test.serial('Post video', async t => {
 
 test.serial('Check if video was created', async t => {
 
-    let query = `{
+    let data = {
+      query: `{
         video(id: ${videoid}) {
             title,
             description
         }
-    }
-    `
-    const res = await axios.get(`${API}/graphql?query=${query}`, axiosBearer(userToken))
+      }
+    `}
+    const res = await axios.post(`${API}/graphql`, data, axiosBearer(userToken))
     t.truthy(res.data.data)
     t.true(isEqualsShallow(res.data.data.video, {title: newVideodata.title, description: newVideodata.description}), "updated object does not match intended")
 })
@@ -155,14 +156,15 @@ test.serial('Put video', async t => {
 
 test.serial('Check if video was updated', async t => {
 
-    let query = `{
+    let data = {
+      query: `{
         video(id: ${videoid}) {
-            title,
-            description
+          title,
+          description
         }
+      }`
     }
-    `
-    const res = await axios.get(`${API}/graphql?query=${query}`, axiosBearer(userToken))
+    const res = await axios.post(`${API}/graphql`, data, axiosBearer(userToken))
     t.truthy(res.data.data)
     t.true(isEqualsShallow(res.data.data.video, updateVideodata), "updated object does not match intended")
 })
