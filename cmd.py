@@ -92,7 +92,7 @@ def test():
     call(["php", "server/toolbox", "seed:refresh"])
 
     os.chdir("apitests")
-    call(["ava", "--fail-fast", "--verbose", "tests/"])
+    call(["ava", "--fail-fast", "--verbose", "--watch", "tests/"])
     os.chdir("..")
 
 def listenv():

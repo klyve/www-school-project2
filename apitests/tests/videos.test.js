@@ -1,9 +1,8 @@
 import test from 'ava';
-const { API } = require('../configs');
+const { KRUS_ROOT, API } = require('../configs');
 const { testDataIntegrity, axiosBearer, axiosFile, isEqualsShallow } = require('../methods');
 const axios = require('axios');
 const fs = require("fs");
-
 
 // HTTP STATUS CODES
 const HTTP_OK            = 200;  // Success and returning content
@@ -176,6 +175,53 @@ test.serial('Delete video', async t => {
 
     const res = await axios.delete(`${API}/video/${videoid}`, axiosBearer(userToken))
 
-    console.log(res.data);
     t.is(res.status, HTTP_ACCEPTED, `Expected status code ${HTTP_ACCEPTED} got ${res.statusCode}`)
 });
+
+
+
+const deleteFolderRecursive = path => {
+    var files = [];
+    if( fs.existsSync(path) ) {
+        files = fs.readdirSync(path);
+        let keep = false;
+        files.forEach(function(file,index){
+            
+            var curPath = path + "/" + file;
+            if(fs.lstatSync(curPath).isDirectory()) { // recurse
+                deleteFolderRecursive(curPath);
+            } else { // delete file
+                if (file != ".gitkeep" && file.indexOf("example") == -1) {
+                    fs.unlinkSync(curPath);
+                } else {
+                    keep = true;
+                }
+            }
+        });
+        if(!keep) {
+            fs.rmdirSync(path);
+        }
+    }
+};
+
+
+test.after.always(async t => {
+
+    // Clean out testdata
+    const PUBLIC_MEDIA_VIDEOS    = `${KRUS_ROOT}/server/public/media/subtitles/`
+    const PUBLIC_MEDIA_SUBTITLES = `${KRUS_ROOT}/server/public/media/videos/`
+    const PUBLIC_MEDIA_THUMBNAILS = `${KRUS_ROOT}/server/public/media/thumbnails/`
+    const PUBLIC_TEMP = `${KRUS_ROOT}/server/public/temp/`
+
+    deleteFolderRecursive(PUBLIC_MEDIA_VIDEOS)
+    deleteFolderRecursive(PUBLIC_MEDIA_SUBTITLES)
+    deleteFolderRecursive(PUBLIC_MEDIA_THUMBNAILS)
+    deleteFolderRecursive(PUBLIC_TEMP)
+
+})
+
+
+
+
+
+
