@@ -25,6 +25,21 @@ class UsersController extends Controller {
         ]);
   }
 
+    public function updateGroup(UsersModel $user, Request $req) {
+        $userid = $req->param('id');
+
+        $user->find([
+            'id' => $userid
+        ]);
+        if(!$user->id) {
+            return Response::statusCode(HTTP_NOT_FOUND, "Could not find $userid");
+        }
+        $user->usergroup = $req->input('group');
+        $user->save();
+
+        return Response::statusCode(HTTP_OK, $user);
+    }
+
 
     public function putUser(UsersModel $user, Request $req) {
 

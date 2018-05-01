@@ -12,6 +12,7 @@ use \App\Http\Type\SearchType;
 use \App\Http\Type\TagsType;
 use \App\Http\Type\PlaylistNodeType;
 use \App\Http\Type\VideoRatingType;
+use \App\Http\Type\SubscriptionsType;
 
 /**
  * Class Types
@@ -35,6 +36,7 @@ class Types
     private static $node;
     private static $tags;
     private static $rating;
+    private static $subs;
 
     /**
      * @return QueryType
@@ -82,6 +84,14 @@ class Types
     public static function tags()
     {
         return self::$tags ?: (self::$tags = new TagsType());
+    }
+
+    /**
+     * @return VideoType
+     */
+    public static function subscriptions()
+    {
+        return self::$subs ?: (self::$subs = new SubscriptionsType());
     }
 
     /**

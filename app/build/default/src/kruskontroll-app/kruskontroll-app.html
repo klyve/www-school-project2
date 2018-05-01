@@ -1,0 +1,72 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/brum-global-variable/index.html">
+
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+
+<link rel="import" href="../store/store.html">
+<link rel="import" href="../actions/user.html">
+<link rel="import" href="./components/main/template/main_template.html">
+<link rel="import" href="./components/main/template/login_template.html">
+<link rel="import" href="./components/main/template/register_template.html">
+<link rel="stylesheet" href="../../main.css">
+<dom-module id="kruskontroll-app">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <!-- app-location binds to the app's URL -->
+    <app-location route="{{route}}" use-hash-as-path=""></app-location>
+
+    <!-- this app-route manages the top-level routes -->
+    <app-route route="{{route}}" pattern="/:view" data="{{routeData}}" tail="{{subroute}}"></app-route>
+
+    <iron-pages selected="[[routeData.view]]" attr-for-selected="name" fallback-selection="main">
+      <login-template name="login"></login-template>
+      <register-template name="register"></register-template>
+      <main-template name="main"></main-template>
+    </iron-pages>
+    
+
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class KruskontrollApp extends ReduxStore(Polymer.Element) {
+      static get is() { return 'kruskontroll-app'; }
+      ready() {
+        super.ready();
+      }
+      static get properties() {
+        return {
+          active: {
+            type: String,
+            value: "false",
+          },
+          prop1: {
+            type: String,
+            value: 'kruskontroll-app'
+          },
+          username: {
+            type: String,
+            statePath: 'user.name',
+          },
+          message: {
+            type: String,
+            statePath: 'testReducer.message'
+          }
+        };
+      }
+    }
+    
+    window.customElements.define(KruskontrollApp.is, KruskontrollApp);
+  </script>
+</dom-module>

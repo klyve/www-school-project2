@@ -43,6 +43,8 @@ Route::post('user/refresh', 'AuthController.refreshToken')
 Route::get('testtoken', 'AuthController.updateToken')
     ->withMiddlewares(['SetActiveUser']);
 
+Route::put('/user/{id}/group', 'UsersController.updateGroup')
+    ->withMiddlewares(['IsAuthenticated', 'SetActiveUser', 'IsAdmin']);
 
 
 //

@@ -1,0 +1,57 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../bower_components/slate-font-awesome/slate-font-awesome.html">
+
+<link rel="import" href="../../styles.html">
+<link rel="import" href="../video-grid/video-item.html">
+
+
+
+<dom-module id="search-page">
+  <template>
+      <style include="shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+    <style include="slate-font-awesome"></style>
+
+    <div class="content-grid">
+        <div class="title">
+            <h1>Search</h1>
+        </div>
+
+        <div class="band">
+            <template is="dom-repeat" items="{{videos}}">
+                <video-item item="{{item}}" index={{index}}></video-item>
+            </template>
+        </div>
+    </div>
+    
+    
+
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class SearchPage extends ReduxStore(Polymer.Element) {
+
+      static get is() { return 'search-page'; }
+        ready() {
+            super.ready();
+        }
+        static get properties() {
+            return {
+                videos: {
+                    type: Array,
+                    statePath: 'search.videos',
+                },
+            };
+        }
+    }
+    
+    window.customElements.define(SearchPage.is, SearchPage);
+  </script>
+</dom-module>

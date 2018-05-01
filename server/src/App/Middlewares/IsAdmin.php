@@ -17,6 +17,7 @@ use \MVC\Core\Session;
 
 use App\Models as Model;
 use \MVC\Http\Response;
+use \MVC\Helpers\Auth;
 
 class IsAdmin {
 
@@ -26,22 +27,12 @@ class IsAdmin {
  * @return redirect @TODO describe whats returned
  */
     public function run($request, $next) {
-        $userId = Session::get('uid');
-
-        $response = new Response();
-
+        $user = Auth::user();
         /** checks if we got a uid */
-        if(!$userId) {
-            return $response->redirect('index');
-        }else {
-            $user = new Model\UsersModel();
-            $user->find(['id' => $userId]);
-
-            /** checks if the user doesnt have id or usergroup level is 2 or lower */
-            if(!$user->id || $user->usergroup <= 2) {
-                return $response->redirect('index');
-            }
+        if(!($user->id) || ($user->usergroup < 3)) {
+            return "ERROR";
         }
+        
         /** continues the request */
         $next($request);
     }
