@@ -1,6 +1,7 @@
 <link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../../../../bower_components/slate-font-awesome/slate-font-awesome.html">
 
+<link rel="import" href="../../../../actions/user.html">
 <link rel="import" href="../../../../store/store.html">
 <link rel="import" href="../../../styles.html">
 
@@ -167,7 +168,7 @@
      * @customElement
      * @polymer
      */
-    class MainTemplate extends ReduxStore(Polymer.Element) {
+    class MainTemplate extends UserActions(ReduxStore(Polymer.Element)) {
 
       static get is() { return 'main-template'; }
       toggleMenu() {
@@ -178,6 +179,12 @@
           this.toggled = "";
         }
         // document.body.classList.add('expanded-menu')
+      }
+
+      ready() {
+        super.ready();
+        this.dispatch(this.getSessionData());
+        this.dispatch(this.getUser());
       }
 
       getUserFirstLetter(username) {

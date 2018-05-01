@@ -17,7 +17,8 @@ Route::get('/', function() {
 // 
 
 // UsersController
-Route::get('/user', "UsersController.getUser");
+Route::get('/user', "UsersController.getUser")
+    ->withMiddlewares(['IsAuthenticated']);
 
 Route::put('/user', 'UsersController.putUser')
     ->withMiddlewares(['IsAuthenticated']);

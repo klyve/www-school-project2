@@ -1,12 +1,19 @@
 <script src="../../bower_components/axios/dist/axios.js"></script>
 <script src="./constants.js"></script>
+<script src="./storage.js"></script>
 <script>
     
-    const bindParams = () => ({
-        headers: {
-            // 'Authorization': 'Bearer ' + token
+    const bindParams = () => {
+        const token = getStorageItem('token');
+        let ret = {
+            headers: {},
+        };
+        
+        if(token) {
+            ret.headers['Authorization'] = 'Bearer ' + token
         }
-    });
+        return ret;
+    };
 
     const get = (path) => {
         return axios.get(SERVER+path, bindParams());
