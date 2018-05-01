@@ -10,7 +10,8 @@
     "iron-pages": "PolymerElements/iron-pages#^2.1.1",
     "slate-font-awesome": "JeffLeFoll/slate-font-awesome#^4.7.3",
     "iron-form": "PolymerElements/iron-form#^2.3.0",
-    "paper-input": "PolymerElements/paper-input#^2.2.2"
+    "paper-input": "PolymerElements/paper-input#^2.2.2",
+    "axios": "^0.18.0"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0",
