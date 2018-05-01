@@ -2,7 +2,7 @@
 
 $config = [
     'database' => [
-        'host' => '127.0.0.1',
+        'host' => getenv('KRUS_DB_HOST'),
         'database' => 'mvc',
         'username' => 'root',
         'password' => ''
