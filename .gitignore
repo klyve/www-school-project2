@@ -19,3 +19,4 @@ server/public/media/subtitles/*
 
 *.env
 db/
+dist/

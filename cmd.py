@@ -7,6 +7,10 @@ import sys
 def change_working_directory_to_script_directory():
     scriptpath = os.path.dirname(os.path.realpath(__file__))
     os.chdir(scriptpath)
+    return scriptpath
+
+def get_script_directory():
+    return os.path.dirname(os.path.realpath(__file__))
 
 
 def setdevenv(webhost="127.0.0.1",
@@ -43,29 +47,49 @@ def setdevenv(webhost="127.0.0.1",
         envfile.write("KRUS_API_PORT="+apiport+"\n")
 
 
-def install():
-    os.chdir("apitests")
-    call(["npm","install"]);
+def fetch():
+
+    ROOT = get_script_directory()
+
+    os.chdir( ROOT+"/apitests" ) 
+    call(["npm","install"])
     
     os.chdir("../server")
-    call(["composer","install"]);
+    call(["composer","install"])
     
     os.chdir("../design")
-    call(["bower","install"]);
-    call(["npm","install"]);
+    call(["bower","install"])
+    call(["npm","install"])
 
     os.chdir("../app")
-    call(["bower","install"]);
-    call(["npm","install"]);
+    call(["bower","install"])
+    call(["npm","install"])
+
+    os.chdir("..")
+
+
+def build_only():
+
+    ROOT = get_script_directory()
+
+    call(["rm", "-r", ROOT+"/dist"])
+    call(["mkdir", "dist"])
+
+    call(["cp", "-r", ROOT+"/server/", ROOT+"/dist/"])
+
+
+def build():
+    fetch()
+    build_only()
 
 
 def migseed():
-    call(["php", "server/toolbox", "migrate:refresh"]);
-    call(["php", "server/toolbox", "seed:refresh"]);
+    call(["php", "server/toolbox", "migrate:refresh"])
+    call(["php", "server/toolbox", "seed:refresh"])
 
 def test():
-    call(["php", "server/toolbox", "migrate:refresh"]);
-    call(["php", "server/toolbox", "seed:refresh"]);
+    call(["php", "server/toolbox", "migrate:refresh"])
+    call(["php", "server/toolbox", "seed:refresh"])
 
     os.chdir("apitests")
     call(["ava", "--fail-fast", "--verbose", "tests/"])
@@ -106,10 +130,11 @@ if __name__ == "__main__":
     change_working_directory_to_script_directory()
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-e","--env", nargs=3, help="Sets environemnt variables for the devenv")
-    
-    parser.add_argument("-l", "--list", help="List environment variables",action="store_true")
-    parser.add_argument("-i", "--install", help="install all npm and composer deps",action="store_true")
+    parser.add_argument("-e","--env", nargs=3, help="<WEB PORT> <API PORT> <DB PORT>")
+    parser.add_argument("-l", "--list", help="List environment variables", action="store_true")
+    parser.add_argument("-f", "--fetch", help="Fetch depencies from bower, npm and composer",action="store_true")
+    parser.add_argument("-b", "--build", help="Fetching and building to /dist",action="store_true")
+    parser.add_argument("-bo", "--build-only", help="Build only to /dist",action="store_true")
     parser.add_argument("-m", "--migseed", help="migrate:refresh + seed:refresh", action="store_true")
     parser.add_argument("-t", "--test", help="Run all tests", action="store_true")
     parser.add_argument("-s", "--serve", help="Run webserver",action="store_true")
@@ -118,8 +143,14 @@ if __name__ == "__main__":
 
     argv = parser.parse_args()
 
-    if argv.install:
-        install()
+    if argv.fetch:
+        fetch()
+
+    elif argv.build:
+        build()
+
+    elif argv.build_only:
+        build_only()
 
     elif argv.migseed:
         migseed()
