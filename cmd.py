@@ -1,6 +1,3 @@
-#!/usr/local/bin/python3
-# -*- coding:utf-8 -*-
-
 import argparse
 from subprocess import call
 import os
@@ -21,7 +18,7 @@ def setdevenv(webhost="127.0.0.1",
 
     with open(".env", "w") as envfile:
         envfile.write("DIR=\"$( cd \"$( dirname \"${BASH_SOURCE[0]}\" )\" && pwd )\"\n")
-        envfile.write("alias krustool=\"$DIR/cmd.py\"\n")
+        envfile.write("alias krustool=\"python3 $DIR/cmd.py\"\n")
         envfile.write("echo \"aliased $DIR/cmd.py -> krustool\"\n\n")
 
         envfile.write("export KRUS_ROOT=$DIR\n")
@@ -49,10 +46,18 @@ def setdevenv(webhost="127.0.0.1",
 def install():
     os.chdir("apitests")
     call(["npm","install"]);
-    os.chdir("..")
-    os.chdir("server")
+    
+    os.chdir("../server")
     call(["composer","install"]);
-    os.chdir("..")
+    
+    os.chdir("../design")
+    call(["bower","install"]);
+    call(["npm","install"]);
+
+    os.chdir("../app")
+    call(["bower","install"]);
+    call(["npm","install"]);
+
 
 def migseed():
     call(["php", "server/toolbox", "migrate:refresh"]);

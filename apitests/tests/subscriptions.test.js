@@ -43,10 +43,12 @@ test.serial('Subscribe to playlist', async (t) =>{
 	);
 	t.true(res1.status === 201 || res1.status === 200);	// Expect beeing subscribed to playlist.
 
+
 	const res3 = await axios.post(	
 		`${API}/playlist/${urlVars.playlistid}/subscribe`, null, axiosBearer(userToken)
 	);
 	t.true(res3.status === 200);
+
 });
 
 // @TODO This test will not pass until 'deleted_at' is not returned from Model::find()
