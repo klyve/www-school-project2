@@ -13,8 +13,6 @@
     const POST_REGISTER_FAILURE = 'POST_REGISTER_FAILURE';
     const POST_REGISTER_SUCCESS = 'POST_REGISTER_SUCCESS';
 
-    const GET_USER_DATA_SUCCESS = 'GET_USER_DATA_SUCCESS';
-
     const DO_LOGOUT_SUCCESS = 'DO_LOGOUT_SUCCESS';
 
 
@@ -63,13 +61,7 @@
         }
     });
 
-    const getUserDataSuccess = (user) => ({
-        type: GET_USER_DATA_SUCCESS,
-        payload:{
-            fetching: false,
-            ...user,
-        }
-    });
+
 
 
     const doLogoutUser = (user) => ({
@@ -103,26 +95,6 @@
                 }
             }
 
-            getUserInfo() {
-                return dispatch => {
-                    // dispatch()
-                    graphql(`query {
-                        viewer {
-                            subscriptions {
-                            playlist {
-                                id
-                                title
-                            }
-                            }
-                        }
-                    }`)
-                    .then(data => {
-                        dispatch(getUserDataSuccess(data.data.data.viewer));
-                    })
-                    .catch(err => console.log(err));
-                }
-            }
-
             postLogin() {
                 return async (dispatch) => {
                     dispatch(postLoginRequest());
@@ -143,7 +115,6 @@
 
                 }
             }
-
 
 
             postRegister() {

@@ -1,13 +1,9 @@
 <link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../../../../bower_components/slate-font-awesome/slate-font-awesome.html">
 
-
 <link rel="import" href="../../../../actions/user.html">
-<link rel="import" href="../../../../actions/site.html">
 <link rel="import" href="../../../../store/store.html">
-
 <link rel="import" href="../../video-grid/video-grid.html">
-<link rel="import" href="../../search-page/search-page.html">
 
 <link rel="import" href="../../../styles.html">
 
@@ -22,10 +18,9 @@
     <style include="slate-font-awesome"></style>
 
 
-      <div id="container" class$=[[toggled]]>
+      <div id="container" class$="[[toggled]]">
           <header>
             <div class="logo">
-              {{searchInput}}
             </div>
 
 
@@ -35,13 +30,11 @@
               </button>
 
               <div class="searchbar">
-                <form action="#/search" method="get" onSubmit="{{doSearch}}">
-                  <input type="text" placeholder="Search for something!" value="{{searchInput::input}}">
-                  
+                  <input type="text" placeholder="Search for something!">
+
                   <div class="icon-wrapper">
                     <i class="fa fa-search"></i>
                   </div>
-                </form>
               </div>
 
               <ul class="nav-right">
@@ -83,10 +76,7 @@
                   <li><a href="#"><i class="fa fa-heart-o"></i><span>Liked videos</span></a></li>
                   
                   <li class="heading"><h4>Subscriptions</h4></li>
-                  <template is="dom-repeat" items="{{subscriptions}}">
-                    <li><a href="#/playlist/{{item.playlist.id}}"><span>{{item.playlist.title}}</span></a></li>
-                  </template>
-                  
+
                 </ul>
 
                 <ul class="bottom">
@@ -98,21 +88,7 @@
             <div class="content-container">
               <div class="container-fluid">
                   <!-- Route are -->
-                  <!-- app-location binds to the app's URL -->
-                  <app-location route="{{route}}" use-hash-as-path></app-location>
-
-                  <!-- this app-route manages the top-level routes -->
-                  <app-route
-                      route="{{route}}"
-                      pattern="/:view"
-                      data="{{routeData}}"
-                      tail="{{subroute}}"
-                    ></app-route>
-                    <iron-pages selected="[[routeData.view]]" attr-for-selected="name" fallback-selection="main">
-                        <search-page name="search" route="{{subroute}}"></search-page>
-                        <video-grid name="main" route="{{subroute}}"></video-grid>
-                    </iron-pages>
-                  
+                  <video-grid></video-grid>
 
               </div>
             </div>
@@ -126,10 +102,11 @@
      * @customElement
      * @polymer
      */
-    class MainTemplate extends SiteActions(UserActions(ReduxStore(Polymer.Element))) {
+    class MainTemplate extends UserActions(ReduxStore(Polymer.Element)) {
 
       static get is() { return 'main-template'; }
       toggleMenu() {
+        console.log(this.toggled);
         if(this.toggled == "") {
           this.toggled = "expanded-menu";
         }else {
@@ -138,27 +115,10 @@
         // document.body.classList.add('expanded-menu')
       }
 
-      doSearch(e) {
-        if(e)
-          e.preventDefault();
-        this.dispatch(this.performSearch());
-      }
-
       ready() {
         super.ready();
         this.dispatch(this.getSessionData());
         this.dispatch(this.getUser());
-        this.dispatch(this.getUserInfo());
-        this.doSearch = this.doSearch.bind(this);
-        
-        const route = this.route.path;
-        const parts = route.split('/');
-        if(parts[0] == 'search' || parts[1] == 'search') {
-          const answer = parts[parts.length - 1];
-          this.searchInput = answer;
-          this.doSearch();
-        }
-        
       }
 
       logout() {
@@ -178,10 +138,6 @@
             type: String,
             statePath: 'user.token',
           },
-          subscriptions: {
-            type: String,
-            statePath: 'user.subscriptions',
-          },
           toggled: {
             type: String,
             value: '',
@@ -190,13 +146,6 @@
             type: String,
             computed: 'getUserFirstLetter(username)',
           },
-          searchInput: {
-            type: String,
-            value: '',
-          },
-          route: {
-            type: String,
-          }
         };
       }
     }

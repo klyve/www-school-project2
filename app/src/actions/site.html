@@ -5,44 +5,45 @@
 
 
 <script>
-    const GET_VIDEOS_REQUEST = 'GET_VIDEOS_REQUEST';
-    const GET_VIDEOS_FAILURE = 'GET_VIDEOS_FAILURE';
-    const GET_VIDEOS_SUCCESS = 'GET_VIDEOS_SUCCESS';
+    const GET_SEARCH_REQUEST = 'GET_SEARCH_REQUEST';
+    const GET_SEARCH_FAILURE = 'GET_SEARCH_FAILURE';
+    const GET_SEARCH_SUCCESS = 'GET_SEARCH_SUCCESS';
 
 
-    const getVideosRequest = () => ({
-        type: GET_VIDEOS_REQUEST,
+    const getSearchRequest = () => ({
+        type: GET_SEARCH_REQUEST,
         payload:{
             fetching: true,
         }
     });
-    const getVideosSuccess = videos => ({
-        type: GET_VIDEOS_SUCCESS,
+    const getSearchSuccess = search => ({
+        type: GET_SEARCH_SUCCESS,
         payload:{
             fetching: false,
-            ...videos
+            ...search
         }
     });
 
-    const getVideosFailure = () => ({
-        type: GET_VIDEOS_FAILURE,
+    const getSearchFailure = () => ({
+        type: GET_SEARCH_FAILURE,
         payload:{
             fetching: false,
         }
     });
 
 
-    const VideosActions = Polymer.dedupingMixin(function(superClass){
+    const SiteActions = Polymer.dedupingMixin(function(superClass){
         return class UserActions extends superClass {
             constructor() {
                super();
             }
             
 
-            getDashboardVideos() {
+            performSearch() {
                 return dispatch => {
-                    dispatch(getVideosRequest());
+                    dispatch(getSearchRequest());
                     graphql(`query {
+                        search(value: "${this.searchInput}" limit:10) {
                             videos {
                                 id
                                 title
@@ -50,9 +51,12 @@
                                 filethumbnail
                                 user {name}
                             }
+                        }
                     }`)
                     .then(res => {
-                        dispatch(getVideosSuccess(res.data.data));
+                        dispatch(getSearchSuccess(res.data.data.search));
+                        window.history.pushState({}, null, `#/search/${this.searchInput}`);
+                        window.dispatchEvent(new CustomEvent('location-changed'));
                     })
                     .catch(err => console.log(err));
                 }

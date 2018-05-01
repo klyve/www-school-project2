@@ -25,7 +25,7 @@ const userReducer = (state = initialUserState, action) => {
                 ...action.payload
             };
         }break;
-        case POST_LOGIN_REQUEST || POST_REGISTER_REQUEST: {
+        case POST_LOGIN_REQUEST || POST_REGIEST_REQUEST: {
             return {
                 ...state,
                 ...action.payload,
@@ -40,13 +40,6 @@ const userReducer = (state = initialUserState, action) => {
                 ...action.payload,
             };
         }break;
-        
-        case GET_USER_DATA_SUCCESS: {
-            return {
-                ...state,
-                ...action.payload,
-            };
-        }
 
         case DO_LOGOUT_SUCCESS: {
             return initialUserState;

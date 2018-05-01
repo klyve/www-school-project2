@@ -1,0 +1,42 @@
+<link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../../bower_components/slate-font-awesome/slate-font-awesome.html">
+
+<link rel="import" href="../../../../store/store.html">
+<link rel="import" href="../../../styles.html">
+
+
+<dom-module id="clean-template">
+  <template>
+      <style include="shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+    <style include="slate-font-awesome"></style>
+
+    
+
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class CleanTemplate extends ReduxStore(Polymer.Element) {
+
+      static get is() { return 'clean-template'; }
+      
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'kruskontroll-app'
+          },
+        };
+      }
+    }
+    
+    window.customElements.define(CleanTemplate.is, CleanTemplate);
+  </script>
+</dom-module>

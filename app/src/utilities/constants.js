@@ -4,4 +4,7 @@ const API = {
     PROD: 'http://localhost:3000/',
 };
 
+
+
 const SERVER = (env !== 'production') ? API.DEV : API.PROD;
+const THUMBNAIL = `${SERVER}public/media/thumbnails/`;

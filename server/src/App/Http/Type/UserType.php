@@ -6,6 +6,8 @@ use \GraphQL\Type\Definition\Type;
 use \App\Http\Types;
 use \App\Models\UsersModel;
 use \App\Models\VideosModel;
+use \App\Models\SubscriptionsModel;
+use \App\Models\PlaylistsModel;
 
 class UserType extends ObjectType {
     public function __construct() {
@@ -27,7 +29,10 @@ class UserType extends ObjectType {
                         'args' => [
                             'id' => Types::nonNull(Types::id()),
                         ],
-                    ]
+                    ],
+                    'subscriptions' => [
+                        'type' => Types::listOf(Types::subscriptions())
+                    ],
                 ];
             },
             'resolveField' => function($value, $args, $context, ResolveInfo $info) {
@@ -42,6 +47,12 @@ class UserType extends ObjectType {
         parent::__construct($config);
     }
 
+
+    public function resolveSubscriptions($user, $args) {
+        return (new SubscriptionsModel())->all([
+            'userid' => $user->id,
+        ]);
+    }
 
     public function resolveVideos($user, $args) {
         $videosModel = new VideosModel();
