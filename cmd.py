@@ -2,7 +2,7 @@ import argparse
 from subprocess import call
 import os
 import sys
-
+from dotenv import load_dotenv
 
 def change_working_directory_to_script_directory():
     scriptpath = os.path.dirname(os.path.realpath(__file__))
@@ -12,53 +12,55 @@ def change_working_directory_to_script_directory():
 def get_script_directory():
     return os.path.dirname(os.path.realpath(__file__))
 
+def load_environment_file():
+    ROOT = get_script_directory()
+    load_dotenv(dotenv_path=ROOT+"/.env", verbose=True)
 
-def inputOrDefault(key, default):
+def setdevenv():
 
-    displayText = "{}: ({}) ".format(key, default)
-    param = input(displayText)
-    if not param:
-        return default
-    return param
+    def writeOrDefault(file, key, default):
+
+        displayText = "{}: ({}) ".format(key, default)
+        param = input(displayText)
+        if not param:
+            file.write("export "+key+"="+default+"\n")
+            file.write("echo "+key+": $"+key+"\n")
+            return default
+
+        file.write("export "+key+"="+param+"\n")    
+        file.write("echo "+key+": $"+key+"\n")
+        return param
 
 
-def setdevenv(webhost="127.0.0.1",
-              webport="3000",
-              apihost="127.0.0.1",
-              apiport="4000",
-              dbhost="127.0.0.1",
-              dbport="3306"):
+    ROOT = get_script_directory()
+    with open(ROOT+"/.env", "w") as envfile:
 
-
-    dbPort = inputOrDefault("KRUS_DB_PORT","3306")
-
-    with open(".env", "w") as envfile:
         envfile.write("DIR=\"$( cd \"$( dirname \"${BASH_SOURCE[0]}\" )\" && pwd )\"\n")
         envfile.write("alias krustool=\"python3 $DIR/cmd.py\"\n")
-        envfile.write("echo \"aliased $DIR/cmd.py -> krustool\"\n\n")
-
+        envfile.write("echo \"aliased python3 $DIR/cmd.py -> krustool\"\n\n")
         envfile.write("export KRUS_ROOT=$DIR\n")
-        envfile.write("export KRUS_WEB_HOST="+webhost+"\n")
-        envfile.write("export KRUS_WEB_PORT="+webport+"\n")
-        envfile.write("export KRUS_API_HOST="+apihost+"\n")
-        envfile.write("export KRUS_API_PORT="+apiport+"\n")
-        envfile.write("export KRUS_DB_HOST="+dbhost+"\n")
-        envfile.write("export KRUS_DB_PORT="+dbport+"\n")
-
-        envfile.write("echo KRUS_ROOT:     $KRUS_ROOT\n")
-        envfile.write("echo KRUS_WEB_HOST: $KRUS_WEB_HOST\n")
-        envfile.write("echo KRUS_WEB_PORT: $KRUS_WEB_PORT\n")
-        envfile.write("echo KRUS_API_HOST: $KRUS_API_HOST\n")
-        envfile.write("echo KRUS_API_PORT: $KRUS_API_PORT\n")
-        envfile.write("echo KRUS_DB_HOST:  $KRUS_DB_HOST\n")
-        envfile.write("echo KRUS_DB_PORT:  $KRUS_DB_PORT\n")
 
 
+        writeOrDefault(envfile,"KRUS_WEB_HOST", "127.0.0.1")
+        writeOrDefault(envfile,"KRUS_WEB_PORT", "8080")
+        apihost = writeOrDefault(envfile, "KRUS_API_HOST", "127.0.0.1")
+        apiport  = writeOrDefault(envfile,"KRUS_API_PORT", "4000")
+        dbhost = writeOrDefault(envfile,"KRUS_DB_HOST", "127.0.0.1")
+        dbport = writeOrDefault(envfile,"KRUS_DB_PORT", "3306")
+        dbname = writeOrDefault(envfile,"KRUS_DB_NAME", "mvc")
+        dbuser = writeOrDefault(envfile,"KRUS_DB_USER", "root")
+        dbpassword = writeOrDefault(envfile,"KRUS_DB_PASSWORD", "")
 
+        with open(ROOT+"/apitests/.env", "w") as apienv:
+            apienv.write("KRUS_API_HOST="+apihost+"\n")
+            apienv.write("KRUS_API_PORT="+apiport+"\n")
 
-    with open("apitests/.env", "w") as envfile:
-        envfile.write("KRUS_API_HOST="+apihost+"\n")
-        envfile.write("KRUS_API_PORT="+apiport+"\n")
+        with open(ROOT+"/server/src/App/.env", "w") as serverenv:
+            serverenv.write("KRUS_DB_HOST="+dbhost+"\n")
+            serverenv.write("KRUS_DB_PORT="+dbport+"\n")
+            serverenv.write("KRUS_DB_NAME="+dbname+"\n")
+            serverenv.write("KRUS_DB_USER="+dbuser+"\n")
+            serverenv.write("KRUS_DB_PASSWORD="+dbpassword+"\n")
 
 
 def fetch():
@@ -124,7 +126,7 @@ def listenv():
     print("KRUS_DB_HOST:",  os.environ.get("KRUS_DB_HOST"))
     print("KRUS_DB_PORT:",  os.environ.get("KRUS_DB_PORT"))
 
-def serve():
+def serve(path):
     host = os.environ.get("KRUS_API_HOST")
     port = os.environ.get("KRUS_API_PORT")
 
@@ -133,7 +135,7 @@ def serve():
         sys.exit()
 
 
-    os.chdir("server")
+    os.chdir(path)
     call(["php", "-S", host+":"+port])
 
 
@@ -149,15 +151,17 @@ if __name__ == "__main__":
 
     change_working_directory_to_script_directory()
 
+    load_environment_file()
+
     parser = argparse.ArgumentParser()
-    parser.add_argument("-e","--env", nargs=3, help="<WEB PORT> <API PORT> <DB PORT>")
+    parser.add_argument("-e","--env", help="Set environment variables", action="store_true")
     parser.add_argument("-l", "--list", help="List environment variables", action="store_true")
     parser.add_argument("-f", "--fetch", help="Fetch depencies from bower, npm and composer",action="store_true")
     parser.add_argument("-b", "--build", help="Fetching and building to /dist",action="store_true")
     parser.add_argument("-bo", "--build-only", help="Build only to /dist",action="store_true")
     parser.add_argument("-m", "--migseed", help="migrate:refresh + seed:refresh", action="store_true")
     parser.add_argument("-t", "--test", help="Run all tests", action="store_true")
-    parser.add_argument("-s", "--serve", help="Run webserver",action="store_true")
+    parser.add_argument("-s", "--serve", nargs=1, help="<serverpath>")
     parser.add_argument("-d", "--docker", help="Run docker-compose up", action="store_true")
     parser.add_argument("-db", "--dockerbuild", help="Run docker-compose up + build", action="store_true")
 
@@ -179,10 +183,10 @@ if __name__ == "__main__":
         test()
 
     elif argv.env:
-        setdevenv(webport=argv.env[0], apiport=argv.env[1], dbport=argv.env[2])
+        setdevenv()
 
     elif argv.serve:
-        serve()
+        serve(argv.serve[0])
 
     elif argv.docker:
         docker()

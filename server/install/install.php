@@ -49,7 +49,6 @@
 <?php
 
 use \MVC\Database\Migrations;
-use \MVC\Database\Seeder;
 use \App\Models\UsersModel;
 use \MVC\Helpers\Hash;
 use \MVC\Http\ErrorCode;
@@ -76,7 +75,7 @@ function getParam($key, $default, $isPassword=false) {
 $isPassword=true;
 
 $dbName = getParam('db-name', 'mvc');
-$dbHost = getParam('db-host', 'http://127.0.0.1');
+$dbHost = getParam('db-host', '127.0.0.1');
 $dbPort = getParam('db-port', '3306');
 $dbUser = getParam('db-user', 'root');
 $dbPassword = getParam('db-password', '', $isPassword);
@@ -107,7 +106,6 @@ echo "Requiring".APP_ROOT."/mvc/bootstrap.php\n";
 echo "Requiring".APP_ROOT."/App/config.php\n\n";
 
 Migrations::runCLI(['refresh']);
-Seeder::runCLI(['refresh']);
 
 function createAdministrator($name, $email, $password) {
 
