@@ -89,7 +89,11 @@ def build_only():
     call(["rm", "-r", ROOT+"/dist"])
     call(["mkdir", "dist"])
 
-    call(["cp", "-r", ROOT+"/server/", ROOT+"/dist/"])
+    call(["cp", "-r", ROOT+"/server/public", ROOT+"/dist/public"])
+    call(["cp", "-r", ROOT+"/server/install", ROOT+"/dist/install"])
+    call(["cp", "-r", ROOT+"/server/src", ROOT+"/dist/src"])
+    call(["cp", "-r", ROOT+"/server/vendor", ROOT+"/dist/vendor"])
+    call(["cp", ROOT+"/server/index.php", ROOT+"/dist/index.php"])
 
 
 def build():

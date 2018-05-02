@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Kruskontroll - Installation</title>
+    <title>Kruskontroll / Configuration</title>
 </head>
 <body>
 
-<h1> Kruskontroll / <small>Installation</small> </h1>
+<h1> Kruskontroll / <small>Configuration</small> </h1>
 
 
 <style>
@@ -73,7 +73,7 @@
            class="input-install"
            type="text" 
            name="db-name"
-           data-placeholder="default: mvc"
+           placeholder="default: mvc"
            tabindex=0/>
 
 
@@ -82,7 +82,7 @@
            class="input-install"
            type="url" 
            name="db-host"
-           data-placeholder="default: http://127.0.0.1"
+           placeholder="default: http://127.0.0.1"
            tabindex=0/> 
 
     <label for="input-db-port">Port</label>
@@ -92,7 +92,7 @@
            name="db-port"
            min=1000
            max=99999
-           data-placeholder="default: 3306"
+           placeholder="default: 3306"
            tabindex=0/>
 
     <label for="input-db-user">User</label>
@@ -100,7 +100,7 @@
            class="input-install"
            type="text"
            name="db-user"
-           data-placeholder="default: root"
+           placeholder="default: root"
            tabindex=0/> 
 
 
@@ -109,7 +109,7 @@
            class="input-install"
            type="password" 
            name="db-password"
-           data-placeholder="default: <no password>"
+           placeholder="default: <no password>"
            tabindex=0/>
 
     </fieldset>
@@ -124,7 +124,7 @@
            class="input-install"
            type="text" 
            name="admin-name"
-           data-placeholder="default: admin"
+           placeholder="default: admin"
            tabindex=0/> 
 
     <label for="input-admin-email">Email</label>
@@ -132,7 +132,7 @@
            class="input-install"
            type="email" 
            name="admin-email"
-           data-placeholder="default: admin@kruskontroll.no"
+           placeholder="default: admin@kruskontroll.no"
            tabindex=0/> 
 
     <label for="input-admin-password">Password</label>
@@ -140,7 +140,7 @@
            class="input-install"
            type="password" 
            name="admin-password"
-           data-placeholder="default: 1234"
+           placeholder="default: 1234"
            tabindex=0/> 
 
     </fieldset>
@@ -163,16 +163,16 @@
 window.addEventListener('load', e => {
 
     // Toggle placeholder on/off on focus/blur
-    Array.from(document.getElementsByClassName('input-install')).forEach(el => {
+  /*  Array.from(document.getElementsByClassName('input-install')).forEach(el => {
 
-        el.placeholder = el.getAttribute('data-placeholder')
+        el.placeholder = el.getAttribute('placeholder')
         
         el.addEventListener('focus', e =>  
             e.target.placeholder = '' )
 
         el.addEventListener('blur', e => 
-            e.target.placeholder = e.target.getAttribute('data-placeholder'))
-    });
+            e.target.placeholder = e.target.getAttribute('placeholder'))
+    });*/
 })
 
 

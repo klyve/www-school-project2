@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Krusskontroll - Success</title>
+    <title>Krusskontroll / Installing...</title>
 
 <style>
     html {
@@ -13,11 +13,11 @@
         height: 25px;
     }
 
-    #form-button-id {
+    .input-install {
+        display: none;
         color: white;
         font-size: .9rem;
         text-align: center;
-        display: inline-block;
         border: none;
         padding: 0px 30px;
         height: 40px
@@ -34,14 +34,20 @@
         cursor: pointer;
     }
 
+    #pre-install-output {
+        display: none;
+    }
+
 </style>
 
 </head>
 
-<h1> Kruskontroll / <small>Installation success</small> </h1>
+<body>
+
+<h1> Kruskontroll / <small> Installing...</small> </h1>
 
 <?php
-echo "<pre>";
+echo "<pre id='pre-install-output'>";
 
 function getParam($key, $default, $isPassword=false) {
 
@@ -90,7 +96,7 @@ echo "</pre>";
 
 
 <form method="get" action="/">
-    <input id="form-button-id"
+    <input id="btn-home-id"
            type="submit"
            class="input-install bg-blue"
            value="Home page"/>
@@ -98,14 +104,30 @@ echo "</pre>";
 
 
 <form method="get" action="/install">
-    <input id="form-button-id"
+    <input id="btn-back-id"
            type="submit"
            class="input-install bg-red"
            value="Back"/>
 </form>
 
 
-<body>
-
 </body>
+<script>
+    window.addEventListener('load', e => {
+
+        window.setTimeout(() =>  {
+            document.getElementById('pre-install-output')
+                    .style
+                    .display = 'block';
+        }, 2000)
+
+        window.setTimeout(() => {
+            Array.from(document.getElementsByClassName('input-install'))
+                 .forEach(btn => {
+                    btn.style
+                       .display = 'inline-block';
+                 })
+        }, 2500)
+    })
+</script>
 </html>
