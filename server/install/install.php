@@ -48,7 +48,15 @@
 
 <?php
 
+use \MVC\Database\Migrations;
+use \MVC\Database\Seeder;
+use \App\Models\UsersModel;
+use \MVC\Helpers\Hash;
+use \MVC\Http\ErrorCode;
+
 define('APP_ROOT', __DIR__."/../src");
+$envpath = APP_ROOT."/App/.env";
+
 
 echo "<pre id='pre-install-output'>";
 
@@ -73,8 +81,7 @@ $dbPort = getParam('db-port', '3306');
 $dbUser = getParam('db-user', 'root');
 $dbPassword = getParam('db-password', '', $isPassword);
 
-$APP_FOLDER = APP_ROOT."/.env";
-$file = fopen($APP_FOLDER, "w");
+$file = fopen($envpath, "w");
 if(!$file) 
     die("Can't open .env file");
 
@@ -98,12 +105,6 @@ require_once APP_ROOT.'/App/config.php';
 
 echo "Requiring".APP_ROOT."/mvc/bootstrap.php\n";
 echo "Requiring".APP_ROOT."/App/config.php\n\n";
-
-use \MVC\Database\Migrations;
-use \MVC\Database\Seeder;
-use \App\Models\UsersModel;
-use \MVC\Helpers\Hash;
-use \MVC\Http\ErrorCode;
 
 Migrations::runCLI(['refresh']);
 Seeder::runCLI(['refresh']);

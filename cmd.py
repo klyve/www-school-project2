@@ -95,6 +95,8 @@ def build_only():
     call(["cp", "-r", ROOT+"/server/vendor", ROOT+"/dist/vendor"])
     call(["cp", ROOT+"/server/index.php", ROOT+"/dist/index.php"])
 
+    call(["rm", ROOT+"/dist/src/App/.env"])
+
 
 def build():
     fetch()
