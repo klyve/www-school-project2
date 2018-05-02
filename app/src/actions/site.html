@@ -10,6 +10,10 @@
     const GET_SEARCH_SUCCESS = 'GET_SEARCH_SUCCESS';
 
 
+    const DISPATCH_ERROR = 'DISPATCH_ERROR';
+    const CLEAR_ERROR = 'CLEAR_ERROR';
+
+
     const getSearchRequest = () => ({
         type: GET_SEARCH_REQUEST,
         payload:{
@@ -31,9 +35,19 @@
         }
     });
 
+    const dispatchError = (err) => ({
+        type: DISPATCH_ERROR,
+        payload: {
+            ...err
+        }
+    });
+
+
+    
+
 
     const SiteActions = Polymer.dedupingMixin(function(superClass){
-        return class UserActions extends superClass {
+        return class SiteActions extends superClass {
             constructor() {
                super();
             }
@@ -61,6 +75,18 @@
                     .catch(err => console.log(err));
                 }
             }
+
+
+            dispatchErrorMessage(err) {
+                return dispatchError();
+            }
+
+            clearError(){
+                return ({
+                    type: CLEAR_ERROR,
+                    payload: {}
+                });
+            } 
 
 
         }

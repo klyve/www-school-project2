@@ -6,6 +6,7 @@
 <link rel="import" href="reducers/user.html">
 <link rel="import" href="reducers/videos.html">
 <link rel="import" href="reducers/search.html">
+<link rel="import" href="reducers/errors.html">
 <!-- <script src="reducers/test.js"></script>
 <script src="reducers/user.js"></script> -->
 
@@ -15,6 +16,7 @@
         user: userReducer,
         videos: videosReducer,
         search: searchReducer,
+        errors: errorsReducer,
     });
     const createStoreWithMiddleware = Redux.applyMiddleware(ReduxThunk.default)(Redux.createStore);
     const store = createStoreWithMiddleware(reducers);
