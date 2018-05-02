@@ -13,6 +13,10 @@
     const DISPATCH_ERROR = 'DISPATCH_ERROR';
     const CLEAR_ERROR = 'CLEAR_ERROR';
 
+    const START_PROGRESS = 'START_PROGRESS';
+    const UPDATE_PROGRESS = 'UPDATE_PROGRESS';
+    const FINISH_PROGRESS = 'FINISH_PROGRESS';
+
 
     const getSearchRequest = () => ({
         type: GET_SEARCH_REQUEST,
@@ -39,6 +43,14 @@
         type: DISPATCH_ERROR,
         payload: {
             ...err
+        }
+    });
+
+    const dispatchProgress = (value) => ({
+        type: UPDATE_PROGRESS,
+        payload: {
+            running: true,
+            value
         }
     });
 
@@ -87,6 +99,10 @@
                     payload: {}
                 });
             } 
+
+            setProgress(value) {
+                return dispatchProgress(value);
+            }
 
 
         }

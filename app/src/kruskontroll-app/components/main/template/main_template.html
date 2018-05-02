@@ -1,5 +1,6 @@
 <link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../../../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../../../../bower_components/paper-progress/paper-progress.html">
 <link rel="import" href="../../../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../../../bower_components/slate-font-awesome/slate-font-awesome.html">
 
@@ -20,6 +21,22 @@
       <style include="shared-styles">
       :host {
         display: block;
+      }
+      paper-progress {
+        --paper-progress-active-color: #e91e63;
+        --paper-progress-height: 3px;
+        --paper-progress-container-color: transparent;
+        --paper-progress-transition-duration: 1s;
+        --paper-progress-transition-timing-function: ease;
+        --paper-progress-transition-delay: 0s;
+        z-index: 10;
+        position: fixed;
+        width: 100%;
+      }
+      .content-container {
+        position: relative;
+        overflow: hidden;
+        overflow-y: auto;
       }
     </style>
     <style include="slate-font-awesome"></style>
@@ -105,6 +122,8 @@
             </div>
 
             <div class="content-container">
+                <paper-progress value="{{progress.value}}" secondary-progress="0" ></paper-progress>
+
               <div class="container-fluid">
                   <!-- Route are -->
                   <!-- app-location binds to the app's URL -->
@@ -175,7 +194,19 @@
           this.searchInput = answer;
           this.doSearch();
         }
+
+        this.updateProgress();
         
+      }
+
+      updateProgress() {
+        const {value} = this.progress;
+        if(value+5 > 100) {
+          this.dispatch(this.setProgress(100));
+          return;
+        }
+        this.dispatch(this.setProgress(value+5));
+        window.setTimeout(() => this.updateProgress(), 1000);
       }
 
       logout() {
@@ -218,6 +249,10 @@
             type: Object,
             observer: '_showToast',
             statePath: 'errors',
+          },
+          progress: {
+            type: Object,
+            statePath: 'progress',
           },
         };
       }

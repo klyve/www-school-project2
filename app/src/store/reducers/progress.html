@@ -1,0 +1,41 @@
+<link rel="import" href="../../actions/site.html">
+
+
+<script>
+
+
+
+const initialProgressState = {
+    running: false,
+    value: 0,
+};
+
+const progressReducer = (state = initialProgressState, action) => {
+    switch(action.type) {
+        case START_PROGRESS: {
+            return {
+                ...state,
+                ...action.payload,
+            };
+        }break;
+        case UPDATE_PROGRESS: {
+            return {
+                ...state,
+                ...action.payload,
+            };
+        }break;
+        case FINISH_PROGRESS: {
+            return {
+                ...state,
+                ...action.payload,
+            };
+        }break;
+        default:
+            return state;
+    }
+
+    return state;
+};
+
+
+</script>
