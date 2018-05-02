@@ -50,10 +50,10 @@ test.serial('Upload thumbnail file', async t => {
     const mimeThumbnail = "image/png"
 
     // UPLOAD THUMBNAIL FILE
-    let dataThumbnail = fs.readFileSync(`files/${filenameThumbnail}`);
+    let dataThumbnail = fs.readFileSync(`${KRUS_ROOT}/apitests/files/${filenameThumbnail}`);
     if(dataThumbnail === null) t.fail();
 
-    const fileSizeInBytes = fs.statSync(`files/${filenameThumbnail}`).size;
+    const fileSizeInBytes = fs.statSync(`${KRUS_ROOT}/apitests/files/${filenameThumbnail}`).size;
 
     try {
 
@@ -83,10 +83,10 @@ test.serial('Upload video file', async t => {
     const filenameVideo     = "video.mp4"
     const mimeVideo         = "video/mp4"
     
-    let dataVideo = fs.readFileSync(`files/${filenameVideo}`);
+    let dataVideo = fs.readFileSync(`${KRUS_ROOT}/apitests/files/${filenameVideo}`);
     if(dataVideo === null) t.fail();
 
-    const fileSizeInBytes = fs.statSync(`files/${filenameVideo}`).size;
+    const fileSizeInBytes = fs.statSync(`${KRUS_ROOT}/apitests/files/${filenameVideo}`).size;
    
     try {
         const res = await axios.post(`${API}/tempfile`, 
