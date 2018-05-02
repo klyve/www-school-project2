@@ -1,34 +1,67 @@
 # Prosjekt 1 IMT2291 våren 2018
 
 ## Test LIVE HERE
-http://web1.bjartelarsen.com
-
+®TODO
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
 
 You need to have these installed.
 
-
 - PHP 5.4 or above
 - Apache or other similar to run the project
 - MySQL, for database
 
+Development only:
+- Python3 and pipi3
 
 
-### Installing
+### Installing development environment
 
-Clone the repository and run `composer install` This should build the autoload file and the fetch the required components
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-Open the config file located under `src/app/config.php` Change the configs to your needs.
+```
+$ git clone <project-url> <project-folder>
 
-Incase autoloader has not been run correctly run `composer dumpautoload`
+$ cd <project-folder>
 
-Once this is done you should run the Migration. If you are on a fresh development machine run the seeder aswell.
-Check out The topic regarding seeding and migration to read more about this
+$ pip3 install -r requirements.txt
+
+$ python3 cmd.py --init
+KRUS_WEB_HOST: (127.0.0.1) 
+KRUS_WEB_PORT: (8080) 
+KRUS_API_HOST: (127.0.0.1) 
+KRUS_API_PORT: (4000) 
+KRUS_DB_HOST: (127.0.0.1) 
+KRUS_DB_PORT: (3306) 
+KRUS_DB_NAME: (mvc) 
+KRUS_DB_USER: (root) 
+KRUS_DB_PASSWORD: () 
+
+$ source .env
+
+$ krustool --help
+$ krustool --fetch         # Fetch npm, composer and bower packages
+$ krustool --migseed       # Run Migrations and Seed the database 
+
+$ krustool --serve <path>  # Run API server from <path>
+                           # php -S <KRUS_API_HOST>:<KRUS_API_PORT>`
+
+$ krustool --test-all      # Run all API tests using AVA Javascript tests
+```
+
+
+
+### Building distribution
+
+```
+$ krustool --fetch          # fetch all npm, bower, composer deps
+$ krustool --build-only     # build into a dist/ folder
+$ krustool --zip <version>  # Create a zip `kruskontroll-<version>.zip` and deleting dist/ folder
+$ krustool --build          # All of the above    
+```
 
 
 ### Generator toolkit
