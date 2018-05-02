@@ -84,6 +84,22 @@ def fetch():
     os.chdir("..")
 
 
+import zipfile
+# ref https://stackoverflow.com/a/1855118/9636402 02.05.2018
+def zip_distribution(version):
+    def zipdir(path, ziph):
+        for root, dirs, files in os.walk(path):
+            for file in files:
+                ziph.write(os.path.join(root, file))
+
+    ROOT = get_script_directory()
+
+    zipf = zipfile.ZipFile('kruskontroll-'+version+'.zip', 'w', zipfile.ZIP_DEFLATED)
+    zipdir('dist/', zipf)
+    zipf.close()
+
+    call(["rm", "-r", ROOT+"/dist"])
+
 def build_only():
 
     ROOT = get_script_directory()
@@ -100,9 +116,10 @@ def build_only():
     call(["rm", ROOT+"/dist/src/App/.env"])
 
 
-def build():
+def build(version):
     fetch()
     build_only()
+    zip_distribution(version)
 
 
 def migseed():
@@ -155,6 +172,8 @@ def dockerbuild():
     call(["mkdir", "db"])
     call(["docker-compose", "up", "--build"])
 
+
+
 if __name__ == "__main__":
 
     change_working_directory_to_script_directory()
@@ -163,9 +182,10 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-e","--env", help="Set environment variables", action="store_true")
+    parser.add_argument("-z","--zip", nargs=1, help="<version>")
     parser.add_argument("-l", "--list", help="List environment variables", action="store_true")
     parser.add_argument("-f", "--fetch", help="Fetch depencies from bower, npm and composer",action="store_true")
-    parser.add_argument("-b", "--build", help="Fetching and building to /dist",action="store_true")
+    parser.add_argument("-b", "--build", nargs=1, help="<version>")
     parser.add_argument("-bo", "--build-only", help="Build only to /dist",action="store_true")
     parser.add_argument("-m", "--migseed", help="migrate:refresh + seed:refresh", action="store_true")
     parser.add_argument("-t", "--test", nargs=1, help="Run specific test")
@@ -180,7 +200,7 @@ if __name__ == "__main__":
         fetch()
 
     elif argv.build:
-        build()
+        build(argv.build[0])
 
     elif argv.build_only:
         build_only()
@@ -208,3 +228,6 @@ if __name__ == "__main__":
 
     elif argv.list:
         listenv()
+
+    elif argv.zip:
+        zip_distribution(argv.zip[0])

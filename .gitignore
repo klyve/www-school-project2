@@ -18,5 +18,6 @@ server/public/media/subtitles/*
 !server/public/media/subtitles/.gitkeep
 
 *.env
+*.zip
 db/
 dist/
