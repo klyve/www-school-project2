@@ -13,6 +13,8 @@
     const GET_VIDEO_FAILURE = 'GET_VIDEO_FAILURE';
     const GET_VIDEO_SUCCESS = 'GET_VIDEO_SUCCESS';
 
+    const POST_COMMENT_SUCCESS = 'POST_COMMENT_SUCCESS';
+
 
     const getVideosRequest = () => ({
         type: GET_VIDEOS_REQUEST,
@@ -56,12 +58,38 @@
         }
     });
 
+    const postCommentSuccess = data => ({
+        type: POST_COMMENT_SUCCESS,
+        payload: {
+            ...data
+        }
+    });
+
 
     const VideosActions = Polymer.dedupingMixin(function(superClass){
         return class VideosActions extends superClass {
             constructor() {
                super();
             }
+
+        postComment() {
+            return dispatch => {
+                // dispatch(postCommentRequest());
+                post(`/video/${this.id}/comment`, {
+                    content: this.commentText
+                })
+                .then(res => dispatch(postCommentSuccess({
+                    video: this.id,
+                    comment: {
+                        user: {
+                           name: 'me',
+                        },
+                        content: this.commentText
+                    },
+                })))
+                .catch(err => console.log(err));
+            }
+        }
 
             getDashboardVideos() {
                 return dispatch => {
@@ -95,6 +123,7 @@
                         comments {
                             user {
                                 name
+                                id
                             }
                             content
                         }
@@ -138,10 +167,10 @@
                 post('/tempfile', this.files[0], params)
                     .then(res => {
                       // Redirect to other screen
-                      
-                      dispatch(dispatch)  
+                      console.log(res);
+                    //   dispatch(dispatch)  
                     })
-                    .catch(err => console.log("ERRROR", err));
+                    .catch(console.log);
             }
         }
 

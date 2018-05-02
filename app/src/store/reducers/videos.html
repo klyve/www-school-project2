@@ -35,6 +35,18 @@ const videosReducer = (state = initialUserState, action) => {
                 ...action.payload,
             };
         }break;
+
+        case POST_COMMENT_SUCCESS: {
+            const newVideo = {...state.video};
+
+            return {
+                ...state,
+                video: {
+                    ...newVideo, 
+                    comments: [action.payload.comment, ...state.video.comments],
+                }
+            }
+        }
         default:
             return state;
     }

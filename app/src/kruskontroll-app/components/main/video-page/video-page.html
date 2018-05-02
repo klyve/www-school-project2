@@ -13,17 +13,154 @@
       :host {
         display: block;
       }
+
+    #subtitles {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    #subtitles ul {
+      margin: 0 !important;
+      padding: 0 !important;
+      list-style-type: none;
+    }
+
+    #subtitles li {
+      padding: 10px 15px;
+      border-bottom: 1px solid #d3d4d5;
+    }
+
+    #subtitles li.active {
+      background-color: #414141;
+      color: white;
+    }
+    .subtitles-container {
+      overflow-y: scroll;
+    }
+
     </style>
     <style include="slate-font-awesome"></style>
     <app-location route="{{route}}" use-hash-as-path></app-location>
     
-    <h1>{{video.title}}</h1>
-    <img src="{{thumbnail}}" alt="">
-    <template is="dom-repeat" items="{{video.comments}}">
-        <h2>{{item.content}}</h2>
-        <small>{{item.user.name}}</small>
-    </template>
-    
+
+
+        <div class="video-wrapper">
+          <div class="video-container">
+            <video class="video-player" controls preload="metadata">
+                <source id="mp4" src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+                <source id="webm" src="http://media.w3.org/2010/05/sintel/trailer.webm" type="video/webm">
+                <source id="ogv" src="http://media.w3.org/2010/05/sintel/trailer.ogv" type="video/ogg">
+                <track kind="subtitles" label="Test" src="src/kruskontroll-app/components/main/video-page/test.vtt" srclang="en" default="default"></track>
+                Your browser does not support HTML5 video.
+              </video>
+          </div>
+          <div class="subtitles-container">
+            <ul id="subtitles">
+                <template is="dom-repeat" items="{{cues}}">
+                  <template is="dom-if" if="{{isId(item.id, activeCue)}}">
+                    <li data-id="{{index}}" class="active" on-click="activateCue">{{item.text}}</li>
+                  </template>
+                  <template is="dom-if" if="{{!isId(item.id, activeCue)}}">
+                      <li data-id="{{index}}" on-click="activateCue">{{item.text}}</li>
+                  </template>
+              </template>
+            </ul>
+          </div>
+      </div>
+      <div class="info-wrapper">
+        
+        <div class="info-article">
+          <div class="video-header">
+            <div class="video-title">
+              <h1>{{video.title}}</h1>
+            </div>
+            <ul class="video-controls">
+              <li>
+                <span>{{video.viewCount}}</span>
+                <small>Views</small>
+              </li>
+              <li class="likes-area">
+                <div class="likes">
+                  <button class="liked">
+                    <i class="fa fa-thumbs-up"></i>
+                  </button>
+                  <button>
+                    <i class="fa fa-thumbs-down"></i>
+                  </button>
+                  
+                </div>
+                <div class="likes-bar">
+                  <div class="likes"></div>
+                  <div class="dislikes"></div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="video-description">
+            <p>
+              {{video.description}}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="comments-container">
+        <div class="comments-app" >
+          
+          <!-- From -->
+          <div class="comment-form">
+            <!-- Comment Avatar -->
+            <div class="comment-avatar">
+              <img src="http://gravatar.com/avatar/412c0b0ec99008245d902e6ed0b264ee?s=80">
+            </div>
+        
+            <div class="form" name="form">
+              <div class="form-row">
+                <textarea class="input" placeholder="Add comment..." value="{{commentText::input}}" required></textarea>
+              </div>
+        
+              <div class="form-row">
+                <input type="submit" value="Add Comment" on-click="comment">
+              </div>
+            </div>
+          </div>
+        
+
+
+          <!-- Comments List -->
+          <div class="comments">
+            <!-- Comment -->
+
+            <template is="dom-repeat" items="{{video.comments}}">
+
+                <div class="comment">
+                  <!-- Comment Avatar -->
+                  <div class="comment-avatar">
+                    <img src="http://gravatar.com/avatar/412c0b0ec99008245d902e6ed0b264ee?s=80">
+                  </div>
+            
+                  
+                  <!-- Comment Box -->
+                  <div class="comment-box">
+                    <div class="comment-text">{{item.content}}</div>
+                    <div class="comment-footer">
+                      <div class="comment-info">
+                        <span class="comment-author">
+                          <a if="!comment.anonymous" href="#/user/{{item.user.id}}">{{ item.user.name }}</a>
+                        </span>
+                        <span class="comment-date">{{ comment.date }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </template>
+        
+           
+          </div>
+        </div>
+      </div>
+
 
   </template>
 
@@ -37,27 +174,86 @@
       static get is() { return 'video-page'; }
 
       ready() {
-          super.ready();
-          this.dispatch(this.getVideo());
+        super.ready();
       }
+
+      activateCue(event) {
+        const active = event.model.item;
+        this.activeCue = active.id;
+
+        const video = Polymer.dom(this.root).querySelector('.video-player');
+        video.play();
+        video.pause();
+        video.currentTime = active.startTime;
+        video.play();
+        
+      }
+
+
+      getVideoFromURL() {
+        if(this.id) {
+          this.dispatch(this.getVideo());
+          this.commentText = '';
+          const dom = Polymer.dom(this.root);
+          
+          const video = dom.querySelector('.video-player');
+          const track = dom.querySelector('.video-player track');
+
+          track.addEventListener('load', e => {
+            this.cues = [];
+            const trackCues = e.path[0].track.cues;
+            for (let i=0; i<trackCues.length; i++) {
+              let cue = trackCues[i];
+              cue.id = i;
+              this.cues.push(cue);         
+            };
+          });
+
+          video.textTracks[0].addEventListener('cuechange', e => {
+            const activeCue = e.target.activeCues;
+            if(activeCue.length) {
+              this.activeCue = activeCue[0].id;
+            }
+          });
+        }
+      }
+
+      comment() {
+        this.dispatch(this.postComment());
+      }
+
       getIdFromRoute(route) {
         const path = route.path;
         if(path) {
           const parts = path.split('/');
-          return parts[parts.length -1];
+          if(/video\/\d+/.exec(path)) {
+            return parts[parts.length -1];
+          }
         }
       }
+
+      isId(cueId, id) {
+        return cueId == id;
+      }
+
+      observeroute() {
+        console.log("Route changed");
+      }
+
       getThumbnailPath(video) {
         return `${THUMBNAIL}${video.filethumbnail}`;
       }
+
       static get properties() {
         return {
           route: {
             type: String,
+            observer: 'observeroute',
           },
           id: {
               type: Number,
               computed: 'getIdFromRoute(route)',
+              observer: 'getVideoFromURL',
           },
           video: {
               type: Object,
@@ -66,6 +262,19 @@
           thumbnail: {
               type: String,
               computed: 'getThumbnailPath(video)'
+          },
+          commentText: {
+            type: String,
+            value: '',
+          },
+          cues: {
+            type: Array,
+            value: [],
+            
+          },
+          activeCue: {
+            type: Number,
+            value: 0,
           }
         };
       }
