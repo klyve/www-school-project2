@@ -109,13 +109,18 @@ def migseed():
     call(["php", "server/toolbox", "migrate:refresh"])
     call(["php", "server/toolbox", "seed:refresh"])
 
-def test():
+def test(path):
+    call(["php", "server/toolbox", "migrate:refresh"])
+    call(["php", "server/toolbox", "seed:refresh"])
+    call(["ava", "--fail-fast", "--verbose", "--watch", path])
+
+
+def test_all():
     call(["php", "server/toolbox", "migrate:refresh"])
     call(["php", "server/toolbox", "seed:refresh"])
 
-    os.chdir("apitests")
-    call(["ava", "--fail-fast", "--verbose", "--watch", "tests/"])
-    os.chdir("..")
+    call(["ava", "--fail-fast", "--verbose", "--watch", "apitests/tests/"])
+
 
 def listenv():
     print("KRUS_ROOT:",     os.environ.get("KRUS_ROOT"))
@@ -163,7 +168,8 @@ if __name__ == "__main__":
     parser.add_argument("-b", "--build", help="Fetching and building to /dist",action="store_true")
     parser.add_argument("-bo", "--build-only", help="Build only to /dist",action="store_true")
     parser.add_argument("-m", "--migseed", help="migrate:refresh + seed:refresh", action="store_true")
-    parser.add_argument("-t", "--test", help="Run all tests", action="store_true")
+    parser.add_argument("-t", "--test", nargs=1, help="Run specific test")
+    parser.add_argument("-ta", "--test-all", help="Run all tests", action="store_true")
     parser.add_argument("-s", "--serve", nargs=1, help="<serverpath>")
     parser.add_argument("-d", "--docker", help="Run docker-compose up", action="store_true")
     parser.add_argument("-db", "--dockerbuild", help="Run docker-compose up + build", action="store_true")
@@ -183,7 +189,10 @@ if __name__ == "__main__":
         migseed()
 
     elif argv.test:
-        test()
+        test(argv.test[0])
+
+    elif argv.test_all:
+        test_all()
 
     elif argv.env:
         setdevenv()
