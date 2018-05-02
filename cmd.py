@@ -125,6 +125,9 @@ def listenv():
     print("KRUS_API_PORT:", os.environ.get("KRUS_API_PORT"))
     print("KRUS_DB_HOST:",  os.environ.get("KRUS_DB_HOST"))
     print("KRUS_DB_PORT:",  os.environ.get("KRUS_DB_PORT"))
+    print("KRUS_DB_NAME:",  os.environ.get("KRUS_DB_NAME"))
+    print("KRUS_DB_USER:",  os.environ.get("KRUS_DB_USER"))
+    print("KRUS_DB_PASSWORD:",  os.environ.get("KRUS_DB_PASSWORD"))
 
 def serve(path):
     host = os.environ.get("KRUS_API_HOST")
