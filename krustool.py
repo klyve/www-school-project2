@@ -16,7 +16,7 @@ def load_environment_file():
     ROOT = get_script_directory()
     load_dotenv(dotenv_path=ROOT+"/.env", verbose=True)
 
-def setdevenv():
+def init():
 
     def writeOrDefault(file, key, default):
 
@@ -36,7 +36,7 @@ def setdevenv():
     with open(ROOT+"/.env", "w") as envfile:
 
         envfile.write("DIR=\"$( cd \"$( dirname \"${BASH_SOURCE[0]}\" )\" && pwd )\"\n")
-        envfile.write("alias krustool=\"python3 $DIR/cmd.py\"\n")
+        envfile.write("alias krustool=\"python3 $DIR/krustool.py\"\n")
         envfile.write("echo \"aliased python3 $DIR/cmd.py -> krustool\"\n\n")
         envfile.write("export KRUS_ROOT=$DIR\n")
 
@@ -72,7 +72,8 @@ def fetch():
     
     os.chdir("../server")
     call(["composer","install"])
-    
+    call(["composer","dumpautoload"])
+
     os.chdir("../design")
     call(["bower","install"])
     call(["npm","install"])
@@ -159,7 +160,6 @@ def serve(path):
         print("ERROR you have to source .env KRUS_WEB_HOST and KRUS_WEB_PORT")
         sys.exit()
 
-
     os.chdir(path)
     call(["php", "-S", host+":"+port])
 
@@ -181,7 +181,7 @@ if __name__ == "__main__":
     load_environment_file()
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-e","--env", help="Set environment variables", action="store_true")
+    parser.add_argument("-i","--init", help="Setting up the development environment", action="store_true")
     parser.add_argument("-z","--zip", nargs=1, help="<version>")
     parser.add_argument("-l", "--list", help="List environment variables", action="store_true")
     parser.add_argument("-f", "--fetch", help="Fetch depencies from bower, npm and composer",action="store_true")
@@ -214,8 +214,8 @@ if __name__ == "__main__":
     elif argv.test_all:
         test_all()
 
-    elif argv.env:
-        setdevenv()
+    elif argv.init:
+        init()
 
     elif argv.serve:
         serve(argv.serve[0])
