@@ -42,8 +42,10 @@
       }
       getIdFromRoute(route) {
         const path = route.path;
-        const parts = path.split('/');
-        return parts[parts.length -1];
+        if(path) {
+          const parts = path.split('/');
+          return parts[parts.length -1];
+        }
       }
       getThumbnailPath(video) {
         return `${THUMBNAIL}${video.filethumbnail}`;
