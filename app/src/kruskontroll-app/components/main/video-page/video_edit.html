@@ -1,0 +1,42 @@
+<link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../../bower_components/slate-font-awesome/slate-font-awesome.html">
+
+<link rel="import" href="../../../../store/store.html">
+<link rel="import" href="../../../styles.html">
+
+
+<dom-module id="video-edit">
+  <template>
+      <style include="shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+    <style include="slate-font-awesome"></style>
+
+    <h1> Edit video </h1>
+
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class VideoEdit extends ReduxStore(Polymer.Element) {
+
+      static get is() { return 'video-edit'; }
+      
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'kruskontroll-app'
+          },
+        };
+      }
+    }
+    
+    window.customElements.define(VideoEdit.is, VideoEdit);
+  </script>
+</dom-module>

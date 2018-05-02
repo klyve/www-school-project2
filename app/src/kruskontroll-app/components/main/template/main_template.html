@@ -2,7 +2,7 @@
 <link rel="import" href="../../../../../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../../../../../bower_components/paper-progress/paper-progress.html">
 <link rel="import" href="../../../../../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../../../../../bower_components/slate-font-awesome/slate-font-awesome.html">
+-<link rel="import" href="../../../../../bower_components/slate-font-awesome/slate-font-awesome.html">
 
 
 <link rel="import" href="../../../../actions/user.html">
@@ -14,6 +14,11 @@
 <link rel="import" href="../video-page/video-page.html">
 
 <link rel="import" href="../../../styles.html">
+
+
+<link rel="import" href="../video-page/video_upload.html">
+<link rel="import" href="../video-page/video_edit.html">
+
 
 
 <dom-module id="main-template">
@@ -143,6 +148,10 @@
                         <search-page name="search" route="{{subroute}}"></search-page>
                         <video-grid name="main" route="{{subroute}}"></video-grid>
                         <video-page name="video" route="{{subroute}}"></video-page>
+                   
+                        <video-upload name="video-upload" route="{{subroute}}"></video-upload>
+                        <video-edit name="video-edit" route="{{subroute}}"></video-edit>
+
                     </iron-pages>
 
               </div>
