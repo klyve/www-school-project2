@@ -133,8 +133,26 @@ function createAdministrator($name, $email, $password) {
 }
 createAdministrator($adminName, $adminEmail, $adminPassword);
 
-echo "</pre>";
 
+// @ref http://php.net/manual/en/function.rmdir.php#110489 02.05.2018
+function delTree($dir) { 
+    $files = array_diff(scandir($dir), array('.','..')); 
+    foreach ($files as $file) { 
+        (is_dir("$dir/$file")) ? delTree("$dir/$file") : unlink("$dir/$file"); 
+    } 
+    return rmdir($dir); 
+} 
+
+
+// If parent directory name === dist
+if (basename(dirname(__DIR__, 1)) === "dist") {
+    echo "Removing installation folder....";
+    delTree(__DIR__. "/../install");
+}
+
+
+
+echo "</pre>";
 echo "<h2>Installation success</h2>"
 
 ?>
