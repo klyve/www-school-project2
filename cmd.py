@@ -13,12 +13,24 @@ def get_script_directory():
     return os.path.dirname(os.path.realpath(__file__))
 
 
+def inputOrDefault(key, default):
+
+    displayText = "{}: ({}) ".format(key, default)
+    param = input(displayText)
+    if not param:
+        return default
+    return param
+
+
 def setdevenv(webhost="127.0.0.1",
               webport="3000",
               apihost="127.0.0.1",
               apiport="4000",
               dbhost="127.0.0.1",
               dbport="3306"):
+
+
+    dbPort = inputOrDefault("KRUS_DB_PORT","3306")
 
     with open(".env", "w") as envfile:
         envfile.write("DIR=\"$( cd \"$( dirname \"${BASH_SOURCE[0]}\" )\" && pwd )\"\n")
@@ -40,6 +52,8 @@ def setdevenv(webhost="127.0.0.1",
         envfile.write("echo KRUS_API_PORT: $KRUS_API_PORT\n")
         envfile.write("echo KRUS_DB_HOST:  $KRUS_DB_HOST\n")
         envfile.write("echo KRUS_DB_PORT:  $KRUS_DB_PORT\n")
+
+
 
 
     with open("apitests/.env", "w") as envfile:

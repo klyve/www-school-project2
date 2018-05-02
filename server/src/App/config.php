@@ -1,12 +1,16 @@
 <?php
+use Symfony\Component\Dotenv\Dotenv;
+
+$dotenv = new Dotenv();
+$dotenv->load(__DIR__.'/.env');
 
 $config = [
     'database' => [
         'host' => getenv('KRUS_DB_HOST'),
         'port' => getenv('KRUS_DB_PORT'),
-        'database' => 'mvc',
-        'username' => 'root',
-        'password' => '',
+        'database' => getenv('KRUS_DB_NAME'),
+        'username' => getenv('KRUS_DB_USER'),
+        'password' => getenv('KRUS_DB_PASSWORD'),
     ],
     'token' => [
         'secret' => 'wgh%#Q(%!=!?#%(!i0eohjweopghj=!#%)w2eoghp2q=3gjh9023',
@@ -41,7 +45,8 @@ $config = [
     ],
     'filepaths' => [
         'images' => 'public/media/images',
-        'videos' => 'public/media/videos'
+        'videos' => 'public/media/videos',
+        'thumbnails' => 'public/media/thumbnails'
     ],
     'usergroups' => [
         'owner' => 5,
