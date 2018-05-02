@@ -108,6 +108,44 @@
         }
 
 
+        uploadVideo() {
+            return dispatch => {
+                let mimetype = this.files[0].type
+                let filename = this.files[0].name;
+                let filesize = this.files[0].size;
+
+                if (mimetype.indexOf("video/mp4") == -1) {
+                    dispatch(dispatchError({
+                        error: "Bad Request",
+                        code: 400,
+                        message: `Only supporting video/mp4 video format. ${mimetype} given`
+                    }));
+
+                    this.$.inputVideo.inputElement.inputElement.files = null
+                    return
+                }
+                const params = {
+                    headers: {
+                    'Content-Type': 'application/octet-stream',
+                    'X-OriginalFilename': filename,
+                    'X-OriginalFilesize': filesize,
+                    'X-OriginalMimetype': mimetype,
+                    },
+
+                    onUploadProgress: progressEvent => dispatch(dispatchProgress((progressEvent.loaded / filesize) * 100))
+                }
+
+                post('/tempfile', this.files[0], params)
+                    .then(res => {
+                      // Redirect to other screen
+                      
+                      dispatch(dispatch)  
+                    })
+                    .catch(err => console.log("ERRROR", err));
+            }
+        }
+
+
         }
     });
 

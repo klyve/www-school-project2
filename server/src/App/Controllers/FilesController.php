@@ -24,7 +24,7 @@ const DS = DIRECTORY_SEPARATOR;
 class FilesController extends Controller {
   
   // @route POST /user/{userid}/tempfile
-  public function postTempfile(Request $req) {
+  public function postTempfile(Request $req, TempVideos $tmpVid) {
 
     // @ref copy from okolloen javascript_forelesning 1
     $fname    = $_SERVER['HTTP_X_ORIGINALFILENAME'];      
@@ -57,8 +57,19 @@ class FilesController extends Controller {
     fclose($output);
 
     $res = ['fname'=> "$tempfilename.$extension", 'size'=>$fsize, 'mime'=>$mimetype, 'message' => 'File uploaded succesfully to temp storage'];
+    
 
-    return Response::statusCode(HTTP_CREATED, $res);
+    // TempVideos(fname, size, mine, userid);
+    // Return TempVideos
+
+    $tmpVid->create([
+      'fname' => $res['fname'],
+      'size' => $res['size'],
+      'mime' => $res['mime'],
+      'userid' => $userid,
+    ]);
+
+    return Response::statusCode(HTTP_CREATED, $tmpVid);
   }
 
 }
