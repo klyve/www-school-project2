@@ -1,0 +1,33 @@
+<link rel="import" href="../../actions/site.html">
+
+
+<script>
+
+
+
+const initialErrorState = {
+    error: null,
+    code: null,
+    message: null,
+};
+
+const errorsReducer = (state = initialErrorState, action) => {
+    switch(action.type) {
+        case DISPATCH_ERROR: {
+            return {
+                ...state,
+                ...action.payload,
+            };
+        }break;
+        case CLEAR_ERROR: {
+            return initialErrorState;
+        }break;
+        default:
+            return state;
+    }
+
+    return state;
+};
+
+
+</script>

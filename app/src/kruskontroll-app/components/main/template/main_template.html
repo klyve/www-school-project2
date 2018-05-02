@@ -1,4 +1,6 @@
 <link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../../../bower_components/slate-font-awesome/slate-font-awesome.html">
 
 
@@ -8,6 +10,7 @@
 
 <link rel="import" href="../../video-grid/video-grid.html">
 <link rel="import" href="../../search-page/search-page.html">
+<link rel="import" href="../video-page/video-page.html">
 
 <link rel="import" href="../../../styles.html">
 
@@ -20,7 +23,13 @@
       }
     </style>
     <style include="slate-font-awesome"></style>
-
+    <custom-style><style is="custom-style">
+        #toast {
+          --paper-toast-background-color: #ff7675;
+          --paper-toast-color: white;
+        }
+      </style></custom-style>
+      
 
       <div id="container" class$=[[toggled]]>
           <header>
@@ -108,11 +117,14 @@
                       data="{{routeData}}"
                       tail="{{subroute}}"
                     ></app-route>
+
+                    <paper-toast id="toast" class="fit-right" text="[[error.message]]" duration="5000"></paper-toast>
+                    
                     <iron-pages selected="[[routeData.view]]" attr-for-selected="name" fallback-selection="main">
                         <search-page name="search" route="{{subroute}}"></search-page>
                         <video-grid name="main" route="{{subroute}}"></video-grid>
+                        <video-page name="video" route="{{subroute}}"></video-page>
                     </iron-pages>
-                  
 
               </div>
             </div>
@@ -144,13 +156,18 @@
         this.dispatch(this.performSearch());
       }
 
+      _showToast(value) {
+        if(value.error != null)
+          this.$.toast.open();
+      }
+
       ready() {
         super.ready();
         this.dispatch(this.getSessionData());
         this.dispatch(this.getUser());
         this.dispatch(this.getUserInfo());
         this.doSearch = this.doSearch.bind(this);
-        
+
         const route = this.route.path;
         const parts = route.split('/');
         if(parts[0] == 'search' || parts[1] == 'search') {
@@ -196,7 +213,12 @@
           },
           route: {
             type: String,
-          }
+          },
+          error: {
+            type: Object,
+            observer: '_showToast',
+            statePath: 'errors',
+          },
         };
       }
     }

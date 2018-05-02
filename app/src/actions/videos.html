@@ -9,6 +9,10 @@
     const GET_VIDEOS_FAILURE = 'GET_VIDEOS_FAILURE';
     const GET_VIDEOS_SUCCESS = 'GET_VIDEOS_SUCCESS';
 
+    const GET_VIDEO_REQUEST = 'GET_VIDEO_REQUEST';
+    const GET_VIDEO_FAILURE = 'GET_VIDEO_FAILURE';
+    const GET_VIDEO_SUCCESS = 'GET_VIDEO_SUCCESS';
+
 
     const getVideosRequest = () => ({
         type: GET_VIDEOS_REQUEST,
@@ -31,13 +35,33 @@
         }
     });
 
+    const getVideoRequest = () => ({
+        type: GET_VIDEO_REQUEST,
+        payload:{
+            fetching: true,
+        }
+    });
+    const getVideoSuccess = video => ({
+        type: GET_VIDEO_SUCCESS,
+        payload:{
+            fetching: false,
+            ...video
+        }
+    });
+
+    const getVideoFailure = () => ({
+        type: GET_VIDEO_FAILURE,
+        payload:{
+            fetching: false,
+        }
+    });
+
 
     const VideosActions = Polymer.dedupingMixin(function(superClass){
-        return class UserActions extends superClass {
+        return class VideosActions extends superClass {
             constructor() {
                super();
             }
-            
 
             getDashboardVideos() {
                 return dispatch => {
@@ -57,6 +81,31 @@
                     .catch(err => console.log(err));
                 }
             }
+
+        getVideo() {
+            return dispatch => {
+                dispatch(getVideoRequest());
+                graphql(`query {
+                    video(id:${this.id}) {
+                        title
+                        description
+                        filevideo
+                        viewCount
+                        filethumbnail
+                        comments {
+                            user {
+                                name
+                            }
+                            content
+                        }
+                    }
+                }`)
+                .then(res => {
+                    dispatch(getVideoSuccess(res.data.data));
+                })
+                .catch(err => console.log(err));
+            }
+        }
 
 
         }
