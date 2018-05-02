@@ -47,6 +47,9 @@
 <h1> Kruskontroll / <small> Installing...</small> </h1>
 
 <?php
+
+define('APP_ROOT', __DIR__."/../src");
+
 echo "<pre id='pre-install-output'>";
 
 function getParam($key, $default, $isPassword=false) {
@@ -70,7 +73,7 @@ $dbPort = getParam('db-port', '3306');
 $dbUser = getParam('db-user', 'root');
 $dbPassword = getParam('db-password', '', $isPassword);
 
-$APP_FOLDER = "../src/App/.env";
+$APP_FOLDER = APP_ROOT."/.env";
 $file = fopen($APP_FOLDER, "w");
 if(!$file) 
     die("Can't open .env file");
@@ -87,10 +90,53 @@ $adminName = getParam('admin-name', 'admin');
 $adminEmail = getParam('admin-email', 'admin@kruskontroll.no');
 $adminPassword = getParam('admin-password', '1234', $isPassword);
 
-echo "\n * = default\n";
+echo "\n * = default\n\n";
+
+
+require_once APP_ROOT.'/mvc/bootstrap.php';
+require_once APP_ROOT.'/App/config.php';
+
+echo "Requiring".APP_ROOT."/mvc/bootstrap.php\n";
+echo "Requiring".APP_ROOT."/App/config.php\n\n";
+
+use \MVC\Database\Migrations;
+use \MVC\Database\Seeder;
+use \App\Models\UsersModel;
+use \MVC\Helpers\Hash;
+use \MVC\Http\ErrorCode;
+
+Migrations::runCLI(['refresh']);
+Seeder::runCLI(['refresh']);
+
+function createAdministrator($name, $email, $password) {
+
+    $usersModel = new UsersModel;
+
+    $user = $usersModel->find([
+        'email' => $email
+    ]);
+
+    if($user->id) {
+        echo "PANIC: Email already exists";
+        return die();
+    }
+    
+    $userid = $user->create([
+        'name' => $name, 
+        'email' => $email,
+        'password' => Hash::password($password)
+    ]);
+
+    if (!$userid) {
+        echo "PANIC: Could not insert administrator into the database";
+        return die();
+    }
+}
+createAdministrator($adminName, $adminEmail, $adminPassword);
+
 echo "</pre>";
 
-
+echo "<h2>Installation success</h2>"
 
 ?>
 
@@ -119,7 +165,7 @@ echo "</pre>";
             document.getElementById('pre-install-output')
                     .style
                     .display = 'block';
-        }, 2000)
+        }, 500)
 
         window.setTimeout(() => {
             Array.from(document.getElementsByClassName('input-install'))
@@ -127,7 +173,7 @@ echo "</pre>";
                     btn.style
                        .display = 'inline-block';
                  })
-        }, 2500)
+        }, 1000)
     })
 </script>
 </html>
