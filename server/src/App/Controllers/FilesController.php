@@ -50,7 +50,7 @@ class FilesController extends Controller {
     $contents = '';
 
     while (!feof($handle)) {                // Read in blocks of 8 KB (no file size limit)
-        $contents = fread($handle, 8192);
+        $contents = fread($handle, 128);
         fwrite($output, $contents);
     }
     fclose($handle);

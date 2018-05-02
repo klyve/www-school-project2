@@ -2,7 +2,7 @@
 <link rel="import" href="../../../../../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../../../../../bower_components/paper-progress/paper-progress.html">
 <link rel="import" href="../../../../../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../../../../../bower_components/slate-font-awesome/slate-font-awesome.html">
+-<link rel="import" href="../../../../../bower_components/slate-font-awesome/slate-font-awesome.html">
 
 
 <link rel="import" href="../../../../actions/user.html">
@@ -14,6 +14,11 @@
 <link rel="import" href="../video-page/video-page.html">
 
 <link rel="import" href="../../../styles.html">
+
+
+<link rel="import" href="../video-page/video_upload.html">
+<link rel="import" href="../video-page/video_edit.html">
+
 
 
 <dom-module id="main-template">
@@ -106,7 +111,11 @@
                   <li class="heading"><h4>Library</h4></li>
                   <li><a href="#/history"><i class="fa fa-clock-o"></i><span>History</span></a></li>
                   <li><a href="#/watchlater"><i class="fa fa-file-o"></i><span>Watch Later</span></a></li>
+
                   <li><a href="#/liked"><i class="fa fa-heart-o"></i><span>Liked videos</span></a></li>
+
+
+                 <li><a href="#/video-upload"><i class="fa fa-upload"></i><span>Upload Video</span></a></li>
                   
                   <li class="heading"><h4>Subscriptions</h4></li>
                   <template is="dom-repeat" items="{{subscriptions}}">
@@ -143,6 +152,10 @@
                         <search-page name="search" route="{{subroute}}"></search-page>
                         <video-grid name="main" route="{{subroute}}"></video-grid>
                         <video-page name="video" route="{{subroute}}"></video-page>
+                   
+                        <video-upload name="video-upload" route="{{subroute}}"></video-upload>
+                        <video-edit name="video-edit" route="{{subroute}}"></video-edit>
+
                     </iron-pages>
 
               </div>
@@ -195,8 +208,6 @@
           this.doSearch();
         }
 
-        this.updateProgress();
-        
       }
 
       updateProgress() {

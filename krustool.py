@@ -152,7 +152,12 @@ def listenv():
     print("KRUS_DB_USER:",  os.environ.get("KRUS_DB_USER"))
     print("KRUS_DB_PASSWORD:",  os.environ.get("KRUS_DB_PASSWORD"))
 
-def serve(path):
+def serve_web(path):
+    os.chdir(path)
+    call(["npm", "start"])
+
+
+def serve_api(path):
     host = os.environ.get("KRUS_API_HOST")
     port = os.environ.get("KRUS_API_PORT")
 
@@ -162,6 +167,7 @@ def serve(path):
 
     os.chdir(path)
     call(["php", "-S", host+":"+port])
+
 
 
 def docker():
@@ -190,7 +196,8 @@ if __name__ == "__main__":
     parser.add_argument("-m", "--migseed", help="migrate:refresh + seed:refresh", action="store_true")
     parser.add_argument("-t", "--test", nargs=1, help="Run specific test")
     parser.add_argument("-ta", "--test-all", help="Run all tests", action="store_true")
-    parser.add_argument("-s", "--serve", nargs=1, help="<serverpath>")
+    parser.add_argument("-sw", "--serve-web", nargs=1, help="<webserver-path>")
+    parser.add_argument("-sa", "--serve-api", nargs=1, help="<apiserver-path>")
     parser.add_argument("-d", "--docker", help="Run docker-compose up", action="store_true")
     parser.add_argument("-db", "--dockerbuild", help="Run docker-compose up + build", action="store_true")
 
@@ -217,8 +224,11 @@ if __name__ == "__main__":
     elif argv.init:
         init()
 
-    elif argv.serve:
-        serve(argv.serve[0])
+    elif argv.serve_web:
+        serve_web(argv.serve_web[0])
+
+    elif argv.serve_api:
+        serve_api(argv.serve_api[0])
 
     elif argv.docker:
         docker()

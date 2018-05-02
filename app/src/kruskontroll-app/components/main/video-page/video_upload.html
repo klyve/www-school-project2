@@ -1,0 +1,102 @@
+<link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../../bower_components/slate-font-awesome/slate-font-awesome.html">
+<link rel="import" href="../../../../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../../../../bower_components/paper-input/paper-textarea.html">
+
+<link rel="import" href="../../../../store/store.html">
+<link rel="import" href="../../../../utilities/storage.html">
+<link rel="import" href="../../../../utilities/http.html">
+<link rel="import" href="../../../styles.html">
+
+
+<dom-module id="video-upload">
+  <template>
+      <style include="shared-styles">
+      :host {
+        display: block;
+      }
+
+
+    </style>
+    <style include="slate-font-awesome"></style>
+
+
+
+
+      <h1>Upload Video</h1>
+
+      <paper-input label="Title" 
+                   type=text></paper-input>
+      
+      <paper-textarea label="Description"></paper-textarea>
+
+
+      <paper-input id="inputVideo"
+                   label="Video" 
+                   type="file" 
+                   on-change="_bindVideo"></paper-input>
+
+
+
+  </template>
+
+  <script>
+
+    /**
+     * @customElement
+     * @polymer
+     */
+    class VideoUpload extends SiteActions(ReduxStore(Polymer.Element)) {
+
+      static get is() { return 'video-upload'; }
+      
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'kruskontroll-app'
+          },
+          
+          files: Object
+        };
+      }
+
+
+      // @ref https://stackoverflow.com/a/43114622/9636402 02.05.2018
+      _bindVideo(e) {
+          this.files = this.$.inputVideo.inputElement.inputElement.files;
+
+          console.log(this.files[0])
+
+          let mimetype = this.files[0].type
+          let filename = this.files[0].name;
+          let filesize = this.files[0].size;
+
+          if (mimetype.indexOf("video/mp4") == -1) {
+            this.dispatch(this.dispatchErrorMessage({
+                error: "Bad Request",
+                code: 400,
+                message: `Only supporting video/mp4 video format. ${mimetype} given`
+            }))
+
+            this.$.inputVideo.inputElement.inputElement.files = null
+            return
+          } 
+
+        const params = {
+            headers: {
+              'Content-Type': 'application/octet-stream',
+              'X-OriginalFilename': filename,
+              'X-OriginalFilesize': filesize,
+              'X-OriginalMimetype': mimetype,
+            },
+
+            onUploadProgress: progressEvent => console.log(progressEvent.loaded)
+        }
+
+        post('/tempfile', this.files[0], params);
+      }
+    }    
+    window.customElements.define(VideoUpload.is, VideoUpload);
+  </script>
+</dom-module>

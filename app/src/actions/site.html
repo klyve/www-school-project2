@@ -1,3 +1,4 @@
+
 <link rel="import" href="../utilities/http.html">
 <link rel="import" href="../utilities/storage.html">
 <link rel="import" href="../../bower_components/polymer/polymer.html">
@@ -90,7 +91,7 @@
 
 
             dispatchErrorMessage(err) {
-                return dispatchError();
+                return dispatchError(err);
             }
 
             clearError(){

@@ -3,10 +3,11 @@
 <link rel="import" href="./constants.html">
 <script>
     
-    const bindParams = () => {
+    const bindParams = (params) => {
         const token = getStorageItem('token');
         let ret = {
             headers: {},
+            ...params,
         };
         
         if(token) {
@@ -19,13 +20,14 @@
         return axios.get(SERVER+path, bindParams());
     }
     
-    const post = (path, data) => {
-        return axios.post(SERVER+path, data, bindParams());
+    const post = (path, data, params = {}) => {
+        return axios.post(SERVER+path, data, bindParams(params));
     }
 
     const graphql = graphqlQuery => {
         return axios.post(SERVER+'graphql', {query:graphqlQuery}, bindParams());
     }
+
 
 
 </script>
