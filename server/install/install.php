@@ -14,7 +14,6 @@
     }
 
     #form-button-id {
-        background-color: #008CBA; 
         color: white;
         font-size: .9rem;
         text-align: center;
@@ -23,6 +22,14 @@
         padding: 0px 30px;
         height: 40px
     }
+
+    .bg-red {
+        background-color:  #f44336;
+    }
+    .bg-blue {
+        background-color: #008CBA;         
+    }
+
     #form-button-id:hover {
         cursor: pointer;
     }
@@ -85,10 +92,17 @@ echo "</pre>";
 <form method="get" action="/">
     <input id="form-button-id"
            type="submit"
-           class="input-install"
+           class="input-install bg-blue"
            value="Home page"/>
 </form>
 
+
+<form method="get" action="/install">
+    <input id="form-button-id"
+           type="submit"
+           class="input-install bg-red"
+           value="Back"/>
+</form>
 
 
 <body>
