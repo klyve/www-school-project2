@@ -12,7 +12,52 @@ use \MVC\Helpers\Hash;
 use \MVC\Http\ErrorCode;
 
 class PlaylistTagController extends Controller {
-
+	/**
+	 * @api {post} /playlist/:playlistid/tag Post a new tag to be applied to the playlist.
+	 * @apiName Post playlist tag
+	 * @apiGroup Playlist
+	 * @apiPermission teacher
+	 *
+	 * @apiParam {Number} playlistid Playlist's unique ID.
+	 * @apiParam {String} name Content of the tag. 
+	 * 
+	 * @apiParamExample {json} Post tag:
+	 * 		{
+	 * 			name: "JSON"
+	 * 		}
+	 * 
+	 * @apiUse data
+	 * 
+	 * @apiSuccessExample New tag added to the playlist.
+	 * 		HTTP/1.1 201 OK
+	 * 		{
+	 * 			data: "Tag created and inserted"
+	 * 		}
+	 * 
+	 * @apiSuccessExample Existing tag added to the playlist.
+	 *		HTTP/1.1 200 OK
+	 * 		{
+	 * 			data: "Tag inserted"
+	 * 		}
+	 * 
+	 * @apiUse errorCode
+	 * 
+	 * @apiErrorExample {json} Error user does not own playlist:
+     *     HTTP/1.1 401 Unauthorized
+ 	 *     {
+ 	 *        code: 401,
+     *		  error: 1,
+     *   	  message: 'You do not have rights for given playlist',
+ 	 *     }
+ 	 * 
+	 * @apiErrorExample {json} Error playlist already contains the given tag:
+     *     HTTP/1.1 409 Conflict
+ 	 *     {
+ 	 *        code: 409,
+     *		  error: 2,
+     *   	  message: 'The playlist already contains the tag',
+ 	 *     }
+	 */
 	public function postTag(
 		UsersModel $user, PlaylistsModel $playlist,
 		TagsModel $tag, PlaylistTagsModel $playlistTag,
@@ -67,6 +112,48 @@ class PlaylistTagController extends Controller {
 		return Response::statusCode(202);	
 	}
 
+
+	/**
+	 * @api {Delete} /playlist/:playlistid/tag/:tagname Remove a tag from playlist.
+	 * @apiName Delete playlist tag
+	 * @apiGroup Playlist
+	 * @apiPermission teacher
+	 *
+	 * @apiParam {Number} playlistid Playlist unique ID.
+	 * @apiParam {String} name Content of the tag. 
+	 * 
+	 * @apiUse data
+	 *
+	 * @apiSuccessExample New tag added to playlist.
+	 * 		HTTP/1.1 202 OK
+	 * 		{
+	 * 			data: "Tag created and inserted"
+	 * 		}
+	 * 
+	 * @apiSuccessExample Existing tag added to playlist.
+	 *		HTTP/1.1 200 OK
+	 * 		{
+	 * 			data: "Delete accepted"
+	 * 		}
+	 * 
+	 * @apiUse errorCode
+	 * 
+	 * @apiErrorExample {json} Error user does not own playlist:
+     *     HTTP/1.1 401 Unauthorized
+ 	 *     {
+ 	 *        code: 401,
+     *		  error: 1,
+     *   	  message: 'You do not have rights for given video',
+ 	 *     }
+ 	 * 
+	 * @apiErrorExample {json} Error playlist with tag does not exist:
+     *     HTTP/1.1 404 Not Found
+ 	 *     {
+ 	 *        code: 404,
+     *		  error: 3,
+     *   	  message: 'Could not find resource',
+ 	 *     }
+	 */
 	public function deleteTag(
 		UsersModel $user, PlaylistsModel $playlist,
 		TagsModel $tag, PlaylistTagsModel $playlistTag,
