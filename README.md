@@ -1,3 +1,8 @@
+# NOTE: Reading markdown on Bitbucket is terrible! 
+
+We strongly recommend reading this document on HackMD instead -> https://hackmd.io/zHnwIapWTMGm08nnd-PcOQ?view - 2018-05-03
+
+
 # Kruskontroll - Prosjekt 2 IMT2291 våren 2018
 
 **Prosjektdeltakere**
