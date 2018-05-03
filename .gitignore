@@ -21,3 +21,4 @@ server/public/media/subtitles/*
 *.zip
 db/
 dist/
+apitests/files*
