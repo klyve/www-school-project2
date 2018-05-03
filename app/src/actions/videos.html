@@ -16,6 +16,7 @@
     const PUT_VIDEO_REQUEST = 'PUT_VIDEO_REQUEST';
     const PUT_VIDEO_SUCCESS = 'PUT_VIDEO_SUCCESS';
     const PUT_VIDEO_FAILURE = 'PUT_VIDEO_FAILURE';
+    const POST_COMMENT_SUCCESS = 'POST_COMMENT_SUCCESS';
 
 
     const getVideosRequest = () => ({
@@ -60,6 +61,13 @@
         }
     });
 
+    const postCommentSuccess = data => ({
+        type: POST_COMMENT_SUCCESS,
+        payload: {
+            ...data
+        }
+    });
+
 
     const putVideoRequest = () => ({
         type: PUT_VIDEO_REQUEST,
@@ -90,6 +98,25 @@
             constructor() {
                super();
             }
+
+        postComment() {
+            return dispatch => {
+                // dispatch(postCommentRequest());
+                post(`/video/${this.id}/comment`, {
+                    content: this.commentText
+                })
+                .then(res => dispatch(postCommentSuccess({
+                    video: this.id,
+                    comment: {
+                        user: {
+                           name: 'me',
+                        },
+                        content: this.commentText
+                    },
+                })))
+                .catch(err => console.log(err));
+            }
+        }
 
             getDashboardVideos() {
                 return dispatch => {
@@ -123,6 +150,7 @@
                         comments {
                             user {
                                 name
+                                id
                             }
                             content
                         }
@@ -155,6 +183,44 @@
 
             }
         }
+
+        uploadVideo() {
+            return dispatch => {
+                let mimetype = this.files[0].type
+                let filename = this.files[0].name;
+                let filesize = this.files[0].size;
+
+                if (mimetype.indexOf("video/mp4") == -1) {
+                    dispatch(dispatchError({
+                        error: "Bad Request",
+                        code: 400,
+                        message: `Only supporting video/mp4 video format. ${mimetype} given`
+                    }));
+
+                    this.$.inputVideo.inputElement.inputElement.files = null
+                    return
+                }
+                const params = {
+                    headers: {
+                    'Content-Type': 'application/octet-stream',
+                    'X-OriginalFilename': filename,
+                    'X-OriginalFilesize': filesize,
+                    'X-OriginalMimetype': mimetype,
+                    },
+
+                    onUploadProgress: progressEvent => dispatch(dispatchProgress((progressEvent.loaded / filesize) * 100))
+                }
+
+                post('/tempfile', this.files[0], params)
+                    .then(res => {
+                      // Redirect to other screen
+                      console.log(res);
+                    //   dispatch(dispatch)  
+                    })
+                    .catch(console.log);
+            }
+        }
+
 
         }
     });

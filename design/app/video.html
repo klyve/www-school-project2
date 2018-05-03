@@ -97,11 +97,147 @@
                 
                 <div class="video-wrapper">
                     <div class="video-container">
-                        
+                      <video class="video-player" controls>
+                          <source id="mp4" src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+                          <source id="webm" src="http://media.w3.org/2010/05/sintel/trailer.webm" type="video/webm">
+                          <source id="ogv" src="http://media.w3.org/2010/05/sintel/trailer.ogv" type="video/ogg">
+                          Your browser does not support HTML5 video.
+                        </video>
                     </div>
                     <div class="subtitles-container">
-
+                      
                     </div>
+                </div>
+                <div class="info-wrapper">
+                  
+                  <div class="info-article">
+                    <div class="video-header">
+                      <div class="video-title">
+                        <h1>Video title</h1>
+                      </div>
+                      <ul class="video-controls">
+                        <li>
+                          <span>1353</span>
+                          <small>Views</small>
+                        </li>
+                        <li class="likes-area">
+                          <div class="likes">
+                            <button class="liked">
+                              <i class="fa fa-thumbs-up"></i>
+                            </button>
+                            <button>
+                              <i class="fa fa-thumbs-down"></i>
+                            </button>
+                            
+                          </div>
+                          <div class="likes-bar">
+                            <div class="likes"></div>
+                            <div class="dislikes"></div>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="video-description">
+                      <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Error, sapiente beatae rerum voluptas, vero maxime eligendi corrupti nesciunt hic earum quo explicabo, atque quae optio doloribus mollitia officia soluta sed?
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="comments-container">
+                  <div class="comments-app" >
+                    
+                    <!-- From -->
+                    <div class="comment-form">
+                      <!-- Comment Avatar -->
+                      <div class="comment-avatar">
+                        <img src="http://gravatar.com/avatar/412c0b0ec99008245d902e6ed0b264ee?s=80">
+                      </div>
+                  
+                      <form class="form" name="form">
+                        <div class="form-row">
+                          <textarea
+                                    class="input"
+                                    placeholder="Add comment..."
+                                    required></textarea>
+                        </div>
+                  
+                        <div class="form-row">
+                          <input type="submit" value="Add Comment">
+                        </div>
+                      </form>
+                    </div>
+                  
+                    <!-- Comments List -->
+                    <div class="comments">
+                      <!-- Comment -->
+                      <div class="comment">
+                        <!-- Comment Avatar -->
+                        <div class="comment-avatar">
+                          <img src="http://gravatar.com/avatar/412c0b0ec99008245d902e6ed0b264ee?s=80">
+                        </div>
+                  
+                        <!-- Comment Box -->
+                        <div class="comment-box">
+                          <div class="comment-text">{{ comment.text }}</div>
+                          <div class="comment-footer">
+                            <div class="comment-info">
+                              <span class="comment-author">
+                                <em if="comment.anonymous">Anonymous</em>
+                                <a if="!comment.anonymous" href="{{ comment.author }}">{{ comment.author }}</a>
+                              </span>
+                              <span class="comment-date">{{ comment.date }}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  
+                      <!-- Comment - Dummy -->
+                      <div class="comment">
+                        <!-- Comment Avatar -->
+                        <div class="comment-avatar">
+                          <img src="http://gravatar.com/avatar/412c0b0ec99008245d902e6ed0b264ee?s=80">
+                        </div>
+                  
+                        <!-- Comment Box -->
+                        <div class="comment-box">
+                          <div class="comment-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto temporibus iste nostrum dolorem natus recusandae incidunt voluptatum.</div>
+                          <div class="comment-footer">
+                            <div class="comment-info">
+                              <span class="comment-author">
+                                <a href="#/user/1">Bjarte</a>
+                              </span>
+                              <span class="comment-date">Feb 2, 2013 11:32:04 PM</span>
+                            </div>
+                  
+                          </div>
+                        </div>
+                      </div>
+                  
+                      <!-- Comment - Dummy -->
+                      <div class="comment">
+                        <!-- Comment Avatar -->
+                        <div class="comment-avatar">
+                          <img src="http://gravatar.com/avatar/412c0b0ec99008245d902e6ed0b264ee?s=80">
+                        </div>
+                  
+                        <!-- Comment Box -->
+                        <div class="comment-box">
+                          <div class="comment-text">Eligendi voluptatum ducimus architecto tempore, quaerat explicabo veniam fuga corporis totam reprehenderit quasi sapiente modi tempora at perspiciatis mollitia, dolores voluptate. Cumque, corrupti?</div>
+                          <div class="comment-footer">
+                            <div class="comment-info">
+                              <span class="comment-author">
+                                <a href="#/user/1">Bjarte</a>
+                              </span>
+                              <span class="comment-date">Jan 31, 1986 11:32:04 PM</span>
+                            </div>
+                  
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
 

@@ -8,6 +8,7 @@ use \MVC\Helpers\Hash;
 use \MVC\Helpers\File;
 use \MVC\Http\ErrorCode;
 use \Datetime;
+use \App\Models\TempVideosModel;
 
 // HTTP STATUS CODES
 const HTTP_OK            = 200;  // Success and returning content
@@ -24,7 +25,7 @@ const DS = DIRECTORY_SEPARATOR;
 class FilesController extends Controller {
   
   // @route POST /user/{userid}/tempfile
-  public function postTempfile(Request $req) {
+  public function postTempfile(Request $req, TempVideosModel $tmpVid) {
 
     // @ref copy from okolloen javascript_forelesning 1
     $fname    = $_SERVER['HTTP_X_ORIGINALFILENAME'];      
@@ -37,7 +38,10 @@ class FilesController extends Controller {
 
     
     $tempfilename = Hash::md5($userid . $fname . $fsize . $mimetype . microtime() );        // rlkngj..
-    $extension = substr($fname, strpos($fname, '.')+1); // e.g. mp4
+    // $extension = substr($fname, strpos($fname, '.')+1); // e.g. mp4
+    $ext_parts = pathinfo($fname);
+    $extension = $ext_parts['extension'];
+
     $tempdir =  WWW_ROOT.DS."public".DS."temp".DS. $userid;
 
     File::makeDirIfNotExist($tempdir);
@@ -57,8 +61,19 @@ class FilesController extends Controller {
     fclose($output);
 
     $res = ['fname'=> "$tempfilename.$extension", 'size'=>$fsize, 'mime'=>$mimetype, 'message' => 'File uploaded succesfully to temp storage'];
+    
 
-    return Response::statusCode(HTTP_CREATED, $res);
+    // TempVideos(fname, size, mine, userid);
+    // Return TempVideos
+
+    $tmpVid->create([
+      'fname' => $res['fname'],
+      'size' => $res['size'],
+      'mime' => $res['mime'],
+      'userid' => $userid,
+    ]);
+
+    return Response::statusCode(HTTP_CREATED, $tmpVid);
   }
 
 }

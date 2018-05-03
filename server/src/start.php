@@ -28,6 +28,11 @@ if(php_sapi_name() === 'cli') {
     MVC\Core\Cli::init($argv);
 }else {
     ob_start();
+    ini_set('memory_limit','5024M');
+    if (function_exists("set_time_limit") == true AND @ini_get("safe_mode") == 0) {
+        @set_time_limit(300);
+    }
+
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, X-OriginalMimetype, X-OriginalFilename, X-OriginalFilesize');
     header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE');
