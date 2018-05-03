@@ -24,6 +24,10 @@
         return axios.post(SERVER+path, data, bindParams(params));
     }
 
+    const put = (path, data, params = {}) => {
+        return axios.put(SERVER+path, data, bindParams(params));
+    }
+
     const graphql = graphqlQuery => {
         return axios.post(SERVER+'graphql', {query:graphqlQuery}, bindParams());
     }

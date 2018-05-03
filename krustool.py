@@ -37,7 +37,7 @@ def init():
 
         envfile.write("DIR=\"$( cd \"$( dirname \"${BASH_SOURCE[0]}\" )\" && pwd )\"\n")
         envfile.write("alias krustool=\"python3 $DIR/krustool.py\"\n")
-        envfile.write("echo \"aliased python3 $DIR/cmd.py -> krustool\"\n\n")
+        envfile.write("echo \"aliased python3 $DIR/krustool.py -> krustool\"\n\n")
         envfile.write("export KRUS_ROOT=$DIR\n")
 
 
@@ -52,6 +52,7 @@ def init():
         dbpassword = writeOrDefault(envfile,"KRUS_DB_PASSWORD", "")
 
         with open(ROOT+"/apitests/.env", "w") as apienv:
+            apienv.write("KRUS_ROOT="+ROOT+"\n")
             apienv.write("KRUS_API_HOST="+apihost+"\n")
             apienv.write("KRUS_API_PORT="+apiport+"\n")
 
