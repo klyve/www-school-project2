@@ -21,3 +21,5 @@ server/public/media/subtitles/*
 *.zip
 db/
 dist/
+
+apidoc/

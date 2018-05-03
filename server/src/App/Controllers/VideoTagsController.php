@@ -13,6 +13,49 @@ use \MVC\Http\ErrorCode;
 
 class VideoTagsController extends Controller {
 
+	/**
+	 * @api {post} /video/:videoid/tag Post a new tag to be applied to the video.
+	 * @apiName Post video tag
+	 * @apiGroup Video
+	 * @apiGroup Tag
+	 *
+	 * @apiParam {Number} videoid Videos unique ID.
+	 * @apiParam {String} name content of the tag. 
+	 * 
+	 * @apiParamExample /video/:videoid/tag {json} Post tag:
+	 * 		{
+	 * 			name: "JSON"
+	 * 		}
+	 * 
+	 *
+	 * @apiSuccessExample When new tag is added to the video.
+	 * 		HTTP/1.1 201 OK
+	 * 		{
+	 * 			data: "Tag created and inserted"
+	 * 		}
+	 * 
+	 * @apiSuccessExample When existing tag is added to the video.
+	 *		HTTP/1.1 200 OK
+	 * 		{
+	 * 			data: "Tag inserted"
+	 * 		}
+	 * 
+	 * @apiErrorExample {json} Error user does not own video with given id:
+     *     HTTP/1.1 401 Unauthorized
+ 	 *     {
+ 	 *        code: 401,
+     *		  error: 1,
+     *   	  message: 'You do not have rights for given video',
+ 	 *     }
+ 	 * 
+	 * @apiErrorExample {json} Error video already contains the given tag:
+     *     HTTP/1.1 409 Conflict
+ 	 *     {
+ 	 *        code: 409,
+     *		  error: 2,
+     *   	  message: 'The video already contains the tag',
+ 	 *     }
+	 */
 	public function postTag(
 		UsersModel $user, VideosModel $videos,
 		TagsModel $tag, VideoTagsModel $videoTags,
@@ -67,6 +110,44 @@ class VideoTagsController extends Controller {
 		return Response::statusCode(202);	
 	}
 
+	/**
+	 * @api {Delete} /video/:videoid/tag/:tagname Remove a tag from video.
+	 * @apiName Delete video tag
+	 * @apiGroup Video
+	 * @apiGroup Tag
+	 *
+	 * @apiParam {Number} videoid Videos unique ID.
+	 * @apiParam {String} name content of the tag. 
+	 * 
+	 *
+	 * @apiSuccessExample When new tag is added to the video.
+	 * 		HTTP/1.1 202 OK
+	 * 		{
+	 * 			data: "Tag created and inserted"
+	 * 		}
+	 * 
+	 * @apiSuccessExample When existing tag is added to the video.
+	 *		HTTP/1.1 200 OK
+	 * 		{
+	 * 			data: "Delete accepted"
+	 * 		}
+	 * 
+	 * @apiErrorExample {json} Error user does not own video with given id:
+     *     HTTP/1.1 401 Unauthorized
+ 	 *     {
+ 	 *        code: 401,
+     *		  error: 1,
+     *   	  message: 'You do not have rights for given video',
+ 	 *     }
+ 	 * 
+	 * @apiErrorExample {json} Error video with tag does not exist:
+     *     HTTP/1.1 404 Not Found
+ 	 *     {
+ 	 *        code: 404,
+     *		  error: 3,
+     *   	  message: 'Could not find resource',
+ 	 *     }
+	 */
 	public function deleteTag(
 		UsersModel $user, VideosModel $videos,
 		TagsModel $tag, VideoTagsModel $videoTags,
