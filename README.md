@@ -1,7 +1,14 @@
-# NOTE: Reading markdown on Bitbucket is terrible! 
+## NOTE: Reading markdown on Bitbucket is not optimal! 
 
-We strongly recommend reading this document on HackMD instead -> https://hackmd.io/zHnwIapWTMGm08nnd-PcOQ?view - 2018-05-03
+For the full experience read this document on HackMD instead -> https://hackmd.io/zHnwIapWTMGm08nnd-PcOQ?view - 2018-05-03
 
+<br>
+
+# Table of Contents
+
+[TOC]
+
+<br>
 
 # Kruskontroll - Prosjekt 2 IMT2291 våren 2018
 
@@ -12,11 +19,6 @@ Bjarte Klyve Larsen **[Klyve](https://github.com/klyve)**
 Eldar Hauge Torkelsen **[fill]()**
 
 Jonas J. Solsvik **[arxcis](https://github.com/arxcis)**
-
-
-
-[TOC]
-
 
 <br>
 
@@ -32,19 +34,17 @@ Jonas J. Solsvik **[arxcis](https://github.com/arxcis)**
 
 ## 2. Prerequisites
 
-**Host system**
-- MacOS, Linux or Docker (Not tested with Windows)
 
-**Back-end**
+- MacOS, Linux or Docker (Not tested with Windows)
+- node package manager(npm)
+- apidoc  - node.js documentation tool
+- ava     - node.js test tool
 - PHP 5.4 minimum
 - Apache, nginx or similar hosts to run the project
-- MySQL - for database
+- MySQL Daemon - for database
 - Python3 - for build scripts and environment setup.
-
-**Front-end**
 - Chrome, Brave (Safari and Firefox currently not working)
-- npm
-- Bower
+- Bower  - for installing webcomponents in Polymer
 
 
 <br>
@@ -133,7 +133,7 @@ $ krustool --test <path>  # Path to ava test file. Found in apitests/
 
 
 
-## Build and package application
+## 4. Build and package application
 
 <br>
 
@@ -160,7 +160,7 @@ $ ls -al
 
 
 
-## Install application
+## 5. Install application
 
 1. Serve the `dist/` folder somewhere
 2. Go to `http://<hostname>/install/index.php`
@@ -192,10 +192,29 @@ The installation has now successfully created the database, and created an admin
 <a href="https://ibb.co/jPDsB7"><img src="https://preview.ibb.co/e08QW7/uml_Database.png" alt="uml_Database" border="0"></a>
 
 
+<br>
+
+
 ## 2. Controllers
 
+Each controller represents a collection in the database
 
+<a href="https://ibb.co/fWOXdn"><img src="https://image.ibb.co/i6inB7/Screen_Shot_2018_05_03_at_21_39_42.png" alt="Screen_Shot_2018_05_03_at_21_39_42" border="0" height=400 ></a><br />
 
+Each Controller method represents an server API endpoint
+
+*From UsersController.php*
+```php
+public function getUser(UsersModel $user, Request $req) {
+    $myuser = $user->find([
+        'id' => $req->input('id'),
+    ]);
+    return Response::statusCode(200, $myUser);
+}
+```
+*NOTE*: This endpoint not actually used. We use GraphQL instead. More on this later.
+
+<br>
 
 ## 3. Generator toolkit
 
@@ -219,12 +238,15 @@ seed:refresh <fileList>
 
 ```
 
+<br>
+
+
 ## 4. Migrations
 
 Migrations is a quick and simple way to add tables to the database
 To create a migration create a migration class inside /App/Database/Migrations
 
-<a href="https://ibb.co/ghOjr7"><img src="https://image.ibb.co/cNmhdn/folder_migrations.png" alt="folder_migrations" height=500 border="0"></a>
+<a href="https://ibb.co/ghOjr7"><img src="https://image.ibb.co/cNmhdn/folder_migrations.png" alt="folder_migrations" height=400 border="0"></a>
 
 
 Name the file the same name as the className.
@@ -252,20 +274,21 @@ class TestMigrations {
 }
 ```
 
+<br>
+
+
 ## 5. Seeding
 Seeding is a quick and simple way to add content to the database
 To created a migration create a migration class inside /App/Database/Seeder
 
-<a href="https://ibb.co/gCTHB7"><img src="https://image.ibb.co/iPeePS/folder_seeder_png.png" alt="folder_seeder_png" height=500 border="0"></a>
+<a href="https://ibb.co/gCTHB7"><img src="https://image.ibb.co/iPeePS/folder_seeder_png.png" alt="folder_seeder_png" height=400 border="0"></a>
 
 Name the file the same name as the className.
 Every Seeding file require a up and down function to run.
 
 Use Models to create the database information as shown below.
 
-```php=
-<?php namespace App\Database\Seeder;
-
+```php
 use \MVC\Database\Schema;
 use \App\Models as Models;
 
@@ -291,7 +314,7 @@ class TestSeeder {
 
 Different language strings are created in the `locales/` folder
 
-<a href="https://imgbb.com/"><img src="https://image.ibb.co/b92r4S/locales.png" alt="locales" border="0"> </a>
+<a href="https://imgbb.com/"><img src="https://image.ibb.co/b92r4S/locales.png" height=240 alt="locales" border="0"> </a>
 
 
 Here is an example of a `en.json` file
@@ -393,13 +416,11 @@ elif argv.init:
 
 To support the GraphQL endpoint from the back-end we have to define a lot of 'types' which will resolve the GraphQL paths. We make one type for each collection, like we do with Controllers, Migrations and Seeders
 
-<a href="https://imgbb.com/"><img src="https://image.ibb.co/jMyjr7/folder_types.png" alt="folder_types" border="0" height=500></a>
+<a href="https://imgbb.com/"><img src="https://image.ibb.co/jMyjr7/folder_types.png" alt="folder_types" border="0" height=400></a>
 
 
 Here is an example from UserType.php constructor
 ```php
-<?php namespace App\Http\Type;
-
 use \GraphQL\Type\Definition\ObjectType;
 use \GraphQL\Type\Definition\ResolveInfo;
 use \GraphQL\Type\Definition\Type;
@@ -436,7 +457,7 @@ class UserType extends ObjectType {
     ];
     parent::__construct($config);
   }
-// Resolver funksjoner kommer her.....
+// More resolve functions here.....
 }
 ```
 The config object which is constructed here dictates how the Graph can be traversed in a typical GraphQL statement.
@@ -462,8 +483,10 @@ user(id:1) {
   } 
 }  
 ```
-Resultat 
-```json=
+
+Resultat
+
+```JSON
 "user": {
   "name": "username0",
   "subscriptions": [
@@ -478,17 +501,51 @@ Resultat
 Her får vi tilbake alle subscriptions for en gitt bruker. I tillegg får vi mulighet til å hente data om spillelisten som brukeren har abonnert på i samme query. Dette gir oss samme funksjonalitet som SQL Join gir oss, men på en mer elegant måte.
 
 
+<br>
 
-# Rest API + GraphQL API
+# RestAPI and Server Endpoints
 
 ## 1. AVA Testing Framework
 
-Output of all tests. NOTE: The tool will start a watch-task on the tests.  CTRL+C to stop.
+
+We are using the NodeJS AVA test framework to write test for the API endpoints. 
+
+<a href="https://imgbb.com/"><img src="https://image.ibb.co/cz3WM7/folder_tests.png" alt="folder_tests" border="0" height=350></a> <br />
+
+
+AVA should be installed as a command line tool using `npm`
+```
+npm install -g ava
+```
+
+Example of a test from `users.test.js`
+```javascript
+const credentials = {
+    email: guid()+'@stud.ntnu.no',
+    name: 'bjarte',
+    password: 'somepassword',
+    newpassword: 'hello123'
+};
+
+test.serial('Log in a user', async (t) => {
+    t.plan(10);
+    const res = await axios.post(`${API}/user/login`, credentials)
+    t.is(res.status, 200, `Expected status code 200 got ${res.status}`);
+
+    testDataIntegrity(res.data, ['email', 'name', 'token', 'usergroup'], t);
+    
+    userToken = res.data.token
+    t.pass();
+});
+```
+
+Here is an output of all tests. 
+NOTE: The tool will start a watch-task on the tests.  CTRL+C to stop.
 
 ```
 $ krustool --test-all
 
-# Rerunning migrations and seeding
+# Re-running migrations and seeding...
 
 ✔ comments › Post comment (316ms)
 ✔ comments › Edit comment (291ms)
@@ -547,22 +604,126 @@ $ krustool --test-all
 AVA js docs - https://github.com/avajs/ava - *2018-05-03*
 
 
+<br>
+
+
 ## 2. apiDoc Documentation Framework
 
 
-APIDocs site - http://apidocjs.com - *2018-05-03*
+This framework documents our API endpoints. We use special comments above all Controller.Functions. Apidoc is installed as a command line tool using `npm`.
+```
+npm install -g apidoc
+```
+
+Standing in the root directory you can now run this command
+```
+apidoc -i server/ -o apidoc/ --verbose -c server/ -e .*vendor
+```
+
+Which will generate a new .gitignored folder `apidoc/`
+To open the documentation
+```
+cd apidoc
+open index.html
+```
+
+This will reveal the apidoc site for our project
+
+<a href="https://ibb.co/npqHB7"><img src="https://preview.ibb.co/jz564S/Screen_Shot_2018_05_03_at_21_37_10.png" alt="Screen_Shot_2018_05_03_at_21_37_10" border="0"></a><br />
+
+
+APIDocs documentation - http://apidocjs.com - *2018-05-03*
+
+<br>
 
 
 ## 3. GraphQL Endpoint
 
+The GraphQL endpoint replaces most if not all tranditional GET endpoints. It does more than just replace though. When you have a GraphQL endpoint you can compose the data you want in your response in new ways without changing anything on the server.
+
+We use the GraphiQL tool for Chrome to do test queries our GraphQL endpoint
+
+<a href="https://ibb.co/gbUzPS"><img src="https://preview.ibb.co/h1Nayn/graphiql.png" alt="graphiql" border="0"></a>
+
+We can also use Postman for the same purpose, but it is not as convenient since we have to write a json object with the whole query on a single line.
+
+
+GraphiQl chrome extension - https://chrome.google.com/webstore/detail/chromeiql/fkkiamalmpiidkljmicmjfbieiclmeij?hl=en - 2018-05-03
 
 GraphQL docs - https://graphql.org/learn/ - *2018-05-03*
 
 
+<br>
 
-## 4. Authentication - JWT JSON Web Token 
 
-## 5. HTTP Methods semantics
+## 4. Authentication - JWT (JSON Web Token) 
+
+When a user logs in we generate a JWT token which is returned with the HTTP response
+
+*From AuthController.php*
+```php
+$myUser->token = Hash::JWT(["key" => 'userid', 'value' => $myUser->id]);  
+return Response::statusCode(200, $myUser);
+```
+
+In the browser, we store this token in the LocalStorage. Whenever the user wants to create a request which requires authenticationg, the token has to be supplied alongside the request.
+
+```javascript
+const res = await axios.post(`${API}/user/login`, credentials)
+token = res.token // save token for later
+```
+
+When the user wants to update his credentials later on.
+```javascript
+const config = { 
+    headers: {
+        Authorization: 'Bearer ' + token;        
+    }}
+};
+
+await axios.put(`${API}/user`, updatedCredentials, config)
+```
+
+To validate the user, the server will validate the token on every request which requires authorization
+
+*From Request.php*
+```php
+public function token() {
+    if($this->hasToken() && Hash::verifyJWT($this->_token))
+        return Hash::getJWT($this->_token);
+    return null;
+}
+```
+Example of how a user is validated.
+
+*From UsersController
+```php
+public function putUser(UsersModel $user, Request $req) {
+
+    $userid =  $req->token()->userid; // Could be a valid userid or null
+
+    $updatedUser = $user->find([
+        'id' => $userid           // if null, no user is found here
+    ]);
+
+    if (!$updatedUser->id) {
+        return Response::statusCode(HTTP_NOT_FOUND, "Could not find $userid");
+    }
+
+    $updatedUser->name = $req->input('name');
+    $updatedUser->email = $req->input('email');
+    $updatedUser->save();
+
+    return Response::statusCode(HTTP_OK, "Updated User");
+}
+```
+
+If the user is not found with the userid returned by the token, the token is invalid. Every token should represent exactly one user.
+
+
+<br>
+
+## 5. HTTP Method semantics
 
 ***GET***
 * We never actually use GET. Only for testing purposes. This could be used for fetching data. 
@@ -598,7 +759,7 @@ header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE');
 
 ## 1. Installation script
 
-The installation script is run by visiting the `http://<hostname>/install/index.php` route.
+The installation script is run by visiting the `http://<hostname>/install/index.php` route, as shown in the Introduction section.
 
 <a href="https://imgbb.com/"><img src="https://image.ibb.co/ePY64S/folder_install.png" alt="folder_install" border="0"></a>
 
@@ -726,19 +887,48 @@ It is important to support GET though, as the URL will be more easily shared as 
 <br>
 
 
-## 2. Safari live reloading bug
+## 2. Broader browser compability
+
+**Safari live reloading bug**
+
+When developing the Polymer front-en we ran into issues with Safari going into an infinite loop, not showing anything, when using the npm start with live reloading. It would be worth looking into fixing this bug. For now we just switched over to Chrome.
+
+
+**Firefox missing thumbnails bug**
+
+When loading the Polymer front-end with firefox no thumbnails are showing up. Also there was no error in the console. We do not know why this is happening
+
+<a href="https://ibb.co/fG6zr7"><img src="https://preview.ibb.co/comzr7/Screen_Shot_2018_05_03_at_21_48_55.png" alt="Screen_Shot_2018_05_03_at_21_48_55" border="0"></a>
+
 
 <br>
 
 
-## 3. Firefox missing thumbnails bug
+## 4. Polymer + Redux as good fit ? 
 
+We found that because Polymer projects tend to rely mainly in .html files it gets a bit clunky to work together with other javascript frameworks. You can't simply use import {javascript} library.
 
-<br>
+Here is an example of how integrating Redux with Polymer creates wierd code
 
+```js
+class VideoUpload extends VideosActions(SiteActions(ReduxStore(Polymer.Element))) {
 
-## 4. Polymer + Redux == true ? 
+    static get is() { return 'video-upload'; }
 
+    static get properties() {
+    return {
+      prop1: {
+        type: String,
+        value: 'kruskontroll-app'
+      },
+
+      files: Object
+    };
+}
+```
+You have to 'wrap-inherit' from 3 different classes to compose different libraries.
+
+@TODO Explain more why this is the case...
 
 <br>
 
@@ -746,13 +936,29 @@ It is important to support GET though, as the URL will be more easily shared as 
 
 ## 5. Why we never delete stuff
 
+When we 'delete' something in our system, we never actually delete it.
+We mark it with a timestamp, which marks the time of when a user wanted it to be deleted.
+
+```php
+$deletedUser->deleted_at = date ("Y-m-d H:i:s");
+$deletedUser->save();
+
+return Response::statusCode(HTTP_ACCEPTED, "User $userid marked for deletion");
+```
+
+I will mention 2 of the reasons for this:
+1. We want to be able to revert if a mistake was made. Maybe the user regrets the deletion. Maybe a bug happened. A lot of things can go wrong.
+
+2. Performance - Deleting something might lead to costly reallocations in the database. You don't want this to happen during the hot hours of the day, causing the web app to halt. If you just mark stuff for deletion, you can make sure the costly reallocations of storage happens during off-peak hours in the evening or night.
+
+
 <br>
 
 
 
 ## 6. CORS for static files problematic
 
-By setting the correct Access control headers in PHP we managed to enable CORS for http routes. For serving static files hovewer we have a bigger problem. The static files are not served by PHP, but by the the "driver" which is out of PHP's control. 
+By setting the correct Access control headers in PHP we managed to enable CORS for `ttp routes. For serving static files hovewer we have a bigger problem. The static files are not served by PHP, but by the the "driver" which is out of PHP's control. 
 
 
 
