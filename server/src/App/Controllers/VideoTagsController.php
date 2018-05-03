@@ -17,7 +17,6 @@ class VideoTagsController extends Controller {
 	 * @api {post} /video/:videoid/tag Post a new tag to be applied to the video.
 	 * @apiName Post video tag
 	 * @apiGroup Video
-	 * @apiGroup Tag
 	 *
 	 * @apiParam {Number} videoid Videos unique ID.
 	 * @apiParam {String} name content of the tag. 
@@ -114,7 +113,6 @@ class VideoTagsController extends Controller {
 	 * @api {Delete} /video/:videoid/tag/:tagname Remove a tag from video.
 	 * @apiName Delete video tag
 	 * @apiGroup Video
-	 * @apiGroup Tag
 	 *
 	 * @apiParam {Number} videoid Videos unique ID.
 	 * @apiParam {String} name content of the tag. 
