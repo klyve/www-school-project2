@@ -182,7 +182,7 @@ NOTE: The installation script deletes itself. To insetall again, you have to bui
 
 ## 1. UML Database Diagram
 
-![UML diagram](https://bitbucket.org/klyve/imt2291-prosjekt2-v2018/wiki/images/umlDatabase.png)
+![UML diagram](https://bitbucket.org/klyve/imt2291-prosjekt2-v2018/raw/master/diagram/umlDatabase.png)
 
 
 ## 2. Generator toolkit
