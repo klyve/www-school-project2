@@ -441,7 +441,7 @@ public function resolveSubscriptions($user, $args) {
 }
 ```
 
-Eksempel på GraphQL query som traverserer UserType.php
+Example GraphQL query which traverses UserType.php
 ```
 user(id:1) { 
   name, 
@@ -452,8 +452,9 @@ user(id:1) {
   } 
 }  
 ```
-Resultat 
-```json=
+
+Result JSON response object
+```
 "user": {
   "name": "username0",
   "subscriptions": [
@@ -475,7 +476,7 @@ Her får vi tilbake alle subscriptions for en gitt bruker. I tillegg får vi mul
 
 Output of all tests. NOTE: The tool will start a watch-task on the tests.  CTRL+C to stop.
 
-```shell
+```
 $ krustool --test-all
 
 # Rerunning migrations and seeding
@@ -532,6 +533,7 @@ $ krustool --test-all
 
 45 tests passed [16:03:47]
 3 tests todo
+
 ```
 
 AVA js docs - https://github.com/avajs/ava - *2018-05-03*
@@ -574,12 +576,10 @@ GraphQL docs - https://graphql.org/learn/ - *2018-05-03*
 * Important for Cross Origin Resource Sharing(CORS). This was relevant for us during development since we are serving Polymer and the RestAPI on different servers.
 
 
-```php
-
+```php=
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, X-OriginalMimetype, X-OriginalFilename, X-OriginalFilesize');
 header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE');
-
 ```
 
 
