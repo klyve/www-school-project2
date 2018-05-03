@@ -13,6 +13,9 @@
  * @link       https://bitbucket.org/klyve/imt2291-project1-spring2018
  * @since      File available since Release 1.0
  */
+
+use \MVC\Helpers\Hash;
+
 const DS = DIRECTORY_SEPARATOR;
 
 class File {
@@ -70,6 +73,29 @@ class File {
         }
         return 0;
     }
+
+
+    function moveFormFile($formFile, $destination, $extension) {
+
+        $tmp_filepath  = $formFile['tmp_name'];
+        if (!is_uploaded_file($tmp_filepath)) {
+            return 1;
+        }
+
+        if (!file_exists($destination)) { // Brukeren har ikke lastet opp filer tidligere
+            if(!@mkdir($destination)) {
+                return 1;
+            }
+        }
+
+        $filename = Hash::md5($formFile['name'] . $destination . $extension . "djfne34#1.--.,,,as^^");
+
+        if (!@move_uploaded_file($tmp_filepath, "$destination/$filename.$extension")) {
+            return 1;
+        }
+        return 0;
+    }
+
 
     // @return 1 if ERROR
     function newFile($dest) {

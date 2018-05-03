@@ -35,58 +35,63 @@ class VideosController extends Controller {
     $newVideo->userid      = $userid;
     $newVideo->title       = $req->input('title');
     $newVideo->description = $req->input('description');
-    $newVideo->filesubtitle  = Hash::md5($userid . $newVideo->title  . microtime() ) . ".srt";
-    $newVideo->filethumbnail = $req->input('fileThumbnail');
-    $newVideo->filevideo     = $req->input('fileVideo');
+    $newVideo->filevideo   = $req->input('fileVideo');
 
-
-    //
-    // @TODO Move this into a function in  FILE.php
-    //
+    $thumbnail = $req->input('thumbnail');
+    $subtitle  = $req->input('subtitle');
 
     // Setup proper filepaths
     $tempdir       = WWW_ROOT.DS."public".DS."temp".DS.$userid;
-
     $mediaDir      =  WWW_ROOT.DS."public".DS."media";
-    $subtitlesDir  = $mediaDir.DS."subtitles".DS.$userid;
-    $thumbnailsDir = $mediaDir.DS."thumbnails".DS.$userid;
-    $videosDir     = $mediaDir.DS."videos".DS.$userid;
-
-    $thumbTemp = $tempdir.DS.$newVideo->filethumbnail;
-    $videoTemp = $tempdir.DS.$newVideo->filevideo;
-
-    $thumbDest    = $thumbnailsDir.DS.$newVideo->filethumbnail;
-    $videoDest    = $videosDir.DS.$newVideo->filevideo;
-    $subtitleDest = $subtitlesDir.DS.$newVideo->filesubtitle;
-
-    File::makeDirIfNotExist($subtitlesDir);
-    File::makeDirIfNotExist($thumbnailsDir);
-    File::makeDirIfNotExist($videosDir);
 
 
-    // Do file operations
-    $err = File::moveFile($thumbTemp, $thumbDest);
-    if ($err) {
-        return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to move file");
+    // Move Video from temp folder to destination folder
+    {
+        $videosDir     = $mediaDir.DS."videos".DS.$userid;
+        File::makeDirIfNotExist($videosDir);
+        $videoTempSource  = $tempdir  .DS. $newVideo->fileVideo;
+        $videoDestination = $videosDir.DS. $newVideo->filevideo;
+
+        $err = File::moveFile($videoTempSource, $videoDest);
+        if ($err) {
+            return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to move file");
+        }
     }
 
-    $err = File::moveFile($videoTemp, $videoDest);
-    if ($err) {
-        return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to move file");
+
+    // Get Thumbnail from form first, then move file from temp to
+    {
+        $thumbnailFormFile = $req->getFile($thumbnail);
+        if ($file) {
+            return Response::statusCode(HTTP_BAD_REQUEST, "Could not find file in form");
+        }
+        
+        $thumbnailsDir = $mediaDir.DS."thumbnails".DS.$userid;
+        File::makeDirIfNotExist($thumbnailsDir);
+
+        $err = File::moveFormFile($thumbnailFormFile, $thumbnailsDir, ".png");
+        if ($err) {
+            return Response::statusCode(HTTP_INTERNAL_ERROR, "Could not move file");
+        }
     }
 
-    $err = File::newFile($subtitleDest);
-    if ($err) {
-        return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to new file");
+
+    // Get Subtitle from form first, then move file from temp to
+    { 
+        $subtitleFormFile = $req->getFile($subtitle);
+        if ($file) {
+            return Response::statusCode(HTTP_BAD_REQUEST, "Could not find file in form");
+        }
+
+        $subtitlesDir = $mediaDir.DS."subtitles".DS.$userid;
+        File::makeDirIfNotExist($subtitlesDir);
+
+        $err = File::moveFormFile($subtitleFormFile, $subtitlesDir, 'srt');
+        if ($err) {
+            return Response::statusCode(HTTP_INTERNAL_ERROR, "Could not move file");
+        }    
     }
 
-    if (!rmdir($tempdir)) {
-        return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to remove users temp directory");
-    }
-    
-    //
-    // @TODO Move THE ABOVE into a function in  FILE.php
-    //
 
     
     // Finally save the new video in the database if all fil operations went through.
@@ -94,6 +99,7 @@ class VideosController extends Controller {
     if(!$videoid) {
         return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to create new video in database");
     }
+
 
     $res = ['videoid' => $videoid, 'message' => "Created a new video"];
     return Response::statusCode(HTTP_CREATED, $res);
