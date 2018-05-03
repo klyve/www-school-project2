@@ -162,9 +162,9 @@ $ ls -al
 
 2. Fill-in installation setup form
 
-![install script image](https://bitbucket.org/klyve/imt2291-prosjekt2-v2018/wiki/images/install-script.png)
+![install script image](https://bitbucket.org/klyve/imt2291-prosjekt2-v2018/raw/master/documentation/install-script.png)
 
-![installation success image](https://bitbucket.org/klyve/imt2291-prosjekt2-v2018/wiki/images/install-success.png)
+![installation success image](https://bitbucket.org/klyve/imt2291-prosjekt2-v2018/raw/master/documentation/install-success.png)
 
 The installation has now successfully created the database, and created an admin user in the database.
 
