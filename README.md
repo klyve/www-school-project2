@@ -253,7 +253,7 @@ Every Seeding file require a up and down function to run.
 
 Use Models to create the database information as shown below.
 
-```php=
+```php
 <?php namespace App\Database\Seeder;
 
 use \MVC\Database\Schema;
@@ -576,7 +576,7 @@ GraphQL docs - https://graphql.org/learn/ - *2018-05-03*
 * Important for Cross Origin Resource Sharing(CORS). This was relevant for us during development since we are serving Polymer and the RestAPI on different servers.
 
 
-```php=
+```php
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, X-OriginalMimetype, X-OriginalFilename, X-OriginalFilesize');
 header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE');
