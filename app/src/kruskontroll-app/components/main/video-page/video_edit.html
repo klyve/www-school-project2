@@ -11,10 +11,63 @@
       :host {
         display: block;
       }
+   
+      canvas {
+        display: none;
+      }
+
     </style>
     <style include="slate-font-awesome"></style>
+    <app-location route="{{route}}" use-hash-as-path></app-location>
+    
+
 
     <h1> Edit video </h1>
+
+      <video id="videoPlayer" controls>
+          <source id="videoSource" 
+                  src="" 
+                  type="video/mp4">
+      </video>
+    
+      <canvas id="cv" h
+              height="400" 
+              width="400"></canvas>
+  
+      <figure>
+        <img src$="[[thumbnail]]" 
+             alt="" 
+             id="imageold" 
+             width=200>
+
+        <figcaption>OldThumbnail</figcaption>
+      </figure>
+
+      <figure>
+        <img crossOrigin="Anonymous" 
+             src$="" 
+             alt="" 
+             id="imagenew" 
+             width=200 >
+
+        <figcaption>New Thumbnail</figcaption>
+      </figure>
+  
+      <paper-button raised 
+                    class="indigo" 
+                    on-click="takeSnapshot">raised</paper-button>
+  
+      <paper-input label="Title" 
+                   type=text
+                   value={{video.title}}></paper-input>
+      
+      <paper-textarea label="Description"
+                      value={{video.description}}></paper-textarea>
+
+      <paper-button raised 
+                    class="green" 
+                    on-click="updateVideo">updateVideo</paper-button>
+  
 
   </template>
 
@@ -23,20 +76,92 @@
      * @customElement
      * @polymer
      */
-    class VideoEdit extends ReduxStore(Polymer.Element) {
+    class VideoEdit extends VideosActions(ReduxStore(Polymer.Element)) {
 
       static get is() { return 'video-edit'; }
-      
+
+
+      set videoSrcElement(src) { 
+        this.$.videoSource.setAttribute('src', src)
+        this.$.videoPlayer.load()
+        this.$.videoPlayer.play()
+      }
+
+      ready() {
+        super.ready()
+        this.dispatch(this.getVideo())
+
+      }
+
+      takeSnapshot() {
+  
+        let canvas = this.$.cv;
+        
+        let ctx = canvas.getContext('2d');
+        let videoPlayer = this.$.videoPlayer;
+
+        canvas.height = videoPlayer.videoHeight;
+        canvas.width  = videoPlayer.videoWidth;
+
+        ctx.drawImage(videoPlayer, 0, 0)
+
+        this.$.imagenew.setAttribute('src', canvas.toDataURL())
+
+      }
+
+      updateVideo() {
+        this.dispatch(this.putVideo())
+      }
+
+
+
+      getIdFromRoute(route) {
+        const path = route.path;
+        if(path) {
+          const parts = path.split('/');
+          return parts[parts.length -1];
+        }
+      }
+
+      getThumbnailPath(video) {
+        return `${THUMBNAIL}${video.filethumbnail}`;
+      }
+
+      getVideoSrc(video) {
+        return `${VIDEO}${video.filevideo}`;
+      }
+
+      refreshVideo(newValue, oldValue) {
+          this.videoSrcElement = this.getVideoSrc(newValue)
+      }
+
       static get properties() {
         return {
-          prop1: {
+          route: {
             type: String,
-            value: 'kruskontroll-app'
           },
+          id: {
+              type: Number,
+              computed: 'getIdFromRoute(route)',
+          },
+          video: {
+              type: Object,
+              statePath: 'videos.video',
+              observer: 'refreshVideo'
+          },
+          thumbnail: {
+              type: String,
+              computed: 'getThumbnailPath(video)'
+          },
+          videosrc: {
+              type: String,
+              computed: 'getVideoSrc(video)'
+          }  
         };
       }
     }
     
     window.customElements.define(VideoEdit.is, VideoEdit);
+
   </script>
 </dom-module>

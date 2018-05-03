@@ -36,6 +36,12 @@ const videosReducer = (state = initialUserState, action) => {
             };
         }break;
 
+        case PUT_VIDEO_SUCCESS: {
+            return {
+                ...state,
+                ...action.payload,
+            };
+        }break;
         case POST_COMMENT_SUCCESS: {
             const newVideo = {...state.video};
 

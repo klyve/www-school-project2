@@ -13,6 +13,9 @@
     const GET_VIDEO_FAILURE = 'GET_VIDEO_FAILURE';
     const GET_VIDEO_SUCCESS = 'GET_VIDEO_SUCCESS';
 
+    const PUT_VIDEO_REQUEST = 'PUT_VIDEO_REQUEST';
+    const PUT_VIDEO_SUCCESS = 'PUT_VIDEO_SUCCESS';
+    const PUT_VIDEO_FAILURE = 'PUT_VIDEO_FAILURE';
     const POST_COMMENT_SUCCESS = 'POST_COMMENT_SUCCESS';
 
 
@@ -64,6 +67,30 @@
             ...data
         }
     });
+
+
+    const putVideoRequest = () => ({
+        type: PUT_VIDEO_REQUEST,
+        payload:{
+            fetching: true,
+        }
+    });
+
+    const putVideoSuccess = () => ({
+        type: PUT_VIDEO_SUCCESS,
+        payload:{
+            fetching: false,
+        }
+    });
+
+
+    const putVideoFailure = () => ({
+        type: PUT_VIDEO_FAILURE,
+        payload:{
+            fetching: false,
+        }
+    });
+
 
 
     const VideosActions = Polymer.dedupingMixin(function(superClass){
@@ -136,6 +163,26 @@
             }
         }
 
+        putVideo() {
+            return dispatch => {
+
+                dispatch(putVideoRequest());
+
+                console.log({
+                    'videoid': this.id,
+                    ...this.video
+                })
+
+
+                put(`video/${this.id}`, {
+                    'videoid': this.id,
+                    ...this.video
+                })
+                .then(res => {  console.log(res); dispatch(putVideoSuccess()); })
+                .catch(err => { console.log(err); dispatch(putVideoFailure()); })
+
+            }
+        }
 
         uploadVideo() {
             return dispatch => {
