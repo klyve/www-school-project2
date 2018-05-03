@@ -1,0 +1,144 @@
+<link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../../../../bower_components/paper-tab/paper-tab.html">
+<link rel="import" href="../../../../../bower_components/slate-font-awesome/slate-font-awesome.html">
+
+<link rel="import" href="../../../../store/store.html">
+<link rel="import" href="../../../styles.html">
+
+<link rel="import" href="./profile-card.html">
+<link rel="import" href="./video-card.html">
+<link rel="import" href="./playlists-card.html">
+<link rel="import" href="./edit-profile.html">
+
+
+
+<dom-module id="profile-page">
+  <template>
+      <style include="shared-styles">
+      :host {
+        display: block;
+      }
+      --paper-tabs-container {
+          margin-top: 40px;
+          margin: 100px;
+      }
+
+      paper-tabs {
+          margin-top: 20px;
+          --paper-tabs-selection-bar-color:	blue;
+      }
+      paper-tab {
+        --paper-tab-ink: #333;
+
+      }
+
+    </style>
+    <style include="slate-font-awesome"></style>
+    <div class="profile-container">
+    <paper-tabs selected="{{selected}}" scrollable>
+        <paper-tab>Profile</paper-tab>
+        <paper-tab>Playlists</paper-tab>
+        <paper-tab>Upload video</paper-tab>
+        <paper-tab>Edit profile</paper-tab>
+    </paper-tabs>
+
+        <iron-pages selected="{{selected}}">
+
+            <div class="profile-container">
+                <div class="tabs"></div>
+                <div class="columns multiline">
+                    <div class="column is-4">
+                        <profile-card></profile-card>
+                    </div>
+    
+                    <div class="column is-8">
+                        <video-card></video-card>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-container">
+                <div class="tabs"></div>
+                <div class="columns multiline">
+                    <div class="column is-4">
+                        <playlists-card></playlists-card>
+                    </div>
+    
+                    <div class="column is-8">
+                        <video-card></video-card>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-container">
+                <div class="tabs"></div>
+                <div class="columns multiline">
+                    <div class="column is-4">
+                        <profile-card></profile-card>
+                    </div>
+    
+                    <div class="column is-8">
+                        <video-card></video-card>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-container">
+                <div class="tabs"></div>
+                <div class="columns multiline">
+                    <div class="column is-4">
+                        <profile-card></profile-card>
+                    </div>
+    
+                    <div class="column is-8">
+                        <edit-profile></edit-profile>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </iron-pages>
+    
+    </div>
+
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class ProfilePage extends ReduxStore(Polymer.Element) {
+
+      static get is() { return 'profile-page'; }
+      
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'kruskontroll-app'
+          },
+          selected: {
+              type: Number,
+              value: 0,
+          },
+        };
+      }
+    }
+    
+    window.customElements.define(ProfilePage.is, ProfilePage);
+  </script>
+</dom-module>

@@ -1,0 +1,86 @@
+<link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../../bower_components/slate-font-awesome/slate-font-awesome.html">
+
+<link rel="import" href="../../../../store/store.html">
+<link rel="import" href="../../../styles.html">
+
+
+<dom-module id="edit-profile">
+  <template>
+      <style include="shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+    <style include="slate-font-awesome"></style>
+
+    <div class="flat-card profile-info-card is-auto">
+            <!-- Title -->
+            <div class="card-title">
+                <h3>Contact info</h3>
+                <!-- Save button -->
+                <div class="confirm-button">
+                    <a href="#" class="header-button">Save</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="columns">
+                    <div class="column is-6">
+                        <div class="info-block">
+                            <span class="label-text">First Name</span>
+                            <div class="control">
+                                <input type="text" class="input is-default" value="Bjarte">
+                            </div>
+                        </div>
+
+                        <div class="info-block">
+                            <span class="label-text">Email</span>
+                            <div class="control">
+                                <input type="email" class="input is-default" value="BjarteLarsen@gmail.com">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="column is-6">
+                        <div class="info-block">
+                            <span class="label-text">Last Name</span>
+                            <div class="control">
+                                <input type="text" class="input is-default" value="Larsen">
+                            </div>
+                        </div>
+
+                        <div class="info-block">
+                            <span class="label-text">Phone</span>
+                            <div class="control">
+                                <input type="text" class="input is-default" value="623 568">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class EditProfile extends ReduxStore(Polymer.Element) {
+
+      static get is() { return 'edit-profile'; }
+      
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'kruskontroll-app'
+          },
+        };
+      }
+    }
+    
+    window.customElements.define(EditProfile.is, EditProfile);
+  </script>
+</dom-module>

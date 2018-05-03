@@ -1,0 +1,76 @@
+<link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../../bower_components/slate-font-awesome/slate-font-awesome.html">
+
+<link rel="import" href="../../../../store/store.html">
+<link rel="import" href="../../../styles.html">
+
+
+<dom-module id="video-card">
+  <template>
+      <style include="shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+    <style include="slate-font-awesome"></style>
+
+    <div class="flat-card list-card is-auto">
+        <ul class="list">
+                
+            <li class="list-item">
+                <div class="item-wrapper">
+                    <img src="http://gravatar.com/avatar/412c0b0ec99008245d902e6ed0b264ee?s=80" alt="">
+                    <span class="product-info">
+                        <span>The Conqueror</span>
+                        <span>Office</span>
+                    </span>     
+                </div>
+            </li>
+
+            <li class="list-item">
+                    <div class="item-wrapper">
+                        <img src="http://gravatar.com/avatar/412c0b0ec99008245d902e6ed0b264ee?s=80" alt="">
+                        <span class="product-info">
+                            <span>The Conqueror</span>
+                            <span>Office</span>
+                        </span>    
+                    </div>
+                </li>
+
+                <li class="list-item">
+                        <div class="item-wrapper">
+                            <img src="http://gravatar.com/avatar/412c0b0ec99008245d902e6ed0b264ee?s=80" alt="">
+                            <span class="product-info">
+                                <span>The Conqueror</span>
+                                <span>Office</span>
+                            </span>
+                        </div>
+                    </li>
+
+            </ul>
+        </div>
+
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class VideoCard extends ReduxStore(Polymer.Element) {
+
+      static get is() { return 'video-card'; }
+      
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'kruskontroll-app'
+          },
+        };
+      }
+    }
+    
+    window.customElements.define(VideoCard.is, VideoCard);
+  </script>
+</dom-module>
