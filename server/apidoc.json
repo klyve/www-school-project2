@@ -1,0 +1,12 @@
+{
+  "name": "Kruskontroll",
+  "version": "2.0",
+  "description": "A video hosting platform designed for use in higher education",
+  "title": "Kruskontroll | api spesification",
+  "order": [
+  	"User",
+  	"Video",
+  	"Playlist",
+  	"Graphql"
+  ]
+}
