@@ -24,6 +24,60 @@ const HTTP_ACCEPTED      = 202;  // Marked for  deletion, not deleted yet
 
 class PlaylistVideosController extends Controller {
 
+    /**
+     * @api {post} /playlist/:playlistid/video Add video to playlist
+     * @apiName Add video to playlist
+     * @apiGroup Playlist
+     * @apiPermission teacher
+     *
+     * @apiParam {Number} playlistid Playlist's unique ID.
+     * @apiParam {Number} videoid Videos' unique ID.
+     * 
+     * @apiParamExample Insert video
+     *      {
+     *          playlistid: 1,
+     *          videoid: 1
+     *      }
+     * 
+     * @apiSuccess {Object} data response container
+     * @apiSuccess {Number} id id of created playlist
+     * @apiSuccess {string} data.message Success message
+     * 
+     * 
+     * @apiSuccessExample Inserted video
+     *      HTTP/1.1 201 Created
+     *      {
+     *          data: {
+     *              message: "Resource created"
+     *          }
+     *      }
+     * 
+     * @apiUse errorCode
+     * 
+     * @apiErrorExample {json} Error id mismatch:
+     *     HTTP/1.1 400 Bad Request
+     *     {
+     *        code: 400,
+     *        error: 3,
+     *        message: 'Id mismatch. The id in the url and the body does not match',
+     *     }
+     * 
+     * @apiErrorExample {json} Error not found
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *        code: 404,
+     *        error: 1,
+     *        message: 'Could not find data with given parameters',
+     *     }
+     * 
+     * @apiErrorExample {json} Error SQL
+     *     HTTP/1.1 500 Internal Server Error
+     *     {
+     *        code: 500,
+     *        error: 2,
+     *        message: 'Server had an error when trying to create resource in the datbase',
+     *     }
+     */
     public function postPlaylistVideo(Request $req, 
                                       PlaylistsModel $playlists, 
                                       VideosModel $videos, 
@@ -81,6 +135,38 @@ class PlaylistVideosController extends Controller {
 
     }
 
+    /**
+     * @api {Delete} /playlist/:playlistid/video/:id Remove video from playlist
+     * @apiName Remove video from playlist.
+     * @apiGroup Playlist
+     * @apiPermission teacher
+     *
+     * @apiParam {Number} id Videos's unique ID.
+     * @apiParam {Number} playlistid Playlist's unique ID.
+     * 
+     * @apiSuccess data {Object} response container
+     * @apiSuccess id {Number} id of created playlist
+     * @apiSuccess message Success message
+     * 
+     * 
+     * @apiSuccessExample Inserted video
+     *      HTTP/1.1 202 Accepted
+     *      {
+     *          data: {
+     *              message: "Resource marked for deletion"
+     *          }
+     *      }
+     * 
+     * @apiUse errorCode
+     * 
+     * @apiErrorExample {json} Error not found
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *        code: 404,
+     *        error: 1,
+     *        message: 'Could not find data with given parameters',
+     *     }
+     */
     public function deletePlaylistVideo(Request $req,
                                         PlaylistsModel $playlists,
                                         PlaylistVideosModel $playlistVideos)
@@ -116,7 +202,34 @@ class PlaylistVideosController extends Controller {
         return Response::statusCode(HTTP_ACCEPTED, $res);
     }
 
-
+    /**
+     * @api {Post} /playlist/:playlistid/reorder/ Change position in playlist.
+     * @apiName Change position in playlist.
+     * @apiGroup Playlist
+     * @apiPermission teacher
+     *
+     * @apiParam {Number[]} reordering New order of playlist.
+     * @apiParam {Number} playlistid Playlist's unique ID.
+     * @apiParam {Number} reordering.id Id of video in playlist.
+     * 
+     * @apiUse data
+     * 
+     * @apiSuccessExample Reordered
+     *      HTTP/1.1 200 OK
+     *      {
+     *          data: "Resource marked for deletion"
+     *      }
+     * 
+     * @apiUse errorCode
+     * 
+     * @apiErrorExample {json} Error not found
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *        code: 404,
+     *        error: 1,
+     *        message: 'Could not find data with given parameters',
+     *     }
+     */
     public function reorderPlaylist(Request $req,
                                     PlaylistsModel $playlists,
                                     PlaylistVideosModel $playlistVideos) 

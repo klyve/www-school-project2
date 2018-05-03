@@ -25,7 +25,7 @@
  
  /**
  * @apiDefine errorCode
- * @apiError {String} code Http status code.
+ * @apiError {Number} code Http status code.
  * @apiError {String} error Internal error usefull for debug.
  * @apiError {String} message Error message.
  */
