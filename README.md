@@ -1,8 +1,14 @@
-# NOTE: Reading markdown on Bitbucket is terrible! 
+## NOTE: Reading markdown on Bitbucket is not optimal! 
 
-We strongly recommend reading this document on HackMD instead -> https://hackmd.io/zHnwIapWTMGm08nnd-PcOQ?view - 2018-05-03
+For the full experience read this document on HackMD instead -> https://hackmd.io/zHnwIapWTMGm08nnd-PcOQ?view - 2018-05-03
+
+<br>
+
+# Table of Contents
 
 [TOC]
+
+<br>
 
 # Kruskontroll - Prosjekt 2 IMT2291 våren 2018
 
