@@ -36,7 +36,6 @@ Jonas J. Solsvik **[arxcis](https://github.com/arxcis)**
 - MySQL - for database
 - Python3 - for build scripts and environment setup.
 
-
 **Front-end**
 - Chrome, Brave (Safari and Firefox currently not working)
 - npm
@@ -95,7 +94,7 @@ $ krustool --fetch
 <br>
 
 
-Run migrations and seed the database
+Run migrations and seed the database with testdata
 ```
 $ krustool --migseed
 ```
@@ -143,7 +142,7 @@ $ krustool --serve-api dist/
 <br>
 
 
-Zip `dist/`
+Package `dist/` folder to a zip file
 ```
 $ krustool --zip 1.0
 $ ls -al
@@ -158,20 +157,23 @@ $ ls -al
 
 ## Install application
 
-1. Go to `http://<hostname>/install/index.php`
+1. Serve the `dist/` folder somewhere
+2. Go to `http://<hostname>/install/index.php`
 
-2. Fill-in installation setup form
+3. Fill-in installation setup form
 
-![install script image](https://bitbucket.org/klyve/imt2291-prosjekt2-v2018/raw/master/documentation/install-script.png)
 
-![installation success image](https://bitbucket.org/klyve/imt2291-prosjekt2-v2018/raw/master/documentation/install-success.png)
+<a href="https://imgbb.com/"><img src="https://image.ibb.co/kQAHdn/install_script.png" alt="install_script" border="0"></a>
+
+
+<a href="https://imgbb.com/"><img src="https://image.ibb.co/dFcxdn/install_success.png" alt="install_success" border="0"></a>
 
 The installation has now successfully created the database, and created an admin user in the database.
 
-3. Go to `http://<hostname>/` and you should see the front-page.
+4. Click on the 'Home Page'-button and you should see the front-page.
 
 
-NOTE: The installation script deletes itself. To insetall again, you have to build the distribution again.
+*NOTE:* The installation script deletes itself. To install again, you have to build the distribution again.
 
 
 <br>
@@ -182,7 +184,7 @@ NOTE: The installation script deletes itself. To insetall again, you have to bui
 
 ## 1. UML Database Diagram
 
-![UML diagram](https://bitbucket.org/klyve/imt2291-prosjekt2-v2018/raw/master/diagram/umlDatabase.png)
+<a href="https://ibb.co/jPDsB7"><img src="https://preview.ibb.co/e08QW7/uml_Database.png" alt="uml_Database" border="0"></a>
 
 
 ## 2. Generator toolkit
@@ -207,15 +209,18 @@ seed:refresh <fileList>
 
 ```
 
-
 ## 3. Migrations
 
 Migrations is a quick and simple way to add tables to the database
-To created a migration create a migration class inside /App/Database/Migrations
+To create a migration create a migration class inside /App/Database/Migrations
+
+<a href="https://ibb.co/ghOjr7"><img src="https://image.ibb.co/cNmhdn/folder_migrations.png" alt="folder_migrations" height=500 border="0"></a>
+
+
 Name the file the same name as the className.
 Every migrations file require a up and down function to run.
 Use Schema to create tables
-```
+```php=
 <?php namespace App\Database\Migrations;
 
 use \MVC\Database\Schema;
@@ -240,12 +245,15 @@ class TestMigrations {
 ## 5. Seeding
 Seeding is a quick and simple way to add content to the database
 To created a migration create a migration class inside /App/Database/Seeder
+
+<a href="https://ibb.co/gCTHB7"><img src="https://image.ibb.co/iPeePS/folder_seeder_png.png" alt="folder_seeder_png" height=500 border="0"></a>
+
 Name the file the same name as the className.
 Every Seeding file require a up and down function to run.
 
 Use Models to create the database information as shown below.
 
-```
+```php=
 <?php namespace App\Database\Seeder;
 
 use \MVC\Database\Schema;
@@ -267,11 +275,42 @@ class TestSeeder {
 }
 ```
 
+<br>
+
+## 4. Locales - Multi-languages support
+
+Different language strings are created in the `locales/` folder
+
+<a href="https://imgbb.com/"><img src="https://image.ibb.co/b92r4S/locales.png" alt="locales" border="0"> </a>
 
 
+Here is an example of a `en.json` file
+```json
+{
+      "user": {
+        "email_exists": "Email already exists"
+      }
+}
+```
+And the corresponding `no.json` file
+```json
+{
+    "user": {
+      "email_exists": "Epost allerede i bruk"
+    }
+}
+```
 
 
-## 4. Locales
+This can now be referenced anywhere in the code through the `Language` class
+```php
+Language::get("user.email_exists");
+```
+
+Depending on which language is setup, the correct string will be shown.
+
+<br>
+
 
 ## 5. Krustool Command Line Tool
 
@@ -307,10 +346,126 @@ optional arguments:
   -db, --dockerbuild    Run docker-compose up + build
 ```
 
+The tool does a lot of the tasks which we found repetitive when developing the application. Originally it had just a few commands, but was really easy to expand the tool to do more and more. 
+
+Python makes this easy by providing a convenient argument parser from the standard library
+
+*ArgumentParser example:*
+
+```python
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-i",
+                    "--init", 
+                    help="Setting up the development environment", 
+                    action="store_true")
+
+parser.add_argument("-z",
+                    "--zip", 
+                    nargs=1, 
+                    help="<version>")
+
+argv = parser.parse_args()
+
+if argv.zip:
+    zip()
+
+elif argv.init:
+    init()
+```
 
 <br>
 
 
+
+## 6. GraphQL types
+
+To support the GraphQL endpoint from the back-end we have to define a lot of 'types' which will resolve the GraphQL paths. We make one type for each collection, like we do with Controllers, Migrations and Seeders
+
+<a href="https://imgbb.com/"><img src="https://image.ibb.co/jMyjr7/folder_types.png" alt="folder_types" border="0" height=500></a>
+
+
+Here is an example from UserType.php constructor
+```php
+<?php namespace App\Http\Type;
+
+use \GraphQL\Type\Definition\ObjectType;
+use \GraphQL\Type\Definition\ResolveInfo;
+use \GraphQL\Type\Definition\Type;
+use \App\Http\Types;
+
+class UserType extends ObjectType {
+  public function __construct() {
+    $config = [
+      'name' => 'UserType',
+      'description' => 'Our users',
+      'fields' => function() {
+        return [
+          'id' => Types::id(),
+          'email' => Types::string(),
+          'name' => [
+            'type' => Types::string(),
+          ],
+          'videos' => [
+            'type' => Types::listOf(Types::video()),
+          ],
+          'subscriptions' => [
+            'type' => Types::listOf(Types::subscriptions())
+          ],
+        ];
+      },
+      'resolveField' => function($value, $args, $context, ResolveInfo $info) {
+          $method = 'resolve' . ucfirst($info->fieldName);
+          if (method_exists($this, $method)) {
+              return $this->{$method}($value, $args, $context, $info);
+          } else {
+              return $value->{$info->fieldName};
+          }
+      }
+    ];
+    parent::__construct($config);
+  }
+// Resolver funksjoner kommer her.....
+}
+```
+The config object which is constructed here dictates how the Graph can be traversed in a typical GraphQL statement.
+
+To make sure you can continue to traverse the graph into other types, and from those types go further to other types and so on, we have to write resolve functions like this
+
+```php
+public function resolveSubscriptions($user, $args) {
+    return (new SubscriptionsModel())->all([
+        'userid' => $user->id,
+    ]);
+}
+```
+
+Eksempel på GraphQL query som traverserer UserType.php
+```
+user(id:1) { 
+  name, 
+  subscriptions { 
+    playlist { 
+      title 
+    } 
+  } 
+}  
+```
+Resultat 
+```json=
+"user": {
+  "name": "username0",
+  "subscriptions": [
+  {
+    "playlist": {
+      "title": "playlist title1"
+    }
+  }
+}
+```
+
+Her får vi tilbake alle subscriptions for en gitt bruker. I tillegg får vi mulighet til å hente data om spillelisten som brukeren har abonnert på i samme query. Dette gir oss samme funksjonalitet som SQL Join gir oss, men på en mer elegant måte.
 
 
 
@@ -378,7 +533,6 @@ $ krustool --test-all
 45 tests passed [16:03:47]
 3 tests todo
 ```
-
 
 AVA js docs - https://github.com/avajs/ava - *2018-05-03*
 
