@@ -1,0 +1,341 @@
+
+.profile-container {
+    padding: 48px 24px;
+
+}
+.columns {
+    display: flex;
+
+
+    &.multiline {
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    }
+
+    .column {
+        display: block;
+        -ms-flex-preferred-size: 0;
+        flex-basis: 0;
+        -ms-flex-positive: 1;
+        flex-grow: 1;
+        -ms-flex-negative: 1;
+        flex-shrink: 1;
+        padding: .75rem;
+
+        &.is-5 {
+            flex: none;
+            width: 41.66667%;
+        }
+        &.is-7 {
+            -ms-flex: none;
+            flex: none;
+            width: 58.33333%;
+        }
+        &.is-4 {
+            -ms-flex: none;
+            flex: none;
+            width: 33.33333%;
+        }
+        &.is-8 {
+            -ms-flex: none;
+            flex: none;
+            width: 66.66667%;
+        }
+
+        &.is-6 {
+            -ms-flex: none;
+            flex: none;
+            width: 50%;
+        }
+    }
+}
+
+.account-title {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -ms-flex-align: center;
+    align-items: center;
+    margin-top: 20px;
+
+    h2 {
+        width: 100%;
+    }
+}
+
+.tabs {
+    -webkit-overflow-scrolling: touch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+    display: -ms-flexbox;
+    display: flex;
+    font-size: 1rem;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    overflow: hidden;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+
+.flat-card {
+    position: relative;
+    background-color: #414141;
+    border: 1px solid #ededed;
+    border-radius: 0.1875rem;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    transition: all 0.5s;
+    max-height: 270px;
+    min-height: 270px;
+}
+
+.flat-card {
+    &.is-auto {
+        height: auto !important;
+        width: 100% !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        max-width: auto !important;
+    }
+
+}
+.profile-card {
+    border: none;
+    margin-bottom: 20px;
+}
+.profile-card .card-body {
+    padding: 20px 40px;
+}
+
+.profile-card .profile-image img {
+    display: block;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 auto;
+}
+
+.profile-card .username {
+    padding-top: 10px;
+}
+
+.has-text-centered {
+    text-align: center !important;
+}
+
+.profile-card .username span {
+    color: #f4f1f1;
+    font-weight: 500;
+}
+
+.profile-card .username span, .profile-card .username small {
+    display: block;
+}
+
+.profile-card .username small {
+    font-size: 0.85rem;
+    color: #e1e1e1;
+}
+
+.profile-card .username span, .profile-card .username small {
+    display: block;
+}
+
+.profile-card .profile-footer {
+    padding: 20px 40px;
+}
+
+.profile-card .profile-footer .achievement-title {
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: .75rem;
+    color: #f4f1f1;
+}
+
+.profile-card .profile-footer .count {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.list-card .list .list-item:first-child {
+    border-top: none !important;
+}
+
+.list-card .list .list-item {
+    border-top: 1px solid #333;
+    overflow: hidden;
+}
+
+.list-card .list .list-item .item-wrapper {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 10px 40px;
+}
+
+.list-card .list .list-item .item-wrapper img {
+    height: 80px;
+}
+img {
+    height: auto;
+    max-width: 100%;
+}
+
+.list-card .list .list-item span {
+    display: block;
+    color: #fff;
+}
+
+.flat-card .product-info {
+    padding: 0 20px;
+}
+
+.list-card .list .list-item .item-wrapper .product-info span:first-child {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 600;
+    font-size: .9rem;
+}
+
+.list-card .list .list-item span {
+    display: block;
+}
+
+.list-card .list .list-item .item-wrapper .action {
+    margin-left: auto;
+}
+
+.dropdown {
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    position: relative;
+    vertical-align: top;
+}
+
+.list-card .list .list-item .item-wrapper .action .dropdown-button {
+    position: relative;
+    height: 25px;
+    width: 25px;
+    max-height: 25px;
+    i {
+        color: white;
+        font-size: 26px;
+    }
+}
+
+.list-card {
+    overflow: visible;
+}
+
+
+.profile-info-card, .menu-card {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.profile-info-card .card-title, .menu-card .card-title {
+    position: relative;
+    padding: 15px 20px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -ms-flex-align: center;
+    align-items: center;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    z-index: 2;
+    color: #fff;
+    margin-bottom: 0;
+}
+.profile-info-card .card-title .edit-account, .menu-card .card-title .edit-account {
+    position: relative;
+    height: 25px;
+    width: 25px;
+    max-height: 25px;
+    i {
+        color: white;
+        font-size: 26px;
+    }
+}
+.menu-card .wishlists li {
+    padding: 5px 20px;
+    border-top: 1px solid #333;
+}
+.menu-card .wishlists li:first-child {
+    border-top: none !important;
+}
+.menu-card .wishlists li a {
+    padding: 10px 0;
+    display: block;
+    color: #fff;
+    &:hover {
+        color: #eb3b5a;
+    }
+}
+.menu-card .wishlists li.is-active a {
+    color: #eb3b5a !important;
+}
+
+
+.profile-info-card .card-body .info-block, .menu-card .card-body .info-block {
+    margin-bottom: 20px;
+}
+
+.profile-info-card .card-body .info-block span.label-text, .menu-card .card-body .info-block span.label-text {
+    color: #fff;
+    font-weight: 500;
+    font-size: 0.85rem;
+}
+.control {
+    font-size: 1rem;
+    position: relative;
+    text-align: left;
+}
+.input.is-default {
+    box-shadow: none;
+    color: #828282;
+    height: 35px;
+}
+.input {
+    transition: all .3s;
+}
+
+.input, .textarea {
+    background-color: #fff;
+    border-color: #dbdbdb;
+    color: #363636;
+    box-shadow: inset 0 1px 2px rgba(10,10,10,0.1);
+    max-width: 100%;
+    width: 100%;
+}
+
+
+a.header-button {
+    background: #eb3b5a;
+    padding: 8px 15px;
+    color: #fff;
+    border-radius: 1px solid #fff;
+
+    &:hover {
+        background: #fff;
+        color: #eb3b5a;
+        border-radius: 1px solid #eb3b5a;
+    }
+}
