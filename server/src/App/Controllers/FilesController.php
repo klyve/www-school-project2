@@ -24,6 +24,28 @@ const DS = DIRECTORY_SEPARATOR;
 
 class FilesController extends Controller {
   
+     /**
+     * @api {Delete} /tempfile Post new file to temp folder
+     * @apiName Post file to temp folder.
+     * @apiGroup File
+     * @apiPermission user
+     * 
+     * 
+     * @apiSuccess {String} data Success message
+     * 
+     * @apiSuccessExample {json} Post file.
+     *      HTTP/1.1 201 Created
+     *      {
+     *          data: {
+     *              id: 1,
+     *              userid: 1,
+     *              fname: "fileName",
+     *              size: 100,
+     *              mime: "mp4"
+     *          }
+     *      }
+     * 
+     */
   // @route POST /user/{userid}/tempfile
   public function postTempfile(Request $req, TempVideosModel $tmpVid) {
 
