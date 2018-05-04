@@ -16,7 +16,7 @@ For the full experience read this document on HackMD instead -> https://hackmd.i
 
 Bjarte Klyve Larsen **[Klyve](https://github.com/klyve)**
 
-Eldar Hauge Torkelsen **[fill]()**
+Eldar Hauge Torkelsen **[eldarht](https://github.com/eldarht)**
 
 Jonas J. Solsvik **[arxcis](https://github.com/arxcis)**
 
