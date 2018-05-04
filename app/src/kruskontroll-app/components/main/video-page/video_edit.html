@@ -26,6 +26,9 @@
         margin: 10px 0px 10px 0px;
       }
    
+    canvas {
+      display: none;
+    }
 
     </style>
     <style include="slate-font-awesome"></style>
@@ -35,7 +38,7 @@
 
     <h1> Edit video </h1>
 
-      <video id="videoPlayer" controls>
+      <video id="videoPlayerId" controls>
           <source id="videoSource" 
                   src="" 
                   type="video/mp4">
@@ -49,6 +52,16 @@
       <paper-textarea label="Description"
                       value={{video.description}}></paper-textarea>
 
+
+
+  <canvas id="canvasId" height="200" width="200"></canvas><br>
+  
+      <paper-button raised 
+                    class="green" 
+                    on-click="captureThumbnail">Capture Thumbnail</paper-button>
+  
+
+      <img src$="[[ thumbnailCapture ]]" alt="" id="thumbnailCaptureId">
 
 
       <paper-button raised 
@@ -96,15 +109,18 @@
           videosrc: {
               type: String,
               computed: 'getVideoSrc(video)'
-          }  
+          },
+          thumbnailCapture: {
+            type: String,
+          }
         };
       }
 
 
       set videoSrcElement(src) { 
         this.$.videoSource.setAttribute('src', src)
-        this.$.videoPlayer.load()
-        this.$.videoPlayer.play()
+        this.$.videoPlayerId.load()
+        this.$.videoPlayerId.play()
       }
 
       ready() {
@@ -113,20 +129,16 @@
 
       }
 
-      takeSnapshot() {
-  
-        let canvas = this.$.cv;
+      captureThumbnail() {
+        const player = this.$.videoPlayerId;
+        const canvas = this.$.canvasId;
+        const ctx    = canvas.getContext('2d');                 
+        //cv.height = player.videoHeight;                  
+        //cv.width = player.videoWidth;                    
         
-        let ctx = canvas.getContext('2d');
-        let videoPlayer = this.$.videoPlayer;
-
-        canvas.height = videoPlayer.videoHeight;
-        canvas.width  = videoPlayer.videoWidth;
-
-        ctx.drawImage(videoPlayer, 0, 0)
-
-        this.$.imagenew.setAttribute('src', canvas.toDataURL())
-
+        ctx.drawImage(player, 0, 0);                     
+        const png = canvas.toDataURL();                 
+        this.thumbnailCapture = png;
       }
 
       updateVideo() {
