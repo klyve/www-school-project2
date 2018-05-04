@@ -82,24 +82,17 @@ class File {
             return 1;
         }
 
-        var_dump("is_uploaded_file");
-
         if (!file_exists($destination)) { // Brukeren har ikke lastet opp filer tidligere
             if(!@mkdir($destination)) {
                 return null;
             }
         }
 
-        var_dump("file_exists");
-
-
         $filename = Hash::md5($formFile['name'] . $destination . $extension . "djfne34#1.--.,,,as^^");
 
         if (!@move_uploaded_file($tmp_filepath, "$destination/$filename.$extension")) {
             return null;
         }
-
-        var_dump("move_uploaded_file");
 
         return "$filename.$extension";
     }
