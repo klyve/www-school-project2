@@ -21,6 +21,7 @@ class UserType extends ObjectType {
                     'name' => [
                         'type' => Types::string(),
                     ],
+                    'usergroup' => Types::int(),
                     'videos' => [
                         'type' => Types::listOf(Types::video()),
                     ],

@@ -1,0 +1,46 @@
+<link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../../../../bower_components/paper-tab/paper-tab.html">
+<link rel="import" href="../../../../../bower_components/slate-font-awesome/slate-font-awesome.html">
+
+<link rel="import" href="../../../../store/store.html">
+<link rel="import" href="../../../../actions/user.html">
+<link rel="import" href="../../../styles.html">
+
+
+
+
+<dom-module id="admin-tab">
+  <template>
+      <style include="shared-styles">
+      :host {
+        display: block;
+      }
+
+    </style>
+    <style include="slate-font-awesome"></style>
+
+
+
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+
+    class AdminTab extends UserActions(ReduxStore(Polymer.Element)) {
+
+      static get is() { return 'admin-tab'; }
+      
+      static get properties() {
+        return {
+        };
+      }
+
+    }
+    
+    window.customElements.define(AdminTab.is, AdminTab);
+  </script>
+</dom-module>
