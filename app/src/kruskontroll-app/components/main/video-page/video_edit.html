@@ -1,5 +1,8 @@
 <link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../../../../bower_components/slate-font-awesome/slate-font-awesome.html">
+<link rel="import" href="../../../../../bower_components/file-drop-zone/file-drop-zone.html">
+<link rel="import" href="../../../../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../../../../bower_components/paper-input/paper-textarea.html">
 
 <link rel="import" href="../../../../store/store.html">
 <link rel="import" href="../../../styles.html">
@@ -11,10 +14,18 @@
       :host {
         display: block;
       }
-   
-      canvas {
-        display: none;
+      file-drop-zone {
+        width: 100%;
+        height: 200px;
+        background-color: #fafafa;
       }
+
+      paper-button {
+        width: 100%;
+
+        margin: 10px 0px 10px 0px;
+      }
+   
 
     </style>
     <style include="slate-font-awesome"></style>
@@ -30,33 +41,7 @@
                   type="video/mp4">
       </video>
     
-      <canvas id="cv" h
-              height="400" 
-              width="400"></canvas>
-  
-      <figure>
-        <img src$="[[thumbnail]]" 
-             alt="" 
-             id="imageold" 
-             width=200>
 
-        <figcaption>OldThumbnail</figcaption>
-      </figure>
-
-      <figure>
-        <img crossOrigin="Anonymous" 
-             src$="" 
-             alt="" 
-             id="imagenew" 
-             width=200 >
-
-        <figcaption>New Thumbnail</figcaption>
-      </figure>
-  
-      <paper-button raised 
-                    class="indigo" 
-                    on-click="takeSnapshot">raised</paper-button>
-  
       <paper-input label="Title" 
                    type=text
                    value={{video.title}}></paper-input>
@@ -64,10 +49,19 @@
       <paper-textarea label="Description"
                       value={{video.description}}></paper-textarea>
 
+
+
       <paper-button raised 
                     class="green" 
                     on-click="updateVideo">updateVideo</paper-button>
-  
+
+
+<br>
+
+      <paper-button raised 
+                    class="green" 
+                    on-click="toVideo">To Video</paper-button>
+    
 
   </template>
 
@@ -79,6 +73,32 @@
     class VideoEdit extends VideosActions(ReduxStore(Polymer.Element)) {
 
       static get is() { return 'video-edit'; }
+
+
+      static get properties() {
+        return {
+          route: {
+            type: String,
+          },
+          id: {
+              type: Number,
+              computed: 'getIdFromRoute(route)',
+          },
+          video: {
+              type: Object,
+              statePath: 'videos.video',
+              observer: 'refreshVideo'
+          },
+          thumbnail: {
+              type: String,
+              computed: 'getThumbnailPath(video)'
+          },
+          videosrc: {
+              type: String,
+              computed: 'getVideoSrc(video)'
+          }  
+        };
+      }
 
 
       set videoSrcElement(src) { 
@@ -113,7 +133,11 @@
         this.dispatch(this.putVideo())
       }
 
+      toVideo() {
 
+        window.history.pushState({}, null, '#/video/' + this.id);
+        window.dispatchEvent(new CustomEvent('location-changed'));
+      }
 
       getIdFromRoute(route) {
         const path = route.path;
@@ -135,30 +159,6 @@
           this.videoSrcElement = this.getVideoSrc(newValue)
       }
 
-      static get properties() {
-        return {
-          route: {
-            type: String,
-          },
-          id: {
-              type: Number,
-              computed: 'getIdFromRoute(route)',
-          },
-          video: {
-              type: Object,
-              statePath: 'videos.video',
-              observer: 'refreshVideo'
-          },
-          thumbnail: {
-              type: String,
-              computed: 'getThumbnailPath(video)'
-          },
-          videosrc: {
-              type: String,
-              computed: 'getVideoSrc(video)'
-          }  
-        };
-      }
     }
     
     window.customElements.define(VideoEdit.is, VideoEdit);
