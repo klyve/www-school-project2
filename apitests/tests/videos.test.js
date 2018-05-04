@@ -107,7 +107,7 @@ test.serial('Post video', async t => {
     data.append('description', newVideodata.description);
     data.append('temp_videoid', temp_videoid);
     data.append('thumbnail', fs.createReadStream(`${KRUS_ROOT}/server/public/media/thumbnails/example.png`));
-    data.append("subtitle", fs.createReadStream(`${KRUS_ROOT}/server/public/media/subtitles/example.srt`));
+    data.append("subtitle", fs.createReadStream(`${KRUS_ROOT}/server/public/media/subtitles/example.vtt`));
 
     const config = {
         headers: {

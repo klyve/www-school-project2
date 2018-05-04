@@ -89,7 +89,7 @@ class VideosController extends Controller {
             $subtitlesDir = $mediaDir.DS."subtitles".DS.$userid;
             File::makeDirIfNotExist($subtitlesDir);
 
-            $subtitleFilename = File::moveFormFile($subtitleFormFile, $subtitlesDir, "srt");
+            $subtitleFilename = File::moveFormFile($subtitleFormFile, $subtitlesDir, "vtt");
             if (!$subtitleFilename) {
                 return Response::statusCode(HTTP_INTERNAL_ERROR, "Could not move subtitle");
             }    

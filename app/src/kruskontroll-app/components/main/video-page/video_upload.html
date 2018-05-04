@@ -2,6 +2,7 @@
 <link rel="import" href="../../../../../bower_components/slate-font-awesome/slate-font-awesome.html">
 <link rel="import" href="../../../../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../../../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../../../../bower_components/file-drop-zone/file-drop-zone.html">
 
 <link rel="import" href="../../../../store/store.html">
 <link rel="import" href="../../../../actions/videos.html">
@@ -15,6 +16,28 @@
         display: block;
       }
 
+    file-drop-zone {
+      width: 100%;
+      height: 200px;
+      background-color: #fafafa;
+    }
+
+    paper-button {
+      width: 100%;
+    }
+
+    #drop-video {
+      background-color: [[drop_video_bgcolor]];
+    }
+
+    #drop-thumbnail {
+      display: [[drop_thumbnail_style]];
+    }
+
+    #drop-subtitle {
+      display: [[drop_subtitle_style]];
+    }
+
     </style>
     <style include="slate-font-awesome"></style>
 
@@ -22,17 +45,69 @@
 
       <h1>Upload Video</h1>
 
-      <paper-input label="Title" 
-                   type=text></paper-input>
+
+
+
+            <paper-input label="Title" 
+                         type=text
+                         value={{title}}></paper-input>
       
-      <paper-textarea label="Description"></paper-textarea>
+      <paper-textarea label="Description"
+                      value={{description}}></paper-textarea>
 
 
-      <paper-input id="inputVideo"
-                   label="Video" 
-                   type="file" 
-                   on-change="_bindVideo"></paper-input>
 
+
+      <file-drop-zone id="drop-video"
+                      accept="video/mp4" 
+                      files="{{filesvideo}}"
+                      style$=" [[ drop_video_style ]] ">
+
+        <div slot="drop-zone">
+          <iron-icon icon="description"></iron-icon>
+          <h3> [[ drop_video_text ]]</h3>
+        </div>
+
+      </file-drop-zone>
+      
+      
+
+
+
+      <file-drop-zone id="drop-thumbnail"
+                      accept="video/png" 
+                      files="{{ filesthumbnail }}"
+                      style$="[[ drop_thumbnail_style ]]">
+
+        <div slot="drop-zone">
+          <iron-icon icon="description"></iron-icon>
+          <h3> [[ drop_thumbnail_text ]]</h3>
+        </div>
+
+      </file-drop-zone>
+
+
+
+
+
+
+      <file-drop-zone id="drop-subtitle"
+                      accept="text/vtt" 
+                      files="{{ filessubtitle }}"
+                      style$="[[ drop_subtitle_style ]]">
+
+        <div slot="drop-zone">
+          <iron-icon icon="description"></iron-icon>
+          <h3> [[ drop_subtitle_text ]]</h3>
+        </div>
+
+      </file-drop-zone>
+
+
+<paper-button raised 
+              class="green" 
+              on-click="_submitVideo"
+              style$="[[ submit_style ]]">Submit</paper-button>
 
 
   </template>
@@ -49,26 +124,125 @@
       
       static get properties() {
         return {
-          prop1: {
+
+          title: {
             type: String,
-            value: 'kruskontroll-app'
+          },
+          description: {
+            type: String
+          },
+
+          upload: {
+            type: Boolean,
+            statePath: 'upload',
+            observer: '_handleUpload'
+          },
+
+          temp_videoid: {
+            type: Number,
           },
           
-          files: Object
+
+          filesvideo: {
+            type: Object,
+            observer: '_bufferVideoToTempFolder'
+          },
+
+          filesthumbnail: {
+            type: Object,
+            observer: '_bindThumbnail'
+          },
+
+          filessubtitle: {
+            type: Object,
+            observer: '_bindSubtitle'
+          },
+
+
+          drop_video_text: {
+            type: String,
+            value: 'Drop VIDEO here',
+          },
+          
+          drop_thumbnail_text: {
+            type: String,
+            value: 'Drop THUMBNAIL here'
+          },
+          drop_subtitle_text: {
+            type: String,
+            value: 'Drop SUBTITLE here'
+          },
+
+
+          drop_video_style: {
+            type: String,
+          },
+          drop_thumbnail_style: {
+            type: String,
+            value: 'display: none;'
+          },
+          drop_subtitle_style: {
+            type: String,
+            value: 'display: none;'
+          },
+          submit_style: {
+            type: String,
+            value: 'display: none;'
+          }
         };
       }
 
+      _bindThumbnail(files) {
+        this.drop_thumbnail_style = "background-color: #008CBA;  color: white;";
+        this.drop_thumbnail_text = "Thumbnail ready";
 
+      }
+      _bindSubtitle(files) {
+        this.drop_subtitle_style =  "background-color: #008CBA; color: white;";
+        this.drop_subtitle_text = "Subtitle ready";
+        this.submit_style = "display: block;"
+      }
+
+      _bufferVideoToTempFolder(files) {
+        console.log(files[0]);
+        this.dispatch(this.uploadVideo())
+      }
+
+      _handleUpload(upload) {
+         console.log("FROM VIDEO UPLOAD", upload)
+
+        if (upload.uploading) {
+          this.drop_video_text = "Uploading....";
+
+          this.drop_thumbnail_style = 'display: none;';
+          this.drop_subtitle_style = 'display: none;';
+          this.drop_video_style = 'background-color: #eb3b5a';
+        }
+        else if (upload.id) {
+          this.drop_video_text = 'Video ready';
+          this.temp_videoid  = upload.id;
+
+          this.drop_thumbnail_style = 'display: block;';
+          this.drop_subtitle_style = 'display: block;';
+          this.drop_video_style = 'background-color: #008CBA;;  color: white;';
+        }
+      }
+
+      _submitVideo() {
+        this.dispatch(this.postVideo());
+       this.drop_thumbnail_style = 'display: none;';
+        this.drop_subtitle_style = 'display: none;';
+        this.drop_video_style = '';
+      }
+
+/*
       // @ref https://stackoverflow.com/a/43114622/9636402 02.05.2018
       _bindVideo(e) {
           this.files = this.$.inputVideo.inputElement.inputElement.files;
-
           console.log(this.files[0])
-
-          
-
-          this.dispatch(this.uploadVideo())
       }
+
+*/
     }    
     window.customElements.define(VideoUpload.is, VideoUpload);
   </script>

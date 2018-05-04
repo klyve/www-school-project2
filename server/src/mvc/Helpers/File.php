@@ -88,7 +88,7 @@ class File {
             }
         }
 
-        $filename = Hash::md5($formFile['name'] . $destination . $extension . "djfne34#1.--.,,,as^^");
+        $filename = Hash::md5($formFile['name'] . $destination . $extension . "djfne34#1.--.,,,as^^" . microtime());
 
         if (!@move_uploaded_file($tmp_filepath, "$destination/$filename.$extension")) {
             return null;
