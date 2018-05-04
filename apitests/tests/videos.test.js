@@ -54,11 +54,11 @@ test.serial('Upload video file', async t => {
     t.plan(2)
 
 
-    let dataVideo = fs.readFileSync(`${KRUS_ROOT}/apitests/files/test.mp4`);
+    let dataVideo = fs.readFileSync(`${KRUS_ROOT}/server/public/media/videos/example.mp4`);
     if(dataVideo === null) 
         t.fail();
 
-    const fileSizeInBytes = fs.statSync(`${KRUS_ROOT}/apitests/files/test.mp4`)
+    const fileSizeInBytes = fs.statSync(`${KRUS_ROOT}/server/public/media/videos/example.mp4`)
                               .size;
 
 
@@ -91,14 +91,12 @@ test.serial('Upload video file', async t => {
 
 
 
+const FormData = require('form-data');
+let    videoid = null
 const newVideodata = {
     title: '10 Javascript Frameworks you HAVE TO LEARN in 2018',
     description: 'Your life will be an absolute missery if you dont learn these super important frameworks!',
 }
-
-const FormData = require('form-data');
-
-let videoid = null
 
 test.serial('Post video', async t => {
     t.plan(2)
@@ -108,8 +106,8 @@ test.serial('Post video', async t => {
     data.append('title', newVideodata.title);
     data.append('description', newVideodata.description);
     data.append('temp_videoid', temp_videoid);
-    data.append('thumbnail', fs.createReadStream(`${KRUS_ROOT}/apitests/files/test.png`));
-    data.append("subtitle", fs.createReadStream(`${KRUS_ROOT}/apitests/files/test.srt`));
+    data.append('thumbnail', fs.createReadStream(`${KRUS_ROOT}/server/public/media/thumbnails/example.png`));
+    data.append("subtitle", fs.createReadStream(`${KRUS_ROOT}/server/public/media/subtitles/example.srt`));
 
     const config = {
         headers: {
@@ -127,7 +125,6 @@ test.serial('Post video', async t => {
     
     videoid = res.data.videoid
 
-    console.log(videoid)
     t.truthy(res.data.videoid)
 })
 
@@ -154,7 +151,6 @@ test.serial('Check if video was created', async t => {
     const res = await axios.post(`${API}/graphql`, data, axiosBearer(userToken))
     t.truthy(res.data.data)
 
-    console.log(res.data.data.video)
     t.true(isEqualsShallow(res.data.data.video, {title: newVideodata.title, description: newVideodata.description}), "updated object does not match intended")
 })
 
