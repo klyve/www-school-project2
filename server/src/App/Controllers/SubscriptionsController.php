@@ -12,6 +12,49 @@ use \MVC\Http\ErrorCode;
 
 class SubscriptionsController extends Controller {
 
+    /**
+     * @api {Post} /playlist/:playlistid/subscribe Subscribe to playlist.
+     * @apiName Subscribe to playlist.
+     * @apiGroup Playlist
+     * @apiPermission user
+     *
+     * @apiParam {Number} playlistid Id of playlist to subscrie to.
+     * 
+     * @apiParamExample Subscribe to playlist
+     *      {
+     * 
+     *      }
+     * 
+     * @apiUse data
+     * 
+     * @apiSuccessExample Created playlist
+     *      HTTP/1.1 201 Created
+     *      {
+     *          data: "Subscribed to playlist"
+     *      }
+     * 
+     * @apiSuccessExample Already subscribed
+     *      HTTP/1.1 200 OK
+     *      {
+     *          data: "Already Subscribed"
+     *      }
+     * 
+     * @apiSuccessExample Resubscribed
+     *      HTTP/1.1 201 Created
+     *      {
+     *          data: "Resubscribed to playlist"
+     *      }
+     * 
+     * @apiUse errorCode
+     * 
+     * @apiErrorExample {json} Error Not Found
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *        code: 404,
+     *        error: 3,
+     *        message: "Could not find playlist with given playlistid and userid"
+     *     }
+     */
 	public function postSubscriptions(
 		UsersModel $user, PlaylistsModel $playlist,
 		SubscriptionsModel $subscriptions, Request $req){
@@ -57,6 +100,43 @@ class SubscriptionsController extends Controller {
 		return response::statusCode(201, "Subscribed to playlist");
 	}
 
+    /**
+     * @api {Delete} /playlist/:playlistid/subscribe Unsubscribe from playlist.
+     * @apiName Unsubscribe from playlist.
+     * @apiGroup Playlist
+     * @apiPermission user
+     *
+     * @apiParam {Number} playlistid Id of playlist to subscrie to.
+     * 
+     * @apiParamExample Delete subscription
+     *      {
+     * 
+     *      }
+     * 
+     * @apiUse data
+     * 
+     * @apiSuccessExample Unsubscribe
+     *      HTTP/1.1 202 Accepted
+     *      {
+     *          data: "Delete accepted"
+     *      }
+     * 
+     * @apiSuccessExample Already unsubscribed
+     *      HTTP/1.1 200 OK
+     *      {
+     *          data: "Not subscribed"
+     *      }
+     * 
+     * @apiUse errorCode
+     * 
+     * @apiErrorExample {json} Error Not Found
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *        code: 404,
+     *        error: 3,
+     *        message: "Could not find playlist with given playlistid and userid"
+     *     }
+     */
 	public function deleteSubscriptions(
 		UsersModel $user, PlaylistsModel $playlist,
 		SubscriptionsModel $subscriptions, Request $req){

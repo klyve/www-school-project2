@@ -22,3 +22,4 @@ server/public/media/subtitles/*
 db/
 dist/
 apitests/files*
+apidoc/

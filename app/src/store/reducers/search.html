@@ -12,7 +12,7 @@ const initialSearchState = {
     fetching: false,
 };
 
-const searchReducer = (state = initialUserState, action) => {
+const searchReducer = (state = initialSearchState, action) => {
     switch(action.type) {
         case GET_SEARCH_REQUEST: {
             return {

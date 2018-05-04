@@ -30,8 +30,6 @@ class TempVideosMigrations {
             $table->primary('id')->autoIncrement();
             $table->number('userid');  // foreign keys
             $table->string('fname')->length(512);
-            $table->string('size')->length(200);
-            $table->string('mime')->length(200);
             $table->timestamps();
         });
     }

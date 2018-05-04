@@ -8,10 +8,11 @@
 const initialVideosState = {
     videos: [],
     fetching: false,
+    uploading: false,
     video: {},
 };
 
-const videosReducer = (state = initialUserState, action) => {
+const videosReducer = (state = initialVideosState, action) => {
     switch(action.type) {
         case GET_VIDEOS_REQUEST || POST_REGIEST_REQUEST: {
             return {
@@ -42,6 +43,8 @@ const videosReducer = (state = initialUserState, action) => {
                 ...action.payload,
             };
         }break;
+
+
         case POST_COMMENT_SUCCESS: {
             const newVideo = {...state.video};
 
