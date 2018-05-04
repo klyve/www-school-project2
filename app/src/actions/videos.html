@@ -342,6 +342,10 @@
                             message: `Video created`
                         }));
 
+
+                        window.history.pushState({}, null, '#/video/'+res.data.videoid);
+                        window.dispatchEvent(new CustomEvent('location-changed'));
+
                     })
                     .catch(err => {
                         dispatch(postVideoFailure(err.response.data))

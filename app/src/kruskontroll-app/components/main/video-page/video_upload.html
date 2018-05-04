@@ -42,7 +42,6 @@
     <style include="slate-font-awesome"></style>
 
 
-
       <h1>Upload Video</h1>
 
 
@@ -124,6 +123,9 @@
       
       static get properties() {
         return {
+          id: {
+              type: Number,
+          },
 
           title: {
             type: String,
@@ -200,6 +202,7 @@
       _bindSubtitle(files) {
         this.drop_subtitle_style =  "background-color: #008CBA; color: white;";
         this.drop_subtitle_text = "Subtitle ready";
+        this.drop_subtitle_text = "Subtitle ready";
         this.submit_style = "display: block;"
       }
 
@@ -208,6 +211,8 @@
         this.dispatch(this.uploadVideo())
       }
 
+
+      // TODO - Used redux for these state changes
       _handleUpload(upload) {
          console.log("FROM VIDEO UPLOAD", upload)
 
@@ -229,10 +234,15 @@
       }
 
       _submitVideo() {
+
         this.dispatch(this.postVideo());
-       this.drop_thumbnail_style = 'display: none;';
+        this.drop_thumbnail_style = 'display: none;';
         this.drop_subtitle_style = 'display: none;';
-        this.drop_video_style = '';
+        this.drop_video_style    = '';
+        this.drop_video_text     = "Drop VIDEO here";
+        this.drop_thumbnail_text = "Drop THUMBNAIL here";
+        this.drop_subtitle_text  = "Drop SUBTITLE here";
+        this.submit_style = "display: none";
       }
 
 /*
