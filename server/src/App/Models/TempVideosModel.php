@@ -10,8 +10,5 @@ class TempVideosModel extends \MVC\Core\Model {
   public $userid;
   public $fname;
 
-  public $size;
-  public $mime;
-
   public $exclude = ['id'];
 }

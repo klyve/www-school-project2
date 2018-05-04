@@ -503,6 +503,10 @@ Her får vi tilbake alle subscriptions for en gitt bruker. I tillegg får vi mul
 
 <br>
 
+
+## 9. Temp storage during Video Upload
+
+
 # RestAPI and Server Endpoints
 
 ## 1. AVA Testing Framework
@@ -757,7 +761,41 @@ header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE');
 
 # Front-end highlights
 
-## 1. Installation script
+## 1. List of dependencies
+
+bower.json
+```
+  "dependencies": {
+    "polymer": "Polymer/polymer#^2.0.0",
+    "polymer-redux": "^1.0.5",
+    "app-route": "PolymerElements/app-route#^2.1.0",
+    "brum-global-variable": "SieBrum/brum-global-variable#^1.0.6",
+    "iron-pages": "PolymerElements/iron-pages#^2.1.1",
+    "slate-font-awesome": "JeffLeFoll/slate-font-awesome#^4.7.3",
+    "iron-form": "PolymerElements/iron-form#^2.3.0",
+    "paper-input": "PolymerElements/paper-input#^2.2.2",
+    "axios": "^0.18.0",
+    "paper-toast": "PolymerElements/paper-toast#^2.1.1",
+    "paper-button": "PolymerElements/paper-button#^2.1.1",
+    "paper-progress": "PolymerElements/paper-progress#^2.1.1",
+    "paper-header-panel": "PolymerElements/paper-header-panel#^2.1.0",
+    "paper-tabs": "PolymerElements/paper-tabs#^2.1.1",
+    "file-drop-zone": "PolymerVis/file-drop-zone#^2.0.3"
+  },
+ ```
+
+package.json
+```
+  "dependencies": {
+    "axios": "^0.18.0",
+    "json-to-graphql-query": "^1.3.0",
+    "redux": "^4.0.0",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.2.0"
+  },
+```
+
+## 2. Installation script
 
 The installation script is run by visiting the `http://<hostname>/install/index.php` route, as shown in the Introduction section.
 
@@ -786,7 +824,7 @@ fclose($file);
 
 <br>
 
-## 2. Multi-device live updating 
+## 3. Multi-device live updating 
 
 In the Polymer app folder to start the polymer server we run
 
@@ -840,20 +878,7 @@ Example of multi device development
 
 
 
-
-<br>
-
-
-
-## 2. Dispatching HTTP request with Redux store
-
-<br>
-
-
-
-## 4. Jump to video location when click on subtitle
-
-<br>
+</br>
 
 
 # Discussion and future work

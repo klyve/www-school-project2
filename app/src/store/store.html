@@ -8,6 +8,7 @@
 <link rel="import" href="reducers/search.html">
 <link rel="import" href="reducers/errors.html">
 <link rel="import" href="reducers/progress.html">
+<link rel="import" href="reducers/upload.html">
 <!-- <script src="reducers/test.js"></script>
 <script src="reducers/user.js"></script> -->
 
@@ -19,6 +20,8 @@
         search: searchReducer,
         errors: errorsReducer,
         progress: progressReducer,
+        upload: uploadReducer,
+        postVideo: postVideoReducer
     });
     const createStoreWithMiddleware = Redux.applyMiddleware(ReduxThunk.default)(Redux.createStore);
     const store = createStoreWithMiddleware(reducers);
