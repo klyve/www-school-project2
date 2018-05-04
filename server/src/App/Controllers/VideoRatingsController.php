@@ -19,6 +19,46 @@ const HTTP_ACCEPTED      = 202;  // Marked for  deletion, not deleted yet
 
 class VideoRatingsController extends Controller {
 
+    /**
+     * @api {post} /video/:videoid/rate Change users rating of video.
+     * @apiName Change users rating of video.
+     * @apiGroup Video
+     * @apiPermission user
+     *
+     * @apiParam {Number} videoid video's unique ID.
+     * @apiParam {Number} rating Rating of the video. 
+     * 
+     * @apiParamExample {json} put rating:
+     *      {
+     *          rating: 1
+     *      }
+     * 
+     * @apiUse data
+     * 
+     * @apiSuccessExample put rating.
+     *      HTTP/1.1 200 OK
+     *      {
+     *          data: "Rating created"
+     *      }
+     * 
+     * @apiUse errorCode
+     * 
+     * @apiErrorExample {json} Error not found
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *        code: 404,
+     *        error: 1,
+     *        message: 'Could not find data with given parameters',
+     *     }
+     * 
+     * @apiErrorExample {json} Error SQL
+     *     HTTP/1.1 500 Conflict
+     *     {
+     *        code: 500,
+     *        error: 2,
+     *        message: 'Server had an error when trying to create resource in the datbase',
+     *     }
+     */
     public function putRating(Request $req, 
                                VideosModel $videos,
                                RatingsModel $ratings) {
@@ -62,6 +102,33 @@ class VideoRatingsController extends Controller {
         return Response::statusCode(HTTP_OK, "Rating created");
     }
 
+
+    /**
+     * @api {post} /video/:videoid/rate Delete users rating of video.
+     * @apiName Delete users rating of video.
+     * @apiGroup Video
+     * @apiPermission user
+     *
+     * @apiParam {Number} videoid video's unique ID.
+     * 
+     * @apiUse data
+     * 
+     * @apiSuccessExample delte accepted.
+     *      HTTP/1.1 202 Accepted
+     *      {
+     *          data: "Rating deletedd"
+     *      }
+     * 
+     * @apiUse errorCode
+     * 
+     * @apiErrorExample {json} Error not found
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *        code: 404,
+     *        error: 1,
+     *        message: 'Could not find data with given parameters',
+     *     }
+     */
     public function deleteRating(Request $req, 
                                  VideosModel $videos,
                                  RatingsModel $ratings) {
