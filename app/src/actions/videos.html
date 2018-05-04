@@ -292,6 +292,13 @@
                           // Redirect to other screen
                           dispatch(uploadVideoSuccess(res.data));
 
+                     dispatch(dispatchError({
+                            error: "Created",
+                            code: 201,
+                            message: `Uploaded video to temp folder`
+                        }));
+
+
                             window.history.pushState({}, null, '#/video-upload');
                             window.dispatchEvent(new CustomEvent('location-changed'));
                     })
