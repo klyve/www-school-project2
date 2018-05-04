@@ -25,8 +25,13 @@ Jonas J. Solsvik **[arxcis](https://github.com/arxcis)**
 
 # Introduction
 
-## 1. @TODO Test LIVE here
+## 1.1 @TODO Test LIVE here
 @TODO
+
+
+## 1.2 LIVE API Documentation 
+
+hosted here --> [arxcis.github.io/ourproject](https://arxcis.github.io/imt2291-project2-videosite/) 
 
 
 <br>
@@ -611,8 +616,8 @@ AVA js docs - https://github.com/avajs/ava - *2018-05-03*
 <br>
 
 
-## 2. apiDoc Documentation Framework
 
+## 2. apiDoc Documentation Framework
 
 This framework documents our API endpoints. We use special comments above all Controller.Functions. Apidoc is installed as a command line tool using `npm`.
 ```
@@ -929,13 +934,13 @@ When loading the Polymer front-end with firefox no thumbnails are showing up. Al
 <br>
 
 
-## 4. Polymer + Redux as good fit ? 
+## 3. Polymer + Redux as good fit ? 
 
 We found that because Polymer projects tend to rely mainly in .html files it gets a bit clunky to work together with other javascript frameworks. You can't simply use import {javascript} library.
 
 Here is an example of how integrating Redux with Polymer creates wierd code
 
-```js
+```
 class VideoUpload extends VideosActions(SiteActions(ReduxStore(Polymer.Element))) {
 
     static get is() { return 'video-upload'; }
@@ -951,6 +956,7 @@ class VideoUpload extends VideosActions(SiteActions(ReduxStore(Polymer.Element))
     };
 }
 ```
+
 You have to 'wrap-inherit' from 3 different classes to compose different libraries.
 
 @TODO Explain more why this is the case...
