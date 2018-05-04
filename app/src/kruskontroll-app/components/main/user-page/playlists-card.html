@@ -1,7 +1,9 @@
 <link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../../../../bower_components/slate-font-awesome/slate-font-awesome.html">
 
 <link rel="import" href="../../../../store/store.html">
+<link rel="import" href="../../../../actions/user.html">
 <link rel="import" href="../../../styles.html">
 
 
@@ -11,21 +13,46 @@
       :host {
         display: block;
       }
+
+      #dialog {
+          width: 300px;
+          height: 400px;
+      }
     </style>
     <style include="slate-font-awesome"></style>
+
+    <paper-dialog id="dialog">
+        <div class="flat-card is-auto menu-card">
+            <div class="card-title">
+                <h3>Create Playlist</h3>
+            </div>
+        </div>
+
+        <paper-input label="Playlist Name" value="{{title}}">
+        </paper-input>
+        <paper-input label="Description" value="{{description}}">
+        </paper-input>
+        
+        <div class="buttons">
+            <paper-button dialog-dismiss>Cancel</paper-button>
+            <paper-button dialog-confirm autofocus on-click="callCreatePlaylist">Accept</paper-button>
+        </div>
+    </paper-dialog>
+    
     <div class="flat-card is-auto menu-card">
         <div class="card-title">
             <h3>Playlists</h3>
 
             <div class="confirm-button">
-                <a href="#" class="header-button">Add</a>
+                <a class="header-button" on-click="openModal">Add</a>
             </div>
         </div>
         <ul class="wishlists">
-            <li class="is-active"><a>Main List</a></li>
-            <li><a>Couches</a></li>
-            <li><a>Tables</a></li>
-            <li><a>Accessories</a></li>
+            <template is="dom-repeat" items="{{playlists}}">
+                <li>
+                    <a on-click="setActivePlaylist(index)">{{item.title}}</a>
+                </li>
+            </template>
         </ul>
     </div>
     
@@ -37,16 +64,41 @@
      * @customElement
      * @polymer
      */
-    class PlaylistsCard extends ReduxStore(Polymer.Element) {
+    class PlaylistsCard extends UserActions(ReduxStore(Polymer.Element)) {
 
       static get is() { return 'playlists-card'; }
       
+        
+        openModal() {
+            this.title = '';
+            this.description = '';
+            this.$.dialog.open()
+        }
+
+        callCreatePlaylist() {
+            this.dispatch(this.createPlaylist());
+        }
+
+        setActivePlaylist(index) {
+            console.log("Set active playlist", index);
+            //this.dispatch(this.setActivePlaylist())
+        }
+
+
       static get properties() {
         return {
-          prop1: {
+            title: {
             type: String,
-            value: 'kruskontroll-app'
+            value: ''
           },
+          description: {
+            type: String,
+            value: ''
+          },
+          playlists: {
+              type: Object,
+              statePath: 'user.playlists',
+          }, 
         };
       }
     }

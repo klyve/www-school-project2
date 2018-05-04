@@ -33,6 +33,9 @@ class UserType extends ObjectType {
                     'subscriptions' => [
                         'type' => Types::listOf(Types::subscriptions())
                     ],
+                    'playlists' => [
+                        'type' => Types::listOf(Types::playlist())
+                    ]
                 ];
             },
             'resolveField' => function($value, $args, $context, ResolveInfo $info) {
@@ -50,6 +53,12 @@ class UserType extends ObjectType {
 
     public function resolveSubscriptions($user, $args) {
         return (new SubscriptionsModel())->all([
+            'userid' => $user->id,
+        ]);
+    }
+
+    public function resolvePlaylists($user, $args) {
+        return (new PlaylistsModel())->all([
             'userid' => $user->id,
         ]);
     }

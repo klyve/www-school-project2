@@ -17,6 +17,9 @@
 
     const DO_LOGOUT_SUCCESS = 'DO_LOGOUT_SUCCESS';
 
+    const POST_PLAYLIST_SUCCESS = 'POST_PLAYLIST_SUCCESS';
+
+    const PUT_PLAYLIST_SUCCESS = 'PUT_PLAYLIST_SUCCESS';
 
 
     const postLoginRequest = () => ({
@@ -79,6 +82,23 @@
 
 
 
+    const postPlaylistSuccess = (playlist, id) => ({
+        type: POST_PLAYLIST_SUCCESS,
+        payload: {
+            ...playlist,
+            id
+        }
+    });
+
+    const putPlaylistSuccess = (playlist) => ({
+        type: PUT_PLAYLIST_SUCCESS,
+        payload: {
+            ...playlist,
+        }
+    })
+
+
+
 
 
     const UserActions = Polymer.dedupingMixin(function(superClass){
@@ -109,10 +129,16 @@
                     graphql(`query {
                         viewer {
                             subscriptions {
-                            playlist {
-                                id
-                                title
+                                playlist {
+                                    id
+                                    title
+                                    description
+                                }
                             }
+                            playlists {
+                                title
+                                id
+                                description
                             }
                         }
                     }`)
@@ -184,6 +210,48 @@
                         }))
                     }
 
+                }
+            }
+
+            createPlaylist() {
+                return dispatch => {
+                    console.log("Creating playlist");
+                    const newPlaylist = {
+                        title: this.title,
+                        description: this.description
+                    };
+                    post('playlist', newPlaylist)
+                        .then(res => dispatch(postPlaylistSuccess(newPlaylist, res.data.id)))
+                        .catch(err => console.log("ERROR", err));
+                }
+            }
+
+            editPlaylist() {
+                return dispatch => {
+                    console.log("Updating playlist");
+                    const newPlaylist = {
+                        id: this.playlistid,
+                        title: this.title,
+                        description: this.description
+                    };
+                    put(`playlist/${this.playlistid}`, newPlaylist)
+                        .then(res => dispatch(putPlaylistSuccess(newPlaylist)))
+                        .catch(err => console.log("ERROR", err));
+                }
+            }
+
+            editUserInfo() {
+                return dispatch => {
+                    console.log("Editing user");
+                    
+                    const userData = {
+                        name: this.userData.name,
+                        email: this.userData.email,
+
+                    };
+                    put(`user`, userData)
+                        .then(res => dispatch(putUserSuccess(userData)))
+                        .catch(err => console.log("ERROR", err));
                 }
             }
         }

@@ -48,6 +48,17 @@ const userReducer = (state = initialUserState, action) => {
             };
         }
 
+
+        case POST_PLAYLIST_SUCCESS: {
+            const newState = {...state};
+
+            return {
+                ...newState,
+                playlists: [...newState.playlists, {...action.payload}],
+            }
+            
+        }
+
         case DO_LOGOUT_SUCCESS: {
             return initialUserState;
         }break;
