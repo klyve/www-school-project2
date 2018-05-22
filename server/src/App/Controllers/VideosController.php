@@ -9,6 +9,7 @@ use \MVC\Helpers\Hash;
 use \MVC\Http\ErrorCode;
 use \MVC\Helpers\File;
 use \Datetime;
+use \App\Models\TempVideosModel;
 
 // HTTP STATUS CODES
 const HTTP_OK            = 200;  // Success and returning content
@@ -25,75 +26,87 @@ const DS = DIRECTORY_SEPARATOR;
 class VideosController extends Controller {
   
   // @route POST /user/{userid}/video
-  public function postVideo(VideosModel $newVideo, Request $req) {
+  public function postVideo(VideosModel $newVideo,
+                            TempVideosModel $tempVideos,
+                            Request $req) {
 
-
-    // @assumption userid matches token
-    $token = $req->token();
-    $userid = $token->userid;
+    $userid = $req->token()->userid;
 
     $newVideo->userid      = $userid;
     $newVideo->title       = $req->input('title');
     $newVideo->description = $req->input('description');
-    $newVideo->filesubtitle  = Hash::md5($userid . $newVideo->title  . microtime() ) . ".srt";
-    $newVideo->filethumbnail = $req->input('fileThumbnail');
-    $newVideo->filevideo     = $req->input('fileVideo');
+    $temp_videoid          = $req->input('temp_videoid');
 
-
-    //
-    // @TODO Move this into a function in  FILE.php
-    //
+    $tempVideo = $tempVideos->find([
+        'id' => $temp_videoid,
+        'userid' => $userid
+    ]);
+    if (!$tempVideo->id) {
+        return Response::statusCode(HTTP_BAD_REQUEST, "Could not find tempvideo");
+    }
 
     // Setup proper filepaths
     $tempdir       = WWW_ROOT.DS."public".DS."temp".DS.$userid;
-
     $mediaDir      =  WWW_ROOT.DS."public".DS."media";
-    $subtitlesDir  = $mediaDir.DS."subtitles".DS.$userid;
-    $thumbnailsDir = $mediaDir.DS."thumbnails".DS.$userid;
-    $videosDir     = $mediaDir.DS."videos".DS.$userid;
-
-    $thumbTemp = $tempdir.DS.$newVideo->filethumbnail;
-    $videoTemp = $tempdir.DS.$newVideo->filevideo;
-
-    $thumbDest    = $thumbnailsDir.DS.$newVideo->filethumbnail;
-    $videoDest    = $videosDir.DS.$newVideo->filevideo;
-    $subtitleDest = $subtitlesDir.DS.$newVideo->filesubtitle;
-
-    File::makeDirIfNotExist($subtitlesDir);
-    File::makeDirIfNotExist($thumbnailsDir);
-    File::makeDirIfNotExist($videosDir);
 
 
-    // Do file operations
-    $err = File::moveFile($thumbTemp, $thumbDest);
-    if ($err) {
-        return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to move file");
-    }
+    // Move Video from temp folder to destination folder
+        {
+            $videosDir     = $mediaDir.DS."videos".DS.$userid;
+            File::makeDirIfNotExist($videosDir);
+            $videoTempSource  = $tempdir  .DS. $tempVideo->fname;
+            $videoDestination = $videosDir.DS. $tempVideo->fname;
 
-    $err = File::moveFile($videoTemp, $videoDest);
-    if ($err) {
-        return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to move file");
-    }
 
-    $err = File::newFile($subtitleDest);
-    if ($err) {
-        return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to new file");
-    }
+            $err = File::moveFile($videoTempSource, $videoDestination);
+            if ($err) {
+                return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to move file");
+            }
+        }
 
-    if (!rmdir($tempdir)) {
-        return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to remove users temp directory");
-    }
-    
-    //
-    // @TODO Move THE ABOVE into a function in  FILE.php
-    //
+
+    // Get Thumbnail from form first, then move file from temp to
+            $thumbnailFormFile = $req->getFile('thumbnail');
+            if (!$thumbnailFormFile) {
+                return Response::statusCode(HTTP_BAD_REQUEST, "Could not find thumbnail in form");
+            }
+            
+            $thumbnailsDir = $mediaDir.DS."thumbnails".DS.$userid;
+            File::makeDirIfNotExist($thumbnailsDir);
+
+            $thumbFilename = File::moveFormFile($thumbnailFormFile, $thumbnailsDir, "png");
+            if (!$thumbFilename) {
+                return Response::statusCode(HTTP_INTERNAL_ERROR, "Could not move thumbnail");
+            }
+
+
+    // Get Subtitle from form first, then move file from temp to
+            $subtitleFormFile = $req->getFile('subtitle');
+            if (!$subtitleFormFile) {
+                return Response::statusCode(HTTP_BAD_REQUEST, "Could not find subtitle in form");
+            }
+
+            $subtitlesDir = $mediaDir.DS."subtitles".DS.$userid;
+            File::makeDirIfNotExist($subtitlesDir);
+
+            $subtitleFilename = File::moveFormFile($subtitleFormFile, $subtitlesDir, "vtt");
+            if (!$subtitleFilename) {
+                return Response::statusCode(HTTP_INTERNAL_ERROR, "Could not move subtitle");
+            }    
 
     
     // Finally save the new video in the database if all fil operations went through.
+    $newVideo->filevideo = $tempVideo->fname;
+    $newVideo->filesubtitle = $subtitleFilename;
+    $newVideo->filethumbnail = $thumbFilename;
     $videoid = $newVideo->save();
     if(!$videoid) {
         return Response::statusCode(HTTP_INTERNAL_ERROR, "Failed to create new video in database");
     }
+
+    // Safely delete temp video
+    $tempVideo->deleted_at = date ("Y-m-d H:i:s");
+    $tempVideo->save();
 
     $res = ['videoid' => $videoid, 'message' => "Created a new video"];
     return Response::statusCode(HTTP_CREATED, $res);

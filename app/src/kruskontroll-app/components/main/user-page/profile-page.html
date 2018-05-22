@@ -4,12 +4,14 @@
 <link rel="import" href="../../../../../bower_components/slate-font-awesome/slate-font-awesome.html">
 
 <link rel="import" href="../../../../store/store.html">
+<link rel="import" href="../../../../actions/user.html">
 <link rel="import" href="../../../styles.html">
 
 <link rel="import" href="./profile-card.html">
 <link rel="import" href="./video-card.html">
 <link rel="import" href="./playlists-card.html">
 <link rel="import" href="./edit-profile.html">
+<link rel="import" href="./admin-tab.html">
 
 
 
@@ -41,6 +43,11 @@
         <paper-tab>Playlists</paper-tab>
         <paper-tab>Upload video</paper-tab>
         <paper-tab>Edit profile</paper-tab>
+        
+        <template is="dom-if" if="{{ _isAdmin(usergroup) }}">
+          <paper-tab>Admin</paper-tab>
+        </template>
+
     </paper-tabs>
 
         <iron-pages selected="{{selected}}">
@@ -99,16 +106,22 @@
 
 
 
+          <template is="dom-if" if="{{ _isAdmin(usergroup) }}">
 
+            <div class="profile-container">
+                <div class="tabs"></div>
+                <div class="columns multiline">
+                    <div class="column is-4">
+                        <profile-card></profile-card>
+                    </div>
+    
+                    <div class="column is-8">
+                        <admin-tab></admin-tab>
+                    </div>
+                </div>
+            </div>
 
-
-
-
-
-
-
-
-
+          </template>
 
     </iron-pages>
     
@@ -121,22 +134,37 @@
      * @customElement
      * @polymer
      */
-    class ProfilePage extends ReduxStore(Polymer.Element) {
+
+
+    class ProfilePage extends UserActions(ReduxStore(Polymer.Element)) {
 
       static get is() { return 'profile-page'; }
       
       static get properties() {
         return {
-          prop1: {
-            type: String,
-            value: 'kruskontroll-app'
-          },
           selected: {
               type: Number,
               value: 0,
           },
+          usergroup: {
+            type: Number,
+            statePath: 'user.usergroup'
+          },
+          
         };
       }
+
+      _isAdmin(usergroup) {
+
+        console.log(usergroup)
+        if (usergroup === ADMIN) {
+          console.log("Is ADMIN")
+          return true
+        }
+        console.log(usergroup, "Is STUDENT, or TEACHER")
+        return false
+      }
+
     }
     
     window.customElements.define(ProfilePage.is, ProfilePage);

@@ -12,17 +12,21 @@ const HTTP_NO_CONTENT     = 204;  // Successfull update
 const HTTP_NOT_IMPLMENTED = 501;
 const HTTP_NOT_FOUND     = 404;
 
-// @note Insert this user into the database using 'php toolbox seed:up' 'php toolbox seed:refresh'
-const credentials = {
-    email: 'useremail1@kruskontroll.no',
-    name: 'username1',
-    password: 'password1',
-};
+
+
+
+
 
 let userToken  = null
 
 test.before(async (t) => {
     t.plan(11);
+
+    const credentials = {
+        email: 'useremail1@kruskontroll.no',
+        name: 'username1',
+        password: 'password1',
+    };
 
     const res = await axios.post(`${API}/user/login`, credentials)
     t.is(res.status, HTTP_OK, `Expected status code ${HTTP_OK} got ${res.statusCode}`);
@@ -35,90 +39,104 @@ test.before(async (t) => {
 });
 
 
-let newVideodata = {
-    title: '10 Javascript Frameworks you HAVE TO LEARN in 2018',
-    description: 'Your life will be an absolute missery if you dont learn these super important frameworks!',
-    fileThumbnail: null, // provided by return from tempfile upload
-    fileVideo: null,     // provided by return from tempfile upload
-}
-
-test.serial('Upload thumbnail file', async t => {
-
-    t.plan(2)
-
-    const filenameThumbnail = "thumbnail.png"
-    const mimeThumbnail = "image/png"
-
-    // UPLOAD THUMBNAIL FILE
-    let dataThumbnail = fs.readFileSync(`${KRUS_ROOT}/apitests/files/${filenameThumbnail}`);
-    if(dataThumbnail === null) t.fail();
-
-    const fileSizeInBytes = fs.statSync(`${KRUS_ROOT}/apitests/files/${filenameThumbnail}`).size;
-
-    try {
-
-        const res = await axios.post(`${API}/tempfile`, 
-                                 dataThumbnail, 
-                                 axiosFile(userToken, 
-                                           fileSizeInBytes,
-                                           filenameThumbnail,
-                                           mimeThumbnail));
 
 
-    t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`);    
 
-        newVideodata.fileThumbnail = res.data.fname;
-        t.truthy(newVideodata.fileThumbnail, "File thumbnail has to be defined");
 
-    } catch(err) {
-        t.fail(`${err.response.status}: ${err.response.data}`);
-    }
 
-});
+
+
+
+let temp_videoid = null;
 
 test.serial('Upload video file', async t => {
     // UPLOAD VIDEO FILE
     t.plan(2)
 
-    const filenameVideo     = "video.mp4"
-    const mimeVideo         = "video/mp4"
-    
-    let dataVideo = fs.readFileSync(`${KRUS_ROOT}/apitests/files/${filenameVideo}`);
-    if(dataVideo === null) t.fail();
 
-    const fileSizeInBytes = fs.statSync(`${KRUS_ROOT}/apitests/files/${filenameVideo}`).size;
-   
-    try {
-        const res = await axios.post(`${API}/tempfile`, 
-                                     dataVideo, 
-                                     axiosFile(userToken, 
-                                               fileSizeInBytes,
-                                               filenameVideo,
-                                               mimeVideo));
+    let dataVideo = fs.readFileSync(`${KRUS_ROOT}/server/public/media/videos/example.mp4`);
+    if(dataVideo === null) 
+        t.fail();
 
-        t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`)
+    const fileSizeInBytes = fs.statSync(`${KRUS_ROOT}/server/public/media/videos/example.mp4`)
+                              .size;
 
-        newVideodata.fileVideo = res.data.fname;
-        t.truthy(newVideodata.fileVideo, "File video has to be defined");
 
-    } catch(err) {
-        t.fail(`${err.response.status}: ${err.response.data}`);
+    const config = {
+        headers: {
+            "Content-Type": "video/mp4",
+            ...axiosBearer(userToken).headers,
+           // "maxContentLength:": fileSizeInBytes
+        },
+        maxContentLength: fileSizeInBytes
     }
-});
 
-let videoid = null
+
+    const res = await axios.post(`${API}/tempfile`, dataVideo, config)
+                           .catch(err => { console.log(err); t.fail("Caught error"); })
+
+    t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`)
+
+    temp_videoid = res.data.id;
+    t.truthy(temp_videoid, "File video has to be defined")
+})
+
+
+
+
+
+
+
+
+
+
+
+const FormData = require('form-data');
+let    videoid = null
+const newVideodata = {
+    title: '10 Javascript Frameworks you HAVE TO LEARN in 2018',
+    description: 'Your life will be an absolute missery if you dont learn these super important frameworks!',
+}
 
 test.serial('Post video', async t => {
-    t.plan(2);
+    t.plan(2)
     
-    const res = await axios.post(`${API}/video`, newVideodata, axiosBearer(userToken))
-                           .catch(err => { console.log(err.responsee); t.fail("Caught error") })
+    var data = new FormData();
+
+    data.append('title', newVideodata.title);
+    data.append('description', newVideodata.description);
+    data.append('temp_videoid', temp_videoid);
+    data.append('thumbnail', fs.createReadStream(`${KRUS_ROOT}/server/public/media/thumbnails/example.png`));
+    data.append("subtitle", fs.createReadStream(`${KRUS_ROOT}/server/public/media/subtitles/example.vtt`));
+
+    const config = {
+        headers: {
+            ...axiosBearer(userToken).headers,
+            ...data.getHeaders()
+        }
+    }
+
+    const res = await axios.post(`${API}/video`, data, config)
+                           .catch(err => { console.log(err); t.fail("Caught error") })
+
+
 
     t.is(res.status, HTTP_CREATED, `Expected status code ${HTTP_CREATED} got ${res.status}`)
     
-    videoid = res.data.videoid;
-    t.truthy(res.data.videoid);
-});
+    videoid = res.data.videoid
+
+    t.truthy(res.data.videoid)
+})
+
+
+
+
+
+
+
+
+
+
 
 test.serial('Check if video was created', async t => {
 
@@ -132,6 +150,7 @@ test.serial('Check if video was created', async t => {
     `}
     const res = await axios.post(`${API}/graphql`, data, axiosBearer(userToken))
     t.truthy(res.data.data)
+
     t.true(isEqualsShallow(res.data.data.video, {title: newVideodata.title, description: newVideodata.description}), "updated object does not match intended")
 })
 

@@ -19,6 +19,17 @@
     const POST_COMMENT_SUCCESS = 'POST_COMMENT_SUCCESS';
 
 
+    const UPLOAD_VIDEO_REQUEST = 'UPLOAD_VIDEO_REQUEST';
+    const UPLOAD_VIDEO_SUCCESS = 'UPLOAD_VIDEO_SUCCESS';
+    const UPLOAD_VIDEO_FAILURE = 'UPLOAD_VIDEO_FAILURE';
+
+    const POST_VIDEO_REQUEST = 'POST_VIDEO_REQUEST';
+    const POST_VIDEO_SUCCESS = 'POST_VIDEO_SUCCESS';
+    const POST_VIDEO_FAILURE = 'POST_VIDEO_FAILURE';
+
+
+
+
     const getVideosRequest = () => ({
         type: GET_VIDEOS_REQUEST,
         payload:{
@@ -93,6 +104,61 @@
 
 
 
+
+    const postVideoRequest = data => ({
+        type: POST_VIDEO_REQUEST,
+        payload: {
+            fetching: true,
+            ...data
+        }
+    });
+
+    const postVideoSuccess = data => ({
+        type: POST_VIDEO_SUCCESS,
+        payload: {
+            fetching: false,
+            ...data
+        }
+    });
+
+
+    const postVideoFailure = data => ({
+        type: POST_VIDEO_FAILURE,
+        payload: {
+            fetching: false,
+            ...data
+        }
+    });
+
+
+
+    const uploadVideoRequest = () => ({
+        type: UPLOAD_VIDEO_REQUEST,
+        payload:{
+            id: null,
+            uploading: true,
+        }
+    });
+
+    const uploadVideoSuccess = (data) => ({
+        type: UPLOAD_VIDEO_SUCCESS,
+        payload:{
+            uploading: false,
+            ...data
+        }
+    });
+
+
+    const uploadVideoFailure = () => ({
+        type: UPLOAD_VIDEO_FAILURE,
+        payload:{
+            id: null,
+            uploading: false,
+        }
+    });
+
+
+
     const VideosActions = Polymer.dedupingMixin(function(superClass){
         return class VideosActions extends superClass {
             constructor() {
@@ -162,7 +228,6 @@
                 .catch(err => console.log(err));
             }
         }
-
         putVideo() {
             return dispatch => {
 
@@ -178,23 +243,36 @@
                     'videoid': this.id,
                     ...this.video
                 })
-                .then(res => {  console.log(res); dispatch(putVideoSuccess()); })
-                .catch(err => { console.log(err); dispatch(putVideoFailure()); })
+                .then(res => {                   
 
+                    dispatch(putVideoSuccess());
+
+                    dispatch(dispatchError({
+                        error: "OK",
+                        code: 200,
+                        message: `Video was updated successfully`
+                    }));
+
+                 })
+                .catch(err => { console.log(err); dispatch(putVideoFailure()); })
             }
         }
 
         uploadVideo() {
             return dispatch => {
-                let mimetype = this.files[0].type
-                let filename = this.files[0].name;
-                let filesize = this.files[0].size;
 
-                if (mimetype.indexOf("video/mp4") == -1) {
+                const file = this.filesvideo[0];
+                const type = file.type;
+                const filesize = file.size;
+
+                dispatch(uploadVideoRequest());
+
+
+                if (type.indexOf("video/mp4") == -1) {
                     dispatch(dispatchError({
                         error: "Bad Request",
                         code: 400,
-                        message: `Only supporting video/mp4 video format. ${mimetype} given`
+                        message: `Only supporting video/mp4 video format. ${type} given`
                     }));
 
                     this.$.inputVideo.inputElement.inputElement.files = null
@@ -202,22 +280,84 @@
                 }
                 const params = {
                     headers: {
-                    'Content-Type': 'application/octet-stream',
-                    'X-OriginalFilename': filename,
-                    'X-OriginalFilesize': filesize,
-                    'X-OriginalMimetype': mimetype,
+                        'Content-Type': 'video/mp4',
                     },
 
                     onUploadProgress: progressEvent => dispatch(dispatchProgress((progressEvent.loaded / filesize) * 100))
                 }
 
-                post('/tempfile', this.files[0], params)
+
+                post('/tempfile', file, params)
                     .then(res => {
-                      // Redirect to other screen
-                      console.log(res);
-                    //   dispatch(dispatch)  
+                          // Redirect to other screen
+                          dispatch(uploadVideoSuccess(res.data));
+
+                     dispatch(dispatchError({
+                            error: "Created",
+                            code: 201,
+                            message: `Uploaded video to temp folder`
+                        }));
+
+
+                            window.history.pushState({}, null, '#/video-upload');
+                            window.dispatchEvent(new CustomEvent('location-changed'));
                     })
-                    .catch(console.log);
+                    .catch(err => {
+                        dispatch(uploadVideoFailure());
+                    });
+            }
+        }
+
+        postVideo() {
+            return dispatch => {
+
+                const form = {
+                    title: this.title,
+                    description: this.description,
+                    temp_videoid: this.temp_videoid,
+                    thumbnail: this.filesthumbnail[0],
+                    subtitle: this.filessubtitle[0]
+                };
+
+                console.log("form", form)
+
+                let formData = new FormData();
+                formData.append('title', form.title)
+                formData.append('description', form.description)
+                formData.append('temp_videoid', form.temp_videoid)
+                formData.append('thumbnail', form.thumbnail)
+                formData.append('subtitle', form.subtitle)
+
+
+                this.dispatch(postVideoRequest(form))
+
+                console.log(formData)
+                const config = {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    }
+                }
+
+                post('/video', formData, config)
+                    .then(res => {
+
+                        dispatch(postVideoSuccess(res.data));
+
+                        dispatch(dispatchError({
+                            error: "Created",
+                            code: 201,
+                            message: `Video created`
+                        }));
+
+
+                        window.history.pushState({}, null, '#/video/'+res.data.videoid);
+                        window.dispatchEvent(new CustomEvent('location-changed'));
+
+                    })
+                    .catch(err => {
+                        dispatch(postVideoFailure(err.response.data))
+                        dispatch(dispatchError(err.response.data));
+                    });
             }
         }
 

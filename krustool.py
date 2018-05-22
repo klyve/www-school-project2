@@ -106,6 +106,8 @@ def build_only():
 
     ROOT = get_script_directory()
 
+
+    # Build rest API PHP app
     call(["rm", "-r", ROOT+"/dist"])
     call(["mkdir", "dist"])
 
@@ -115,7 +117,22 @@ def build_only():
     call(["cp", "-r", ROOT+"/server/vendor", ROOT+"/dist/vendor"])
     call(["cp", ROOT+"/server/index.php", ROOT+"/dist/index.php"])
 
+
+    # Build polymer web app
+    call(["mkdir", ROOT+"/dist/polymerapp"])
+
+    call(["cp", "-r", ROOT+"/app/bower_components", ROOT+"/dist/polymerapp/bower_components"])
+    call(["cp", "-r", ROOT+"/app/node_modules",     ROOT+"/dist/polymerapp/node_modules"])
+    call(["cp", "-r", ROOT+"/app/main.css",         ROOT+"/dist/polymerapp/main.css"])
+    call(["cp", "-r", ROOT+"/app/index.html",         ROOT+"/dist/polymerapp/index.html"])
+    call(["cp", "-r", ROOT+"/app/src",              ROOT+"/dist/polymerapp/src"])
+
+
+
     call(["rm", ROOT+"/dist/src/App/.env"])
+
+
+
 
 
 def build(version):
@@ -179,7 +196,13 @@ def dockerbuild():
     call(["mkdir", "db"])
     call(["docker-compose", "up", "--build"])
 
-
+def apidoc():
+    call(
+        ["apidoc", "-i", "server/",
+        "-o", "apidoc/",
+        "-c", "server/",
+        "-e", ".*vendor", "-e", "server/node_modules/"
+	]) 
 
 if __name__ == "__main__":
 
@@ -201,6 +224,7 @@ if __name__ == "__main__":
     parser.add_argument("-sa", "--serve-api", nargs=1, help="<apiserver-path>")
     parser.add_argument("-d", "--docker", help="Run docker-compose up", action="store_true")
     parser.add_argument("-db", "--dockerbuild", help="Run docker-compose up + build", action="store_true")
+    parser.add_argument("-a", "--apidoc", help="Generate apidoc and save to apidoc/index.html", action="store_true")
 
     argv = parser.parse_args()
 
@@ -242,3 +266,6 @@ if __name__ == "__main__":
 
     elif argv.zip:
         zip_distribution(argv.zip[0])
+
+    elif argv.apidoc:
+        apidoc()

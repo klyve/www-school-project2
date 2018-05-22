@@ -18,6 +18,7 @@
     "paper-header-panel": "PolymerElements/paper-header-panel#^2.1.0",
     "paper-tabs": "PolymerElements/paper-tabs#^2.1.1",
     "paper-dialog": "PolymerElements/paper-dialog#^2.1.1"
+    "file-drop-zone": "PolymerVis/file-drop-zone#^2.0.3"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0",

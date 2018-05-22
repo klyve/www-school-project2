@@ -17,7 +17,6 @@ const initialUserState = {
 };
 
 const userReducer = (state = initialUserState, action) => {
-    console.log(action);
     switch(action.type) {
         case 'UPDATE_USERNAME': {
             return {

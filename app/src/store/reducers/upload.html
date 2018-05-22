@@ -1,0 +1,78 @@
+<link rel="import" href="../../actions/videos.html">
+
+
+<script>
+
+
+const initialUploadState = {
+    uploading: false,
+    id: null
+};
+
+const uploadReducer = (state = initialUploadState, action) => {
+    switch(action.type) {
+        case UPLOAD_VIDEO_REQUEST: {
+            return {
+                ...state,
+                ...action.payload,
+            };
+        }break;
+        case UPLOAD_VIDEO_SUCCESS: {
+            return {
+                ...state,
+                ...action.payload,
+            };
+        }break;
+        case UPLOAD_VIDEO_FAILURE: {
+            return {
+                ...state,
+                ...action.payload,
+            };
+        }break;
+        default:
+            return state;
+    }
+
+    return state;
+};
+
+
+const initialPostVideoState = {
+    videoid: null,
+    message: null,
+    fetching: false,
+    title: null,
+    description: null,
+    temp_videoid: null,
+    thumbnail: null,
+    subtitle: null
+}
+
+const postVideoReducer = (state = initialPostVideoState, action) => {
+    switch(action.type) {
+        case POST_VIDEO_REQUEST: {
+            return {
+                ...state,
+                ...action.payload,
+            };
+        }break;
+        case POST_VIDEO_SUCCESS: {
+            return {
+                ...state,
+                ...action.payload,
+            };
+        }break;
+        case POST_VIDEO_FAILURE: {
+            return {
+                ...state,
+                ...action.payload,
+            };
+        }break;
+        default:
+            return state;
+    }
+    return state;
+};
+
+
+</script>

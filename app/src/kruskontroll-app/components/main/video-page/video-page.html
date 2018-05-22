@@ -1,6 +1,5 @@
 <link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../../../../bower_components/slate-font-awesome/slate-font-awesome.html">
-
 <link rel="import" href="../../../../store/store.html">
 <link rel="import" href="../../../../actions/videos.html">
 <link rel="import" href="../../../styles.html">
@@ -47,13 +46,25 @@
 
         <div class="video-wrapper">
           <div class="video-container">
-            <video class="video-player" controls preload="metadata">
+
+
+
+
+            <video id="videoPlayerId"
+                   class="video-player" 
+                   controls 
+                   preload="metadata">
+
                 <source id="mp4" src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
                 <source id="webm" src="http://media.w3.org/2010/05/sintel/trailer.webm" type="video/webm">
                 <source id="ogv" src="http://media.w3.org/2010/05/sintel/trailer.ogv" type="video/ogg">
                 <track kind="subtitles" label="Test" src="src/kruskontroll-app/components/main/video-page/test.vtt" srclang="en" default="default"></track>
                 Your browser does not support HTML5 video.
-              </video>
+           
+            </video>
+
+
+
           </div>
           <div class="subtitles-container">
             <ul id="subtitles">
@@ -68,7 +79,17 @@
             </ul>
           </div>
       </div>
-      <div class="info-wrapper">
+
+
+        <paper-button raised 
+                label="Video Rate"
+                class="green"
+                on-click="changeSelected">{{ rate }}</paper-button>
+
+
+
+
+     <div class="info-wrapper">
         
         <div class="info-article">
           <div class="video-header">
@@ -184,6 +205,8 @@
         const video = Polymer.dom(this.root).querySelector('.video-player');
         video.play();
         video.pause();
+
+
         video.currentTime = active.startTime;
         video.play();
         
@@ -244,6 +267,45 @@
         return `${THUMBNAIL}${video.filethumbnail}`;
       }
 
+      changeSelected() {
+        this.selected = (this.selected + 1) % 4;
+      }
+
+
+      changeVideoSpeed(selected) {
+
+
+        switch(selected) {
+
+          case 0:{
+          // set speed to 0.5
+            this.rate = 0.5
+          } break
+          case 1: {
+           // set speed to 1.0
+            this.rate = 1.0
+            break;
+          }
+          case 2: {
+            // set speed to 1.5
+            this.rate = 1.5
+          } break;
+
+          case 3: {
+            // set speed to 2.0
+            this.rate = 2.0
+          } break;
+        }
+
+
+
+
+        let videoElement = this.$.videoPlayerId;
+        console.log("videoelement: ", videoElement, "   selected: ", selected)
+
+        videoElement.playbackRate = this.rate
+      } 
+
       static get properties() {
         return {
           route: {
@@ -275,7 +337,16 @@
           activeCue: {
             type: Number,
             value: 0,
-          }
+          },
+          rate: {
+            type: Number,
+            value: 1.0,
+          },
+          selected: {
+            type: Number,
+            value: 1,
+            observer: 'changeVideoSpeed'
+          },
         };
       }
     }

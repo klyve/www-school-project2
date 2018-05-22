@@ -107,6 +107,10 @@ echo "Requiring".APP_ROOT."/App/config.php\n\n";
 
 Migrations::runCLI(['refresh']);
 
+const STUDENT       = 0;
+const TEACHER       = 1;
+const ADMINISTRATOR = 2;
+
 function createAdministrator($name, $email, $password) {
 
     $usersModel = new UsersModel;
@@ -120,10 +124,13 @@ function createAdministrator($name, $email, $password) {
         return die();
     }
     
+
+
     $userid = $user->create([
         'name' => $name, 
         'email' => $email,
-        'password' => Hash::password($password)
+        'password' => Hash::password($password),
+        'usergroup' => ADMINISTRATOR,
     ]);
 
     if (!$userid) {

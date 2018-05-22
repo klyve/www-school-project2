@@ -24,29 +24,42 @@ const DS = DIRECTORY_SEPARATOR;
 
 class FilesController extends Controller {
   
+     /**
+     * @api {Delete} /tempfile Post new file to temp folder
+     * @apiName Post file to temp folder.
+     * @apiGroup File
+     * @apiPermission user
+     * 
+     * 
+     * @apiSuccess {String} data Success message
+     * 
+     * @apiSuccessExample {json} Post file.
+     *      HTTP/1.1 201 Created
+     *      {
+     *          data: {
+     *              id: 1,
+     *              userid: 1,
+     *              fname: "fileName",
+     *              size: 100,
+     *              mime: "mp4"
+     *          }
+     *      }
+     * 
+     */
   // @route POST /user/{userid}/tempfile
   public function postTempfile(Request $req, TempVideosModel $tmpVid) {
-
-    // @ref copy from okolloen javascript_forelesning 1
-    $fname    = $_SERVER['HTTP_X_ORIGINALFILENAME'];      
-    $fsize    = $_SERVER['HTTP_X_ORIGINALFILESIZE'];
-    $mimetype = $_SERVER['HTTP_X_ORIGINALMIMETYPE'];
 
     // Read the file from stdin
     $handle = fopen("php://input", 'r');      
     $userid = $req->token()->userid;
 
-    
-    $tempfilename = Hash::md5($userid . $fname . $fsize . $mimetype . microtime() );        // rlkngj..
-    // $extension = substr($fname, strpos($fname, '.')+1); // e.g. mp4
-    $ext_parts = pathinfo($fname);
-    $extension = $ext_parts['extension'];
-
+    $extension = ".mp4";
+    $tempfilename = Hash::md5($userid . ".dsf2$45/*^s.." . microtime() ) . $extension;
     $tempdir =  WWW_ROOT.DS."public".DS."temp".DS. $userid;
 
     File::makeDirIfNotExist($tempdir);
 
-    $output = File::openToWrite("$tempdir".DS."$tempfilename.$extension");
+    $output = File::openToWrite("$tempdir".DS."$tempfilename");
     if(!$output) {
         return Response::statusCode(HTTP_INTERNAL_ERROR, "Could not open file");
     }
@@ -60,20 +73,21 @@ class FilesController extends Controller {
     fclose($handle);
     fclose($output);
 
-    $res = ['fname'=> "$tempfilename.$extension", 'size'=>$fsize, 'mime'=>$mimetype, 'message' => 'File uploaded succesfully to temp storage'];
+    $res = ['fname'=> "$tempfilename", 'message' => 'File uploaded succesfully to temp storage'];
     
 
     // TempVideos(fname, size, mine, userid);
     // Return TempVideos
-
-    $tmpVid->create([
-      'fname' => $res['fname'],
-      'size' => $res['size'],
-      'mime' => $res['mime'],
-      'userid' => $userid,
+    $lastinsertid = $tmpVid->create([
+      'fname' => $tempfilename,
+      'userid' => $userid
     ]);
 
-    return Response::statusCode(HTTP_CREATED, $tmpVid);
+    if(!$lastinsertid) {
+        return Response::statusCode(HTTP_INTERNAL_ERROR, "Could not create tempvideo entry");
+    }
+
+    return Response::statusCode(HTTP_CREATED, ["id" => $lastinsertid]);
   }
 
 }
